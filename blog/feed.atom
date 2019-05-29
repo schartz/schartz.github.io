@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Schartz&#039;s</title>
+    <link href="" />
+    <link type="application/atom+xml" rel="self" href="/blog/feed.atom" />
+    <updated>2019-05-29T12:49:18+05:30</updated>
+    <id>/blog/feed.atom</id>
+    <author>
+        <name>Schartz Rehan</name>
+    </author>
+                <entry>
+    <id>/blog/my-first-blog-post</id>
+    <link type="text/html" rel="alternate" href="/blog/my-first-blog-post" />
+    <title>Hello Blogging</title>
+    <published>2019-05-29T05:30:00+05:30</published>
+    <updated>2019-05-29T05:30:00+05:30</updated>
+    <author>
+        <name>Schartz Rehan</name>
+    </author>
+    <summary type="html">&lt;code&gt;This is the start of your first blog post.&lt;/code&gt;  
+This is what JigSaw told me as I booted things up for my first (serious-ish) blogging attempt.
+I have been thinking about creating a blog for quite sometime. And finally my procrastination was......</summary>
+    <content type="html"><![CDATA[
+        <p><code>This is the start of your first blog post.</code>  </p>
+<p>This is what JigSaw told me as I booted things up for my first (serious-ish) blogging attempt.
+I have been thinking about creating a blog for quite sometime. And finally my procrastination was beaten, this blog is here.  </p>
+<p>I am not very sure about the direction for this blog. I'll be mostly documenting about the things I've been doing and an occasional <code>thought_dump()</code> will be present.  </p>
+<p>The idea of running an entire blog from a Git repository seems interesting and a bit bewitching.  </p>
+<p>I have interest in a lot of things. Consequently, there will be writings about a lot of things. And there will be a bunch of Computer Science, Programming and Mathematics.<br />
+You have been warned.</p>    ]]></content>
+</entry>
+    </feed>

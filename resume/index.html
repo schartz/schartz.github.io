@@ -1,0 +1,464 @@
+<html>
+    <head>
+
+        <title>
+            Resume(?)
+        </title>
+
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Raleway:100' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+
+        <style>
+            * {
+                box-sizing: border-box;
+                transition: 0.35s ease;
+            }
+            .content-block {
+                display: block;
+                position: relative;
+                margin: auto;
+                top: ;
+                left: ;
+                right: ;
+                bottom: ;
+            }
+            .content-inline {
+                display: inline-block;
+                position: relative;
+                margin: auto;
+                top: ;
+                left: ;
+                right: ;
+                bottom: ;
+            }
+            .floated {
+                display: inline-block;
+                position: relative;
+                margin: false;
+                top: ;
+                left: ;
+                right: ;
+                bottom: ;
+                float: left;
+            }
+            .abs-center {
+                display: false;
+                position: absolute;
+                margin: false;
+                top: 50%;
+                left: 50%;
+                right: false;
+                bottom: false;
+                transform: translate(-50%, -50%);
+                text-align: center;
+                width: 88%;
+            }
+            body {
+                font-family: 'Open Sans';
+                font-size: 18px;
+                letter-spacing: 0px;
+                font-weight: 400;
+                line-height: 28px;
+                background: url("http://kingofwallpapers.com/leaves/leaves-016.jpg") right no-repeat;
+                background-size: cover;
+                background: #f9f9f9;
+            }
+            body:before {
+                content: "";
+                display: false;
+                position: fixed;
+                margin: 0;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(255,255,255,0.92);
+            }
+            .caps {
+                text-transform: uppercase;
+            }
+            .justified {
+                text-align: justify;
+            }
+            p.light {
+                color: #777;
+            }
+            h2 {
+                font-family: 'Open Sans';
+                font-size: 30px;
+                letter-spacing: 5px;
+                font-weight: 600;
+                line-height: 40px;
+                color: #000;
+            }
+            h3 {
+                font-family: 'Open Sans';
+                font-size: 21px;
+                letter-spacing: 1px;
+                font-weight: 600;
+                line-height: 28px;
+                color: #000;
+            }
+            .page {
+                width: 90%;
+                max-width: 1200px;
+                margin: 80px auto;
+                background-color: #fff;
+                box-shadow: 6px 10px 28px 0px rgba(0,0,0,0.4);
+            }
+            .top-bar {
+                height: 220px;
+                background-color: #848484;
+                color: #fff;
+            }
+            .name {
+                display: false;
+                position: absolute;
+                margin: false;
+                top: false;
+                left: calc(350px + 5%);
+                right: 0;
+                bottom: 0;
+                height: 120px;
+                text-align: center;
+                font-family: 'Raleway';
+                font-size: 58px;
+                letter-spacing: 8px;
+                font-weight: 100;
+                line-height: 60px;
+            }
+            .name div {
+                width: 94%;
+            }
+            .side-bar {
+                display: false;
+                position: absolute;
+                margin: false;
+                top: 60px;
+                left: 5%;
+                right: false;
+                bottom: 0;
+                width: 350px;
+                background-color: #e6edf4;
+                padding: 320px 30px 50px;
+            }
+            .mugshot {
+                display: false;
+                position: absolute;
+                margin: false;
+                top: 50px;
+                left: 70px;
+                right: false;
+                bottom: false;
+                height: 210px;
+                width: 210px;
+            }
+            .mugshot .logo {
+                margin: -23px;
+                position: relative;
+            }
+            .logo {
+                display: false;
+                position: absolute;
+                margin: false;
+                top: 0;
+                left: 0;
+                right: false;
+                bottom: false;
+                z-index: 100;
+                margin: 0;
+                color: #000;
+                height: 250px;
+                width: 250px;
+            }
+            .logo .logo-svg {
+                height: 100%;
+                width: 100%;
+                stroke: #000;
+                cursor: pointer;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            .logo .logo-text {
+                display: false;
+                position: absolute;
+                margin: false;
+                top: 58%;
+                left: ;
+                right: 16%;
+                bottom: ;
+                cursor: pointer;
+                font-family: "Montserrat";
+                font-size: 55px;
+                letter-spacing: 0px;
+                font-weight: 400;
+                line-height: 58.333333333333336px;
+            }
+            .social {
+                padding-left: 60px;
+                margin-bottom: 20px;
+                cursor: pointer;
+            }
+            .social:before {
+                content: "";
+                display: false;
+                position: absolute;
+                margin: false;
+                top: -4px;
+                left: 10px;
+                right: false;
+                bottom: false;
+                height: 35px;
+                width: 35px;
+                background-size: cover !important;
+            }
+            .social.twitter:before {
+                background: url("/assets/img/resume/twitter.svg") center no-repeat;
+            }
+            .social.email:before {
+                background: url("/assets/img/resume/email.svg") center no-repeat;
+            }
+            .social.linked-in:before {
+                background: url("/assets/img/resume/linkedin.svg") center no-repeat;
+            }
+            .social.phone:before {
+                background: url("/assets/img/resume/phone.svg") center no-repeat;
+            }
+            .social.github:before {
+                background: url("/assets/img/resume/github.svg") center no-repeat;
+            }
+            .side-header {
+                font-family: 'Open Sans';
+                font-size: 18px;
+                letter-spacing: 4px;
+                font-weight: 600;
+                line-height: 28px;
+                margin: 60px auto 10px;
+                padding-bottom: 5px;
+                border-bottom: 1px solid #888;
+            }
+            .list-thing {
+                padding-left: 25px;
+                margin-bottom: 10px;
+            }
+            .content-container {
+                margin-right: 0;
+                width: calc(95% - 350px);
+                padding: 25px 40px 50px;
+            }
+            .content-container > * {
+                margin: 0 auto 25px;
+            }
+            .content-container > h3 {
+                margin: 0 auto 5px;
+            }
+            .content-container > p.long-margin {
+                margin: 0 auto 50px;
+            }
+            .title {
+                width: 80%;
+                text-align: center;
+            }
+            .separator {
+                width: 240px;
+                height: 2px;
+                background-color: #999;
+            }
+            .greyed {
+                background-color: #ddd;
+                width: 100%;
+                max-width: 580px;
+                text-align: center;
+                font-family: 'Open Sans';
+                font-size: 18px;
+                letter-spacing: 6px;
+                font-weight: 600;
+                line-height: 28px;
+            }
+
+            a{
+                color: #2f77a7;
+                text-decoration: none;
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+            .me{
+                width: 9rem;
+                height: 9rem;
+                border-radius: 50px;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                margin-bottom: 0;
+                position: absolute;
+                top: 3rem;
+                left: 3rem;
+            }
+
+            @media  screen and (max-width: 1150px) {
+                .name {
+                    color: #fff;
+                    font-family: 'Raleway';
+                    font-size: 38px;
+                    letter-spacing: 6px;
+                    font-weight: 100;
+                    line-height: 48px;
+                }
+            }
+
+            @media  print {
+                .page {
+                    width: 100%;
+                    max-width: 100%;
+                    margin: 0;
+                    background-color: #fff;
+                    box-shadow: 6px 10px 28px 0px rgba(0,0,0,0.4);
+                }
+
+                body{
+                    zoom: 55%;
+                }
+
+                .me {
+                    width: 5rem;
+                    height: 5rem;
+                    border-radius: 50px;
+                    -webkit-border-radius: 50%;
+                    -moz-border-radius: 50%;
+                    margin-bottom: 0;
+                    position: absolute;
+                    top: 2rem;
+                    left: 2rem;
+                }
+
+            }
+
+            @page    {
+                size: portrait;
+
+            }
+
+        </style>
+    </head>
+
+    <body>
+    <div class="content-block page" id="resume">
+        <div class="content-block top-bar">
+            <div class="caps name"><div class="abs-center">Schartz Rehan</div></div>
+        </div>
+        <div class="side-bar">
+            <div class="mugshot">
+                <div class="logo">
+                    <img src="/assets/img/resume/me.jpg" class="me" alt="">
+                    <svg viewbox="0 0 80 80" class="content-block logo-svg">
+                        <path d="M 10 10 L 52 10 L 72 30 L 72 70 L 30 70 L 10 50 Z" stroke-width="2.5" fill="none"/>
+                    </svg>
+                    <p class="logo-text">SR</p>
+                </div>
+            </div>
+            <p style="color: #2f77a7 ">
+                Software architect with an inclination towards machine learning, distributed computing and all things cloud.
+            </p>
+            <p>
+                <a href="https://schartz.github.io">schartz.github.io</a>
+            </p>
+            <p></p>
+            <br>
+            <p class="content-block social email">
+                <a href="mailto:rehan.saifi@live.com">
+                    rehan.saifi@live.com
+                </a>
+            </p>
+            <p class="content-block social phone">
+                <a href="tel:+917792886569">+91 7792886569</a>
+            </p>
+            <p class="content-block social github">
+                <a href="https://github.com/schartz/">Github</a>
+            </p>
+            <p class="content-block social twitter">
+                <a href="https://twitter.com/schartzium/">@schartzium</a>
+            </p>
+            <p class="content-block social linked-in">
+                <a href="https://www.linkedin.com/in/schartzrehan/">LinkedIn</a>
+            </p>
+            <p class="content-block caps side-header">Expertise</p>
+            <p class="content-block list-thing">Technical Architecture</p>
+            <p class="content-block list-thing">Web services in the cloud</p>
+            <p class="content-block list-thing">Inter and hybrid cloud architectures</p>
+            <p class="content-block list-thing">Golang, PHP(7.x), Javascript(ES6), Python, Object Oriented Programming Concepts</p>
+            <p class="content-block list-thing">Killer taste in literature and gaming</p>
+            <p class="content-block caps side-header">Education</p>
+            <p class="content-block list-thing">B.E. in Computer Science from MBM Engineering College, Jodhpur <br>
+            Class of 2015
+            </p>
+        </div>
+        <div class="content-block content-container">
+            <h2 class="content-block caps title">Technology Lead at ALLPS GmbH</h2>
+            <div class="content-block separator"></div>
+            <div class="content-block caps greyed">A bit of humble bragging</div>
+            <p class="long-margin">
+                Software Architect, Motorcyclist, Gamer, Wrangler, Drink-Slinger from the desert.
+                <br><br>
+                I am a *nix fan, open source enthusiast, fast learner, early adopter, team guy, deeply driven, self motivated software craftsman. With a pinch of sarcasm, I am also a die Hard Batman fan.
+            </p>
+            <div class="content-block caps greyed">Experience</div>
+
+            <h3>Technology Lead at ALLPS GmbH</h3>
+            <p class="light">May 2017 to present</p>
+            <p class="justified">
+                At Allps GmbH I lead the teams for company's in house product ipropal.com as well as other enterprise projects.
+                My responsibilities here involve:
+                <ul>
+                    <li>
+                        Guiding the team for better results and making important decisions regarding technology.
+                    </li>
+                    <li>
+                        Creating application architectures.
+                    </li>
+                    <li>
+                        Creating cloud architectures for applications.
+                    </li>
+                    <li>
+                        Coding the critical components of the systems.
+                    </li>
+                </ul>
+
+                Technologies used: AWS, Kotlin, Linux, Docker, Kubernetes, MongoDB, MariaDB, VueJS, Webpack,
+            </p>
+
+            <h3>Full Stack Developer at Rygbee</h3>
+            <p class="light">September 2016 to April 2017 (8 months)</p>
+            <p class="justified">
+                Rygbee (now known as raxter.io) is a personal smart idea guide. My responsibilities here were:
+
+            <ul>
+                <li> Building the web interface for the Core Recommender System.</li>
+                <li> Setup micro service architecture for various components of the Core Recommender System.</li>
+                <li> Building reliable REST based API for communication between various services.</li>
+                <li> Creating SPAs for front-end</li>
+            </ul>
+
+                Technologies Used: NodeJs/SailsJS(an expressJS framework), ZeroMQ, Autobahn and Crossbar (Realtime Websockets)
+            </p>
+
+            <h3>Web Developer at Photofie</h3>
+            <p class="light">Three months in 2016</p>
+            <p class="justified">
+                My responsibilities in this job were-
+
+            <ul>
+                <li>Building the initial version of the photo contest platform.</li>
+                <li>Addressing the scaling issues on initial traffic load.</li>
+                <li>Train and oversee technical interns.</li>
+            </ul>
+
+                Technologies Used: Laravel(PHP MVC Framework), AWS EC2, S3 storage Linux Server Administration.
+            </p>
+        </div>
+    </div>
+    </body>
+</html>
