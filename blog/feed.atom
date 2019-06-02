@@ -3,12 +3,103 @@
     <title>Schartz&#039;s</title>
     <link href="" />
     <link type="application/atom+xml" rel="self" href="/blog/feed.atom" />
-    <updated>2019-05-29T12:49:18+05:30</updated>
+    <updated>2019-06-02T14:54:30+05:30</updated>
     <id>/blog/feed.atom</id>
     <author>
         <name>Schartz Rehan</name>
     </author>
                 <entry>
+    <id>/blog/06-02-2019-install-tfgpu131-on-ubuntu</id>
+    <link type="text/html" rel="alternate" href="/blog/06-02-2019-install-tfgpu131-on-ubuntu" />
+    <title>Install Tensorflow GPU 1.13 on Elementary OS Juno (Ubuntu 18.04)</title>
+    <published>2019-06-02T05:30:00+05:30</published>
+    <updated>2019-06-02T05:30:00+05:30</updated>
+    <author>
+        <name>Schartz Rehan</name>
+    </author>
+    <summary type="html">Setting up Tensorflow with GPU support gave me good deal of pain. Internet is full of tutorials
+with older releases of Tensorflow. Some of them use an approach of installing CUDA toolkit via apt.
+This approach is not appropriate because of a number of......</summary>
+    <content type="html"><![CDATA[
+        <p>Setting up Tensorflow with GPU support gave me good deal of pain. Internet is full of tutorials
+with older releases of Tensorflow. Some of them use an approach of installing CUDA toolkit via apt.
+This approach is not appropriate because of a number of reasons. Tensorflow 2.0 is am alpha stage now.
+It has a planned stable release in second quarter of 2019. Soon enough I'll upgrading to latest stable.
+Nvidia drivers have a penchant for being compatible with specific versions of CUDA toolkit, to make matters
+a bit more complicated Tensorflow requires a specific version of Nvidia drivers.  </p>
+<p>Ubuntu graphics-driver ppa has latest Nvidia drivers <code>nvidia-driver-430</code> at the time of writing. However, requirements for
+Tensorflow 13.1 are <code>nvidia-driver-410</code> and <code>cuda-toolkit-10.0</code>. cuDNN 7.5.0 is also required for Tensorflow.  </p>
+<p>Let's begin with a clean install.</p>
+<h2>Step1: Install Nvidia drivers</h2>
+<p>If you have <code>nvidia-driver-410</code> meta package installed, you can skip this step.</p>
+<p>Start by adding Ubuntu Graphics Driver PPA if not already added. </p>
+<pre><code class="language-bash">sudo add-apt-repository ppa:graphics-drivers/ppa    
+sudo apt-get update</code></pre>
+<p>Remove any nvidia drivers. We are doing a clean install</p>
+<pre><code class="language-bash">sudo apt-get purge nvidia* 
+sudo apt-get autoremove 
+sudo apt-get autoclean 
+sudo rm -rf /usr/local/cuda*</code></pre>
+<p>If you have a Secure Boot UEFI enabled system it will ask you to set a password which
+you'll need to enter at the time of reboot. This is a one time only process.
+Now reboot your system.  </p>
+<p>Check if install was successful by running following</p>
+<pre><code class="language-bash">nvidia-smi</code></pre>
+<p>It should print something similar to following.  </p>
+<p><img src="/assets/img/posts/nvidiasmi.png" alt="Blog starter template screenshot" />  </p>
+<p>Notice the version of CUDA toolkit stated by the driver.
+Version 410 of nvidia driver for Linux is only compatible with CUDA toolkit version 10.<br />
+If your screen resolution is messed up after driver install, fix it with following.</p>
+<pre><code class="language-bash">sudo nvidia-xconfig</code></pre>
+<h2>Step2: Install CUDA toolkit 10.0</h2>
+<p>Install the dependencies</p>
+<pre><code class="language-bash">sudo apt-get install g++ freeglut3-dev build-essential libx11-dev libxmu-dev libxi-dev libglu1-mesa libglu1-mesa-dev</code></pre>
+<p>Head over to <a href="https://developer.nvidia.com/cuda-10.0-download-archive">https://developer.nvidia.com/cuda-10.0-download-archive</a>
+and download the CUDA archive.  Make sure to download runfile.  </p>
+<p><img src="/assets/img/posts/cudatoolkit.png" alt="Blog starter template screenshot" />  </p>
+<p>Install it.</p>
+<pre><code class="language-bash">sudo sh cuda_10.0.130_410.48_linux.run</code></pre>
+<p>In the installation process installer will complain that you are about to install an unsupported configuration.
+Answer <code>yes</code> to that. Installer complains about 'unsupported configuration', because it's not the latest version of CUDA toolkit.
+However, latest stable version of Tensorflow (1.13 at the time of writing) requires CUDA 10.0 specifically.<br />
+Installer will also ask to add a symlink. Answer <code>yes</code> to that as well.<br />
+Finally add following to your <code>~/.bashrc</code> and/or <code>~/.zshrc</code> in accordance with whichever shell you use.</p>
+<pre><code class="language-bash">export PATH=/usr/local/cuda-10.0/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=/usr/local/cuda-10.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}</code></pre>
+<p>Afterwards load these PATH additions in your current shell session as well as run <code>ldconfig</code>
+Run <code>source ~/.zshrc</code> if you are in Z shell.</p>
+<pre><code class="language-bash">source ~/.bashrc
+sudo ldconfig</code></pre>
+<h2>Step3: Install cuDNN 7.5.0</h2>
+<p>Go to <a href="https://developer.nvidia.com/rdp/cudnn-archive">https://developer.nvidia.com/rdp/cudnn-archive</a> and click download cuDNN button.
+Nvidia will require you to create an account (if you don't already have one). After logging into your Nvidia Developer Account accept the agreement
+Click on cuDNN archive which says <code>Download cuDNN v7.5.0 (Feb 21, 2019), for CUDA 10.0</code> and download <code>cuDNN Library for Linux</code>
+<a href="https://developer.nvidia.com/compute/machine-learning/cudnn/secure/v7.5.0.56/prod/10.0_20190219/cudnn-10.0-linux-x64-v7.5.0.56.tgz">Here is the direct download link to the same.</a><br />
+But there is no guarantee that it will work all the time. If the direct doesn't work, follow above steps.<br />
+Once you have downloaded the cuDNN archive put it at correct place by running:</p>
+<pre><code class="language-blade">tar -xf cudnn-10.0-linux-x64-v7.5.0.56.tgz
+sudo cp -R cuda/include/* /usr/local/cuda-10.0/include
+sudo cp -R cuda/lib64/* /usr/local/cuda-10.0/lib64</code></pre>
+<p>Also install a small dependency </p>
+<pre><code class="language-blade">sudo apt-get install libcupti-dev</code></pre>
+<p>Add following to your <code>~/.bashrc</code> or <code>~/.zshrc</code></p>
+<pre><code class="language-blade">export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH</code></pre>
+<p>And finally</p>
+<pre><code class="language-bash">source ~/.bashrc
+sudo ldconfig</code></pre>
+<h2>Step4: Test it</h2>
+<p>It's recommended that you have a virtual environment for this.
+I prefer <code>virtualenvwrapper</code>.
+You can use any tool to create virtual env.</p>
+<pre><code class="language-blade">mkvirtualenv tfgpu
+workon tfgpu
+pip install tensorflow-gpu==1.13.1
+pip show tensorflow-gpu</code></pre>
+<p>It should show something like this </p>
+<p><img src="/assets/img/posts/tf.png" alt="Blog starter template screenshot" /></p>
+<p>Now go build some <a href="https://en.wikipedia.org/wiki/Artificial_intelligence">AI</a> </p>    ]]></content>
+</entry>
+            <entry>
     <id>/blog/my-first-blog-post</id>
     <link type="text/html" rel="alternate" href="/blog/my-first-blog-post" />
     <title>Hello Blogging</title>
