@@ -3,12 +3,213 @@
     <title>Schartz&#039;s</title>
     <link href="" />
     <link type="application/atom+xml" rel="self" href="/blog/feed.atom" />
-    <updated>2019-06-02T15:16:16+05:30</updated>
+    <updated>2019-06-07T13:15:11+05:30</updated>
     <id>/blog/feed.atom</id>
     <author>
         <name>Schartz Rehan</name>
     </author>
                 <entry>
+    <id>/blog/june-2-2019-the-shape-of-tensor</id>
+    <link type="text/html" rel="alternate" href="/blog/june-2-2019-the-shape-of-tensor" />
+    <title>The Shape of Tensor</title>
+    <published>2019-06-07T05:30:00+05:30</published>
+    <updated>2019-06-07T05:30:00+05:30</updated>
+    <author>
+        <name>Schartz Rehan</name>
+    </author>
+    <summary type="html">Tensors are the primary data structures used by neural networks. And they are rather fascinating as well.
+Machine learning and by extension deep learning is an interdisciplinary field. Its interesting
+to note how many different people from many different......</summary>
+    <content type="html"><![CDATA[
+        <p>Tensors are the primary data structures used by neural networks. And they are rather fascinating as well.
+Machine learning and by extension deep learning is an interdisciplinary field. Its interesting
+to note how many different people from many different fields came to same concepts. Specific to this writing,
+the concept of tensors.  </p>
+<p>The concept of tensor is a mathematical generalization of more specific concepts, vectors and matrices in particular.
+In neural networks transformations, input, output etc are performed via tensors.<br />
+To build a good enough concept let's start with a matrix of some simple concepts from computer science and mathematics.  </p>
+<p style="text-align:center"><img class="no-shadow" src="/assets/img/posts/eqn1.png"></p>
+<p>The same can also be represented via following matrix  </p>
+<p style="text-align:center"><img class="no-shadow" src="/assets/img/posts/eqn2.png"></p>
+<p>This pseudo-mathematical notation gives us a nice one-to-one relationship between concepts of number, array and 2d-array from computer science
+to the concepts of scalar, vector and matrix in mathematics.</p>
+<p>Let's write examples of above 6 concepts to better understand them</p>
+<pre><code class="language-bash">
+number   ---&gt; 9
+scalar   ---&gt; 9
+
+array    ---&gt; [5, 8, 3]
+vector   ---&gt; (5i, 8j, 3k) 
+                   or 
+              5i + 8j + 3k 
+                or simply 
+                (5, 8, 3)
+
+2d-array ---&gt; [
+                [1, 2, 3]
+                [4, 5, 6]
+                [7, 8, 9]
+              ]
+
+matrix   ---&gt; |1, 2, 3|
+              |4, 5, 6|
+              |7, 8, 9|
+</code></pre>
+<h2>The index notation</h2>
+<p>Upon closer inspection of the above examples it's apparent that to access any element
+in each representation, we need the same number of indices in the related concepts of computer science and mathematics.</p>
+<p>For example, to access an element in an array we need following notation</p>
+<pre><code class="language-blade">my_array = [5, 8, 3]
+my_array[2] ---&gt; 8</code></pre>
+<p>Similarly to access a component of a mathematical vector we need one index, and, vice-versa for matrix and 2d-array. We have following underlying pattern:</p>
+<table>
+<thead>
+<tr>
+<th>Indices Required</th>
+<th>Computer Science</th>
+<th>Mathematics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>number</td>
+<td>scalar</td>
+</tr>
+<tr>
+<td>1</td>
+<td>array</td>
+<td>vector</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2d-array</td>
+<td>matrix</td>
+</tr>
+</tbody>
+</table>
+<p>This gives us a working framework to make the generalization. </p>
+<h2>Meet the tensors</h2>
+<p>When we have more than two indices to refer to a specific element in a data structures (or mathematical, structure) we stop
+treating them with special names like scalars, vectors, matrices etc. Instead we address them  with a more generalized language.  </p>
+<p><strong>We call them Tensors.</strong>  </p>
+<p>This gives us following table  </p>
+<table>
+<thead>
+<tr>
+<th>Indices Required</th>
+<th>Computer Science</th>
+<th>Mathematics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>number</td>
+<td>scalar</td>
+</tr>
+<tr>
+<td>1</td>
+<td>array</td>
+<td>vector</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2d-array</td>
+<td>matrix</td>
+</tr>
+<tr>
+<td>n</td>
+<td>nd-array</td>
+<td>tensor</td>
+</tr>
+</tbody>
+</table>
+<p>For all practical purposes in programming. It is good enough to remember that:</p>
+<p><strong>Tensors are multidimensional arrays.</strong>  </p>
+<p>Coming back to the part of generalization part. It's safe to draw following conclusions:  </p>
+<ul>
+<li>scalar    ---&gt; 0 dimensional tensor  ---&gt; number</li>
+<li>vector    ---&gt; 1 dimensional tensor  ---&gt; simple array</li>
+<li>matrix    ---&gt; 2 dimensional tensor  ---&gt; 2d array</li>
+<li>nd array  ---&gt; n dimensional tensor ---&gt; nd array  </li>
+</ul>
+<p>The dimension of a tensor a completely different entity from what we mean when we refer to the dimension of a vector in a vector space. The dimension of a tensor does not tell us how many components exist within the tensor.</p>
+<p>If we have a three dimensional vector from three dimensional euclidean space, we have an ordered triple with three components.</p>
+<p>A three dimensional tensor, however, can have many more than three components. Our two dimensional tensor <code>2d-array</code> for example has nine components.</p>
+<pre><code class="language-bash">2d-array ---&gt; [
+                [1, 2, 3]
+                [4, 5, 6]
+                [7, 8, 9]
+              ]</code></pre>
+<h2>Rank and Axes of Tensor</h2>
+<p><strong>A tensor's rank is equal to the number of indices are needed to access to a specific element within the tensor.</strong>  </p>
+<p>In our example our <code>2d-array</code> tensor is of rank two because we need to indices to access any element inside it.  </p>
+<pre><code class="language-bash">elem = 2d-array[i][j]</code></pre>
+<p><strong>Axis refers to a particular dimension of a tensor.</strong><br />
+In case of a tensor of rank 2, it has 2 dimensions (also called 2 axis), hence a requirement of 2 indices (one for each axis or dimension) to access any element.    </p>
+<p><strong>The length of each axis tells us how many indexes are available along each axis.</strong></p>
+<h2>The Shape of Tensor</h2>
+<p>The shape of a tensor is determined by the length of each axis, so if we know the shape of a given tensor, then we know the length of each axis, and this tells us how many indexes are available along each axis.  </p>
+<p><strong>The shape of a tensor gives us the length of each axis of the tensor.</strong>  </p>
+<p>Going back to our familiar <code>2d-array</code> tensor</p>
+<pre><code class="language-bash">2d-array ---&gt; [
+                [1, 2, 3]
+                [4, 5, 6]
+                [7, 8, 9]
+              ]</code></pre>
+<p>We say that above tensor's shape is <code>3 x 3</code> which means that it has 2 axis (or dimensions) of length 3 each.  </p>
+<p><strong>Tensor's shape is super important.</strong></p>
+<p>Higher rank tensors tend to become more and more abstract very quickly.
+In this case shape provides us some reference point to understand them.  </p>
+<p>Additionally tensors being the data structures of neural networks flow through various layers of the network.
+More than often they are required to be in a certain shape. </p>
+<h2>Reshaping the tensor</h2>
+<p>Reshaping is a simple yet very powerful concept.
+Simply put, reshaping refers to the process of changing the order of axis (dimensions) in the data structure.
+For example lets say we have a tensor of rank 2 as follows:</p>
+<pre><code class="language-bash"> Shape 2 x 3
+
+[
+   [4, 5, 6]
+   [7, 8, 9]
+]</code></pre>
+<p>It can be reshaped to various shapes as follows:</p>
+<pre><code class="language-bash">Shape 6 x 1
+
+[  
+   [4],  
+   [5],  
+   [6],  
+   [7],  
+   [8],  
+   [9],  
+]
+
+Shape 3 x 2
+
+[
+    [4, 7],
+    [5, 8],
+    [6, 9]
+]
+
+Shape 1 x 6
+
+[
+    [4],[5],[6],[7],[8],[9],
+]
+</code></pre>
+<p>Important point to note about reshaping operation is that it changes the shape, ie. it changes the ordering of individual elements inside a tensor, but is does not change the underlying elements themselves.  </p>
+<p>Above is a very crude but workable conceptual introduction to tensors.<br />
+It is by no means rigorous. However, it serves as good enough starting point while trying to work with Neural Networks from a &quot;mathematically un-inclined programmer&quot; perspective.  </p>
+<p>Rigorous mathematical treatment of this subject is of utmost importance if one wishes to do anything meaningful in the area of Deep Learning.</p>
+<p>For a just enough introduction, this is a <strong>must</strong> read:
+<a href="http://www.ita.uni-heidelberg.de/~dullemond/lectures/tensor/tensor.pdf">Intruduction to Tensor Calculus, Kees Dullemond &amp; Kasper Peeters</a>.  </p>
+<p>I'll also highly recommend <a href="https://www.amazon.in/dp/1541013638/ref=cm_sw_r_tw_dp_U_x_uwH-CbV9MFGXN">Tensor Calculus Made Simple, Taha Sochi</a><br />
+I enjoyed my time with the book. I hope you will too.</p>    ]]></content>
+</entry>
+            <entry>
     <id>/blog/06-02-2019-install-tfgpu131-on-ubuntu</id>
     <link type="text/html" rel="alternate" href="/blog/06-02-2019-install-tfgpu131-on-ubuntu" />
     <title>Install Tensorflow GPU 1.13 on Elementary OS Juno (Ubuntu 18.04)</title>

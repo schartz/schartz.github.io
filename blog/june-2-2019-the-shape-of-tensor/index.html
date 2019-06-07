@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="I needed an obligatory &#039;my corner of Internet&#039;, so here it is.">
+
+        <meta property="og:title" content="The Shape of Tensor | Schartz&#039;s"/>
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="/blog/june-2-2019-the-shape-of-tensor"/>
+        <meta property="og:description" content="I needed an obligatory &#039;my corner of Internet&#039;, so here it is." />
+
+        <title>Schartz&#039;s | The Shape of Tensor</title>
+
+        <link rel="home" href="">
+        <link rel="icon" href="/favicon.ico">
+        <link href="/blog/feed.atom" type="application/atom+xml" rel="alternate" title="Schartz&#039;s Atom Feed">
+
+            <meta property="og:title" content="The Shape of Tensor" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="/blog/june-2-2019-the-shape-of-tensor"/>
+    <meta property="og:description" content="This is your first blog post." />
+
+        
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,400i,700,700i,800,800i" rel="stylesheet">
+        <link rel="stylesheet" href="/assets/build/css/main.css?id=48f60b09a0a946a4df96">
+    </head>
+
+    <body class="flex flex-col justify-between min-h-screen bg-grey-lightest text-grey-darkest leading-normal font-sans">
+        <header class="flex items-center shadow bg-white border-b h-24 py-4" role="banner">
+            <div class="container flex items-center max-w-4xl mx-auto px-4 lg:px-8">
+                <div class="flex items-center">
+                    <a href="/" title="Schartz&#039;s home" class="inline-flex items-center">
+                        <img class="h-8 md:h-10 mr-3" src="/assets/img/logo.svg" alt="Schartz&#039;s logo" />
+
+                        <h1 class="text-lg md:text-2xl text-blue-darkest font-semibold hover:text-blue-dark my-0">Schartz&#039;s</h1>
+                    </a>
+                </div>
+
+                <div id="vue-search" class="flex flex-1 justify-end items-center">
+                    <search></search>
+
+                    <nav class="hidden lg:flex items-center justify-end text-lg">
+    <a title="Schartz&#039;s Blog" href="/blog"
+        class="ml-6 text-grey-darker hover:text-blue-dark ">
+        Blog
+    </a>
+
+    <a title="Schartz&#039;s About" href="/about"
+        class="ml-6 text-grey-darker hover:text-blue-dark ">
+        About
+    </a>
+
+    <a title="Schartz&#039;s Resume" href="/resume" target="_blank"
+        class="ml-6 text-grey-darker hover:text-blue-dark ">
+        Resume
+    </a>
+</nav>
+
+                    <button class="flex justify-center items-center bg-blue border border-blue h-10 px-5 rounded-full lg:hidden focus:outline-none"
+    onclick="navMenu.toggle()"
+>
+    <svg id="js-nav-menu-show" xmlns="http://www.w3.org/2000/svg"
+        class="fill-current text-white h-9 w-4" viewBox="0 0 32 32"
+    >
+        <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z"/>
+    </svg>
+
+    <svg id="js-nav-menu-hide" xmlns="http://www.w3.org/2000/svg"
+        class="hidden fill-current text-white h-9 w-4" viewBox="0 0 36 30"
+    >
+        <polygon points="32.8,4.4 28.6,0.2 18,10.8 7.4,0.2 3.2,4.4 13.8,15 3.2,25.6 7.4,29.8 18,19.2 28.6,29.8 32.8,25.6 22.2,15 "/>
+    </svg>
+</button>
+
+                </div>
+            </div>
+        </header>
+
+        <nav id="js-nav-menu" class="nav-menu hidden lg:hidden">
+    <ul class="list-reset my-0">
+        <li class="pl-4">
+            <a
+                title="Schartz&#039;s Blog"
+                href="/blog"
+                class="nav-menu__item hover:text-blue "
+            >Blog</a>
+        </li>
+        <li class="pl-4">
+            <a
+                title="Schartz&#039;s About"
+                href="/about"
+                class="nav-menu__item hover:text-blue "
+            >About</a>
+        </li>
+        <li class="pl-4">
+            <a
+                title="Schartz&#039;s Resume"
+                href="/contact"
+                target="_blank"
+                class="nav-menu__item hover:text-blue "
+            >Resume</a>
+        </li>
+    </ul>
+</nav>
+
+        <main role="main" class="flex-auto w-full container max-w-xl mx-auto py-16 px-6">
+                        <img src="/assets/img/posts/tensor.jpg" alt="The Shape of Tensor cover image" class="mb-2">
+    
+    <h1 class="leading-none mb-2">The Shape of Tensor</h1>
+
+    <p class="text-grey-darker text-xl md:mt-0">Schartz Rehan  •  June 7, 2019</p>
+
+    
+    <div class="border-b border-blue-lighter mb-10 pb-4 post-content" v-pre>
+        <p>Tensors are the primary data structures used by neural networks. And they are rather fascinating as well.
+Machine learning and by extension deep learning is an interdisciplinary field. Its interesting
+to note how many different people from many different fields came to same concepts. Specific to this writing,
+the concept of tensors.  </p>
+<p>The concept of tensor is a mathematical generalization of more specific concepts, vectors and matrices in particular.
+In neural networks transformations, input, output etc are performed via tensors.<br />
+To build a good enough concept let's start with a matrix of some simple concepts from computer science and mathematics.  </p>
+<p style="text-align:center"><img class="no-shadow" src="/assets/img/posts/eqn1.png"></p>
+<p>The same can also be represented via following matrix  </p>
+<p style="text-align:center"><img class="no-shadow" src="/assets/img/posts/eqn2.png"></p>
+<p>This pseudo-mathematical notation gives us a nice one-to-one relationship between concepts of number, array and 2d-array from computer science
+to the concepts of scalar, vector and matrix in mathematics.</p>
+<p>Let's write examples of above 6 concepts to better understand them</p>
+<pre><code class="language-bash">
+number   ---&gt; 9
+scalar   ---&gt; 9
+
+array    ---&gt; [5, 8, 3]
+vector   ---&gt; (5i, 8j, 3k) 
+                   or 
+              5i + 8j + 3k 
+                or simply 
+                (5, 8, 3)
+
+2d-array ---&gt; [
+                [1, 2, 3]
+                [4, 5, 6]
+                [7, 8, 9]
+              ]
+
+matrix   ---&gt; |1, 2, 3|
+              |4, 5, 6|
+              |7, 8, 9|
+</code></pre>
+<h2>The index notation</h2>
+<p>Upon closer inspection of the above examples it's apparent that to access any element
+in each representation, we need the same number of indices in the related concepts of computer science and mathematics.</p>
+<p>For example, to access an element in an array we need following notation</p>
+<pre><code class="language-blade">my_array = [5, 8, 3]
+my_array[2] ---&gt; 8</code></pre>
+<p>Similarly to access a component of a mathematical vector we need one index, and, vice-versa for matrix and 2d-array. We have following underlying pattern:</p>
+<table>
+<thead>
+<tr>
+<th>Indices Required</th>
+<th>Computer Science</th>
+<th>Mathematics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>number</td>
+<td>scalar</td>
+</tr>
+<tr>
+<td>1</td>
+<td>array</td>
+<td>vector</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2d-array</td>
+<td>matrix</td>
+</tr>
+</tbody>
+</table>
+<p>This gives us a working framework to make the generalization. </p>
+<h2>Meet the tensors</h2>
+<p>When we have more than two indices to refer to a specific element in a data structures (or mathematical, structure) we stop
+treating them with special names like scalars, vectors, matrices etc. Instead we address them  with a more generalized language.  </p>
+<p><strong>We call them Tensors.</strong>  </p>
+<p>This gives us following table  </p>
+<table>
+<thead>
+<tr>
+<th>Indices Required</th>
+<th>Computer Science</th>
+<th>Mathematics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>number</td>
+<td>scalar</td>
+</tr>
+<tr>
+<td>1</td>
+<td>array</td>
+<td>vector</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2d-array</td>
+<td>matrix</td>
+</tr>
+<tr>
+<td>n</td>
+<td>nd-array</td>
+<td>tensor</td>
+</tr>
+</tbody>
+</table>
+<p>For all practical purposes in programming. It is good enough to remember that:</p>
+<p><strong>Tensors are multidimensional arrays.</strong>  </p>
+<p>Coming back to the part of generalization part. It's safe to draw following conclusions:  </p>
+<ul>
+<li>scalar    ---&gt; 0 dimensional tensor  ---&gt; number</li>
+<li>vector    ---&gt; 1 dimensional tensor  ---&gt; simple array</li>
+<li>matrix    ---&gt; 2 dimensional tensor  ---&gt; 2d array</li>
+<li>nd array  ---&gt; n dimensional tensor ---&gt; nd array  </li>
+</ul>
+<p>The dimension of a tensor a completely different entity from what we mean when we refer to the dimension of a vector in a vector space. The dimension of a tensor does not tell us how many components exist within the tensor.</p>
+<p>If we have a three dimensional vector from three dimensional euclidean space, we have an ordered triple with three components.</p>
+<p>A three dimensional tensor, however, can have many more than three components. Our two dimensional tensor <code>2d-array</code> for example has nine components.</p>
+<pre><code class="language-bash">2d-array ---&gt; [
+                [1, 2, 3]
+                [4, 5, 6]
+                [7, 8, 9]
+              ]</code></pre>
+<h2>Rank and Axes of Tensor</h2>
+<p><strong>A tensor's rank is equal to the number of indices are needed to access to a specific element within the tensor.</strong>  </p>
+<p>In our example our <code>2d-array</code> tensor is of rank two because we need to indices to access any element inside it.  </p>
+<pre><code class="language-bash">elem = 2d-array[i][j]</code></pre>
+<p><strong>Axis refers to a particular dimension of a tensor.</strong><br />
+In case of a tensor of rank 2, it has 2 dimensions (also called 2 axis), hence a requirement of 2 indices (one for each axis or dimension) to access any element.    </p>
+<p><strong>The length of each axis tells us how many indexes are available along each axis.</strong></p>
+<h2>The Shape of Tensor</h2>
+<p>The shape of a tensor is determined by the length of each axis, so if we know the shape of a given tensor, then we know the length of each axis, and this tells us how many indexes are available along each axis.  </p>
+<p><strong>The shape of a tensor gives us the length of each axis of the tensor.</strong>  </p>
+<p>Going back to our familiar <code>2d-array</code> tensor</p>
+<pre><code class="language-bash">2d-array ---&gt; [
+                [1, 2, 3]
+                [4, 5, 6]
+                [7, 8, 9]
+              ]</code></pre>
+<p>We say that above tensor's shape is <code>3 x 3</code> which means that it has 2 axis (or dimensions) of length 3 each.  </p>
+<p><strong>Tensor's shape is super important.</strong></p>
+<p>Higher rank tensors tend to become more and more abstract very quickly.
+In this case shape provides us some reference point to understand them.  </p>
+<p>Additionally tensors being the data structures of neural networks flow through various layers of the network.
+More than often they are required to be in a certain shape. </p>
+<h2>Reshaping the tensor</h2>
+<p>Reshaping is a simple yet very powerful concept.
+Simply put, reshaping refers to the process of changing the order of axis (dimensions) in the data structure.
+For example lets say we have a tensor of rank 2 as follows:</p>
+<pre><code class="language-bash"> Shape 2 x 3
+
+[
+   [4, 5, 6]
+   [7, 8, 9]
+]</code></pre>
+<p>It can be reshaped to various shapes as follows:</p>
+<pre><code class="language-bash">Shape 6 x 1
+
+[  
+   [4],  
+   [5],  
+   [6],  
+   [7],  
+   [8],  
+   [9],  
+]
+
+Shape 3 x 2
+
+[
+    [4, 7],
+    [5, 8],
+    [6, 9]
+]
+
+Shape 1 x 6
+
+[
+    [4],[5],[6],[7],[8],[9],
+]
+</code></pre>
+<p>Important point to note about reshaping operation is that it changes the shape, ie. it changes the ordering of individual elements inside a tensor, but is does not change the underlying elements themselves.  </p>
+<p>Above is a very crude but workable conceptual introduction to tensors.<br />
+It is by no means rigorous. However, it serves as good enough starting point while trying to work with Neural Networks from a &quot;mathematically un-inclined programmer&quot; perspective.  </p>
+<p>Rigorous mathematical treatment of this subject is of utmost importance if one wishes to do anything meaningful in the area of Deep Learning.</p>
+<p>For a just enough introduction, this is a <strong>must</strong> read:
+<a href="http://www.ita.uni-heidelberg.de/~dullemond/lectures/tensor/tensor.pdf">Intruduction to Tensor Calculus, Kees Dullemond &amp; Kasper Peeters</a>.  </p>
+<p>I'll also highly recommend <a href="https://www.amazon.in/dp/1541013638/ref=cm_sw_r_tw_dp_U_x_uwH-CbV9MFGXN">Tensor Calculus Made Simple, Taha Sochi</a><br />
+I enjoyed my time with the book. I hope you will too.</p>    </div>
+
+    <nav class="flex justify-between text-sm md:text-base">
+        <div>
+                            <a href="/blog/06-02-2019-install-tfgpu131-on-ubuntu" title="Older Post: Install Tensorflow GPU 1.13 on Elementary OS Juno (Ubuntu 18.04)">
+                    &LeftArrow; Install Tensorflow GPU 1.13 on Elementary OS Juno (Ubuntu 18.04)
+                </a>
+                    </div>
+
+        <div>
+                    </div>
+    </nav>
+        </main>
+
+        <footer class="bg-white text-center text-sm mt-12 py-4" role="contentinfo">
+            <ul class="flex flex-col md:flex-row justify-center list-reset">
+                <li class="md:mr-2">
+                    &copy; 2019. Some rights reserved.
+                </li>
+
+                <li>
+                    Built with <a href="http://jigsaw.tighten.co" title="Jigsaw by Tighten">Jigsaw</a>
+                    and <a href="https://tailwindcss.com" title="Tailwind CSS, a utility-first CSS framework">Tailwind CSS</a>.
+                </li>
+            </ul>
+        </footer>
+
+        <script src="/assets/build/js/main.js?id=ecff99b3948a67b9c95f"></script>
+
+        <script>
+    const navMenu = {
+        toggle() {
+            const menu = document.getElementById('js-nav-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('lg:block');
+            document.getElementById('js-nav-menu-hide').classList.toggle('hidden');
+            document.getElementById('js-nav-menu-show').classList.toggle('hidden');
+        },
+    }
+</script>
+    </body>
+</html>
