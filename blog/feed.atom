@@ -3,7 +3,7 @@
     <title>Schartz&#039;s</title>
     <link href="" />
     <link type="application/atom+xml" rel="self" href="/blog/feed.atom" />
-    <updated>2019-07-07T18:34:21+05:30</updated>
+    <updated>2019-07-07T18:39:37+05:30</updated>
     <id>/blog/feed.atom</id>
     <author>
         <name>Schartz Rehan</name>
@@ -12,8 +12,8 @@
     <id>/blog/july-07-2019-understanding-x509-certificates</id>
     <link type="text/html" rel="alternate" href="/blog/july-07-2019-understanding-x509-certificates" />
     <title>X.509 Certificates Explained</title>
-    <published>2019-06-26T05:30:00+05:30</published>
-    <updated>2019-06-26T05:30:00+05:30</updated>
+    <published>2019-07-06T05:30:00+05:30</published>
+    <updated>2019-07-06T05:30:00+05:30</updated>
     <author>
         <name>Schartz Rehan</name>
     </author>
