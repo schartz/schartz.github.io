@@ -3,12 +3,98 @@
     <title>Schartz&#039;s</title>
     <link href="" />
     <link type="application/atom+xml" rel="self" href="/blog/feed.atom" />
-    <updated>2019-06-07T13:15:11+05:30</updated>
+    <updated>2019-07-07T18:34:21+05:30</updated>
     <id>/blog/feed.atom</id>
     <author>
         <name>Schartz Rehan</name>
     </author>
                 <entry>
+    <id>/blog/july-07-2019-understanding-x509-certificates</id>
+    <link type="text/html" rel="alternate" href="/blog/july-07-2019-understanding-x509-certificates" />
+    <title>X.509 Certificates Explained</title>
+    <published>2019-06-26T05:30:00+05:30</published>
+    <updated>2019-06-26T05:30:00+05:30</updated>
+    <author>
+        <name>Schartz Rehan</name>
+    </author>
+    <summary type="html">To put it simply, X.509 certificate is a digital document encoded and/or
+digitally signed according to RFC 5280
+Generally speaking X.509 certificate refers to IETF&#039;s(Internet Engineering Task Force) PKIX certificate
+and CRL profile of the X.509......</summary>
+    <content type="html"><![CDATA[
+        <p>To put it simply, X.509 certificate is a digital document encoded and/or
+digitally signed according to <a href="https://tools.ietf.org/html/rfc5280">RFC 5280</a></p>
+<p>Generally speaking <em>X.509 certificate</em> refers to IETF's(Internet Engineering Task Force) PKIX certificate
+and CRL profile of the X.509 certificate v3 standard. Yes there are versions of this thing.
+This version is specified in <a href="https://tools.ietf.org/html/rfc5280">RFC 5280</a>. It is also known as PKIX, full form being &quot;<em>Public Key Infrastructure (X.509)</em>&quot;</p>
+<h3>X509 File types</h3>
+<p>There are a bunch of file type names being thrown around X.509. Occasionally and incorrectly it is said that they are all interchangeable.
+While in come cases they may be interchangeable. It is always better to know your certificates and label them accordingly.  </p>
+<h4>Encodings (may be used as file extensions on Windows systems)</h4>
+<ul>
+<li>
+<p>.DER = The DER extension is used for binary DER encoded certificates. These files may also bear the CER or the CRT extension.
+It would be better to say that &quot;<strong>This is a DER encoded certificate</strong>&quot; rather than &quot;This is DER certificate&quot;.</p>
+</li>
+<li>
+<p>.PEM = The PEM extension is used for X.509v3 files which contain ASCII (Base64) encoded data prefixed with a &quot;—–
+BEGIN ...&quot; type of line.</p>
+<h4>Common file extensions</h4>
+</li>
+<li>
+<p>CRT = The CRT extension is used for certificates. The certificates may be encoded as binary DER or as ASCII PEM. The CER and
+CRT extensions are nearly synonymous. Most common among *nix systems</p>
+</li>
+<li>
+<p>CER = alternate form of .crt (Microsoft Convention) You can use MS to convert .crt to .cer (.both DER encoded .cer, or base64[PEM]
+encoded .cer) The .cer file extension is also recognized by IE as a command to run a MS cryptoAPI command (specifically
+rundll32.exe cryptext.dll,CryptExtOpenCER) which displays a dialogue for importing and/or viewing certificate contents.</p>
+</li>
+<li>
+<p>.KEY = The KEY extension is used both for public and private PKCS#8 keys. The keys may be encoded as binary DER or as ASCII
+PEM.  </p>
+</li>
+</ul>
+<p>The only time CRT and CER can safely be interchanged is when the encoding type can be identical. (ie PEM encoded CRT = PEM encoded
+CER)  </p>
+<h4>Basic OpenSSL Certificate Operations</h4>
+<p>There are four basic types of certificate manipulations. View, Transform, Combination , and Extraction</p>
+<p>To view PEM encoded certificates</p>
+<pre><code class="language-bash">openssl x509 -in certfile -text noout</code></pre>
+<p>Here <code>certfile</code> can have any of the above mentioned encodings. Following error might occur:</p>
+<pre><code class="language-bash">unable to load certificate
+12626:error:0906D06C:PEM routines:PEM_read_bio:no start line:pem_lib.c:647:Expecting: TRUSTED CERTIFICATE</code></pre>
+<p>This typically means that you are trying to read a certificate which is in DER format.<br />
+To view a certificate use following</p>
+<pre><code class="language-bash">openssl x509 -in certfile -inform der -text -noout</code></pre>
+<p>You will encounter following error if you try to run above command on PEM encoded certificate:</p>
+<pre><code class="language-bash">unable to load certificate
+13978:error:0D0680A8:asn1 encoding routines:ASN1_CHECK_TLEN:wrong tag:tasn_dec.c:1306:
+13978:error:0D07803A:asn1 encoding routines:ASN1_ITEM_EX_D2I:nested asn1 error:tasn_dec.c:380:Type=X509</code></pre>
+<p>PEM to DER can be transformed like following</p>
+<pre><code class="language-bash">openssl x509 -in certfile -outform der -out cert.der</code></pre>
+<p>Similarly DER to PEM can be transformed like following</p>
+<pre><code class="language-bash">openssl x509 -in certfile -inform der -outform pem -out cert.pem</code></pre>
+<h4>Combining X.509 certificate components</h4>
+<p>In some cases it is advantageous to combine multiple pieces of the X.509 infrastructure into a single file. One common example would be to
+combine both the private key and public key into the same certificate.
+The easiest way to combine certs keys and chains is to convert each to a PEM encoded certificate then simple copy the contents of each file
+into a new file. This is suitable for combining files to use in a number of applications.  </p>
+<p>Quite often you will come across a file with .p12 extensions.<br />
+This type of file uses that uses PKCS#12 (Public Key Cryptography Standard #12) encryption.<br />
+It is typically used as a portable format for transferring personal private keys or other sensitive information.<br />
+It is also used by various security and encryption programs.</p>
+<h4>Extracting components from certificates</h4>
+<p>An X.509 certificate contains ONLY the public key and NEVER contains a private key.<br />
+To extract the public key from it use following</p>
+<pre><code class="language-bash">openssl x509 -pubkey -noout -in certfile.pem</code></pre>
+<p>To calculate fingerprint/thumbprint/hash/signature of X.509 certificate in SHA256 use following</p>
+<pre><code>openssl x509 -noout -fingerprint -sha256 -inform pem -in certfile.pem</code></pre>
+<p>To calculate fingerprint/thumbprint/hash/signature of public key of X.509 certificate in SHA256 use following</p>
+<pre><code>openssl x509 -in certfile.pem -pubkey -noout | grep -v '^-' | base64 -d | openssl sha256</code></pre>
+<p>If you have your certificate in DER encoding, simple add <code>-inform der</code> to above commands accordingly.</p>    ]]></content>
+</entry>
+            <entry>
     <id>/blog/june-2-2019-the-shape-of-tensor</id>
     <link type="text/html" rel="alternate" href="/blog/june-2-2019-the-shape-of-tensor" />
     <title>The Shape of Tensor</title>
