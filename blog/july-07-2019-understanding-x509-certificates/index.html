@@ -4,37 +4,32 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="description" content="I needed an obligatory &#039;my corner of Internet&#039;, so here it is.">
+        <meta name="description" content="This is your first blog post.">
 
         <meta property="og:title" content="X.509 Certificates Explained | Schartz&#039;s"/>
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="article" />
         <meta property="og:url" content="/blog/july-07-2019-understanding-x509-certificates"/>
-        <meta property="og:description" content="I needed an obligatory &#039;my corner of Internet&#039;, so here it is." />
+        <meta property="og:description" content="This is your first blog post." />
 
-        <title>Schartz&#039;s | X.509 Certificates Explained</title>
+        <title>X.509 Certificates Explained | Schartz&#039;s</title>
 
         <link rel="home" href="">
         <link rel="icon" href="/favicon.ico">
         <link href="/blog/feed.atom" type="application/atom+xml" rel="alternate" title="Schartz&#039;s Atom Feed">
 
-            <meta property="og:title" content="X.509 Certificates Explained" />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="/blog/july-07-2019-understanding-x509-certificates"/>
-    <meta property="og:description" content="This is your first blog post." />
-
         
         <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,400i,700,700i,800,800i" rel="stylesheet">
-        <link rel="stylesheet" href="/assets/build/css/main.css?id=48f60b09a0a946a4df96">
+        <link rel="stylesheet" href="/assets/build/css/main.css">
     </head>
 
-    <body class="flex flex-col justify-between min-h-screen bg-grey-lightest text-grey-darkest leading-normal font-sans">
+    <body class="flex flex-col justify-between min-h-screen bg-gray-100 text-gray-800 leading-normal font-sans">
         <header class="flex items-center shadow bg-white border-b h-24 py-4" role="banner">
-            <div class="container flex items-center max-w-4xl mx-auto px-4 lg:px-8">
+            <div class="container flex items-center max-w-8xl mx-auto px-4 lg:px-8">
                 <div class="flex items-center">
                     <a href="/" title="Schartz&#039;s home" class="inline-flex items-center">
                         <img class="h-8 md:h-10 mr-3" src="/assets/img/logo.svg" alt="Schartz&#039;s logo" />
 
-                        <h1 class="text-lg md:text-2xl text-blue-darkest font-semibold hover:text-blue-dark my-0">Schartz&#039;s</h1>
+                        <h1 class="text-lg md:text-2xl text-blue-800 font-semibold hover:text-blue-600 my-0">Schartz&#039;s</h1>
                     </a>
                 </div>
 
@@ -105,86 +100,121 @@
     </ul>
 </nav>
 
-        <main role="main" class="flex-auto w-full container max-w-xl mx-auto py-16 px-6">
+        <main role="main" class="flex-auto w-full container max-w-4xl mx-auto py-16 px-6">
                         <img src="/assets/img/posts/cert.svg" alt="X.509 Certificates Explained cover image" class="mb-2">
     
     <h1 class="leading-none mb-2">X.509 Certificates Explained</h1>
 
-    <p class="text-grey-darker text-xl md:mt-0">Schartz Rehan  •  July 6, 2019</p>
+    <p class="text-gray-700 text-xl md:mt-0">Schartz Rehan  •  July 6, 2019</p>
 
     
-    <div class="border-b border-blue-lighter mb-10 pb-4 post-content" v-pre>
+    <div class="border-b border-blue-200 mb-10 pb-4" v-pre>
         <p>To put it simply, X.509 certificate is a digital document encoded and/or
 digitally signed according to <a href="https://tools.ietf.org/html/rfc5280">RFC 5280</a></p>
+
 <p>Generally speaking <em>X.509 certificate</em> refers to IETF's(Internet Engineering Task Force) PKIX certificate
 and CRL profile of the X.509 certificate v3 standard. Yes there are versions of this thing.
-This version is specified in <a href="https://tools.ietf.org/html/rfc5280">RFC 5280</a>. It is also known as PKIX, full form being &quot;<em>Public Key Infrastructure (X.509)</em>&quot;</p>
+This version is specified in <a href="https://tools.ietf.org/html/rfc5280">RFC 5280</a>. It is also known as PKIX, full form being "<em>Public Key Infrastructure (X.509)</em>"</p>
+
 <h3>X509 File types</h3>
-<p>There are a bunch of file type names being thrown around X.509. Occasionally and incorrectly it is said that they are all interchangeable.
-While in come cases they may be interchangeable. It is always better to know your certificates and label them accordingly.  </p>
+
+<p>There are a bunch of file type names being thrown around X.509. Occasionally and incorrectly it is said that they are all interchangeable. 
+While in come cases they may be interchangeable. It is always better to know your certificates and label them accordingly.</p>
+
 <h4>Encodings (may be used as file extensions on Windows systems)</h4>
+
 <ul>
-<li>
-<p>.DER = The DER extension is used for binary DER encoded certificates. These files may also bear the CER or the CRT extension.
-It would be better to say that &quot;<strong>This is a DER encoded certificate</strong>&quot; rather than &quot;This is DER certificate&quot;.</p>
-</li>
-<li>
-<p>.PEM = The PEM extension is used for X.509v3 files which contain ASCII (Base64) encoded data prefixed with a &quot;—–
-BEGIN ...&quot; type of line.</p>
-<h4>Common file extensions</h4>
-</li>
-<li>
-<p>CRT = The CRT extension is used for certificates. The certificates may be encoded as binary DER or as ASCII PEM. The CER and
-CRT extensions are nearly synonymous. Most common among *nix systems</p>
-</li>
-<li>
-<p>CER = alternate form of .crt (Microsoft Convention) You can use MS to convert .crt to .cer (.both DER encoded .cer, or base64[PEM]
-encoded .cer) The .cer file extension is also recognized by IE as a command to run a MS cryptoAPI command (specifically
-rundll32.exe cryptext.dll,CryptExtOpenCER) which displays a dialogue for importing and/or viewing certificate contents.</p>
-</li>
-<li>
-<p>.KEY = The KEY extension is used both for public and private PKCS#8 keys. The keys may be encoded as binary DER or as ASCII
-PEM.  </p>
-</li>
+<li>.DER = The DER extension is used for binary DER encoded certificates. These files may also bear the CER or the CRT extension.
+  It would be better to say that "<strong>This is a DER encoded certificate</strong>" rather than "This is DER certificate".</li>
+<li>.PEM = The PEM extension is used for X.509v3 files which contain ASCII (Base64) encoded data prefixed with a "—–
+BEGIN ..." type of line.</li>
 </ul>
+
+<h4>Common file extensions</h4>
+
+<ul>
+<li><p>CRT = The CRT extension is used for certificates. The certificates may be encoded as binary DER or as ASCII PEM. The CER and
+CRT extensions are nearly synonymous. Most common among *nix systems</p></li>
+<li><p>CER = alternate form of .crt (Microsoft Convention) You can use MS to convert .crt to .cer (.both DER encoded .cer, or base64[PEM]
+encoded .cer) The .cer file extension is also recognized by IE as a command to run a MS cryptoAPI command (specifically
+rundll32.exe cryptext.dll,CryptExtOpenCER) which displays a dialogue for importing and/or viewing certificate contents.</p></li>
+<li><p>.KEY = The KEY extension is used both for public and private PKCS#8 keys. The keys may be encoded as binary DER or as ASCII
+PEM.</p></li>
+</ul>
+
 <p>The only time CRT and CER can safely be interchanged is when the encoding type can be identical. (ie PEM encoded CRT = PEM encoded
-CER)  </p>
+CER)</p>
+
 <h4>Basic OpenSSL Certificate Operations</h4>
+
 <p>There are four basic types of certificate manipulations. View, Transform, Combination , and Extraction</p>
+
 <p>To view PEM encoded certificates</p>
-<pre><code class="language-bash">openssl x509 -in certfile -text noout</code></pre>
+
+<pre><code class="language-bash">openssl x509 -in certfile -text noout
+</code></pre>
+
 <p>Here <code>certfile</code> can have any of the above mentioned encodings. Following error might occur:</p>
+
 <pre><code class="language-bash">unable to load certificate
-12626:error:0906D06C:PEM routines:PEM_read_bio:no start line:pem_lib.c:647:Expecting: TRUSTED CERTIFICATE</code></pre>
+12626:error:0906D06C:PEM routines:PEM_read_bio:no start line:pem_lib.c:647:Expecting: TRUSTED CERTIFICATE
+</code></pre>
+
 <p>This typically means that you are trying to read a certificate which is in DER format.<br />
 To view a certificate use following</p>
-<pre><code class="language-bash">openssl x509 -in certfile -inform der -text -noout</code></pre>
+
+<pre><code class="language-bash">openssl x509 -in certfile -inform der -text -noout
+</code></pre>
+
 <p>You will encounter following error if you try to run above command on PEM encoded certificate:</p>
+
 <pre><code class="language-bash">unable to load certificate
 13978:error:0D0680A8:asn1 encoding routines:ASN1_CHECK_TLEN:wrong tag:tasn_dec.c:1306:
-13978:error:0D07803A:asn1 encoding routines:ASN1_ITEM_EX_D2I:nested asn1 error:tasn_dec.c:380:Type=X509</code></pre>
+13978:error:0D07803A:asn1 encoding routines:ASN1_ITEM_EX_D2I:nested asn1 error:tasn_dec.c:380:Type=X509
+</code></pre>
+
 <p>PEM to DER can be transformed like following</p>
-<pre><code class="language-bash">openssl x509 -in certfile -outform der -out cert.der</code></pre>
+
+<pre><code class="language-bash">openssl x509 -in certfile -outform der -out cert.der
+</code></pre>
+
 <p>Similarly DER to PEM can be transformed like following</p>
-<pre><code class="language-bash">openssl x509 -in certfile -inform der -outform pem -out cert.pem</code></pre>
+
+<pre><code class="language-bash">openssl x509 -in certfile -inform der -outform pem -out cert.pem
+</code></pre>
+
 <h4>Combining X.509 certificate components</h4>
+
 <p>In some cases it is advantageous to combine multiple pieces of the X.509 infrastructure into a single file. One common example would be to
 combine both the private key and public key into the same certificate.
 The easiest way to combine certs keys and chains is to convert each to a PEM encoded certificate then simple copy the contents of each file
-into a new file. This is suitable for combining files to use in a number of applications.  </p>
+into a new file. This is suitable for combining files to use in a number of applications.</p>
+
 <p>Quite often you will come across a file with .p12 extensions.<br />
 This type of file uses that uses PKCS#12 (Public Key Cryptography Standard #12) encryption.<br />
 It is typically used as a portable format for transferring personal private keys or other sensitive information.<br />
 It is also used by various security and encryption programs.</p>
+
 <h4>Extracting components from certificates</h4>
+
 <p>An X.509 certificate contains ONLY the public key and NEVER contains a private key.<br />
 To extract the public key from it use following</p>
-<pre><code class="language-bash">openssl x509 -pubkey -noout -in certfile.pem</code></pre>
+
+<pre><code class="language-bash">openssl x509 -pubkey -noout -in certfile.pem
+</code></pre>
+
 <p>To calculate fingerprint/thumbprint/hash/signature of X.509 certificate in SHA256 use following</p>
-<pre><code>openssl x509 -noout -fingerprint -sha256 -inform pem -in certfile.pem</code></pre>
+
+<pre><code>openssl x509 -noout -fingerprint -sha256 -inform pem -in certfile.pem
+</code></pre>
+
 <p>To calculate fingerprint/thumbprint/hash/signature of public key of X.509 certificate in SHA256 use following</p>
-<pre><code>openssl x509 -in certfile.pem -pubkey -noout | grep -v '^-' | base64 -d | openssl sha256</code></pre>
-<p>If you have your certificate in DER encoding, simple add <code>-inform der</code> to above commands accordingly.</p>    </div>
+
+<pre><code>openssl x509 -in certfile.pem -pubkey -noout | grep -v '^-' | base64 -d | openssl sha256
+</code></pre>
+
+<p>If you have your certificate in DER encoding, simple add <code>-inform der</code> to above commands accordingly.</p>
+    </div>
 
     <nav class="flex justify-between text-sm md:text-base">
         <div>
@@ -199,9 +229,9 @@ To extract the public key from it use following</p>
         </main>
 
         <footer class="bg-white text-center text-sm mt-12 py-4" role="contentinfo">
-            <ul class="flex flex-col md:flex-row justify-center list-reset">
+            <ul class="flex flex-col md:flex-row justify-center list-none">
                 <li class="md:mr-2">
-                    &copy; 2019. Some rights reserved.
+                    &copy; <a href="https://tighten.co" title="Tighten website">Tighten</a> 2021.
                 </li>
 
                 <li>
@@ -211,7 +241,7 @@ To extract the public key from it use following</p>
             </ul>
         </footer>
 
-        <script src="/assets/build/js/main.js?id=ecff99b3948a67b9c95f"></script>
+        <script src="/assets/build/js/main.js"></script>
 
         <script>
     const navMenu = {
