@@ -2,17 +2,17 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
 	<title>Schartz&#x27;s</title>
 	<subtitle>Dev blog, general blog and dev log of Schartz Rehan.</subtitle>
-	<link href="http://127.0.0.1:8000/atom.xml" rel="self" type="application/atom+xml"/>
-  <link href="http://127.0.0.1:8000"/>
+	<link href="https://schartz.github.io/atom.xml" rel="self" type="application/atom+xml"/>
+  <link href="https://schartz.github.io"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
 	<updated>2020-08-28T00:00:00+00:00</updated>
-	<id>http://127.0.0.1:8000/atom.xml</id>
+	<id>https://schartz.github.io/atom.xml</id>
 	<entry xml:lang="en">
 		<title>About</title>
 		<published>2020-08-28T00:00:00+00:00</published>
 		<updated>2020-08-28T00:00:00+00:00</updated>
-		<link href="http://127.0.0.1:8000/about/" type="text/html"/>
-		<id>http://127.0.0.1:8000/about/</id>
+		<link href="https://schartz.github.io/about/" type="text/html"/>
+		<id>https://schartz.github.io/about/</id>
 		<content type="html">&lt;p&gt;&lt;strong&gt;I am bout page&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
 </content>
 	</entry>
@@ -20,8 +20,8 @@
 		<title>X.509 Certificates Explained</title>
 		<published>2019-07-06T00:00:00+00:00</published>
 		<updated>2019-07-06T00:00:00+00:00</updated>
-		<link href="http://127.0.0.1:8000/blog/x509-certificates-explained/" type="text/html"/>
-		<id>http://127.0.0.1:8000/blog/x509-certificates-explained/</id>
+		<link href="https://schartz.github.io/blog/x509-certificates-explained/" type="text/html"/>
+		<id>https://schartz.github.io/blog/x509-certificates-explained/</id>
 		<content type="html">&lt;p&gt;To put it simply, X.509 certificate is a digital document encoded and&#x2F;or
 digitally signed according to &lt;a href=&quot;https:&#x2F;&#x2F;tools.ietf.org&#x2F;html&#x2F;rfc5280&quot;&gt;RFC 5280&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;Generally speaking &lt;em&gt;X.509 certificate&lt;&#x2F;em&gt; refers to IETF&#x27;s(Internet Engineering Task Force) PKIX certificate
@@ -106,8 +106,8 @@ To extract the public key from it use following&lt;&#x2F;p&gt;
 		<title>The Shape of Tensor</title>
 		<published>2019-06-07T00:00:00+00:00</published>
 		<updated>2019-06-07T00:00:00+00:00</updated>
-		<link href="http://127.0.0.1:8000/blog/the-shape-of-tensor/" type="text/html"/>
-		<id>http://127.0.0.1:8000/blog/the-shape-of-tensor/</id>
+		<link href="https://schartz.github.io/blog/the-shape-of-tensor/" type="text/html"/>
+		<id>https://schartz.github.io/blog/the-shape-of-tensor/</id>
 		<content type="html">&lt;p&gt;Tensors are the primary data structures used by neural networks. And they are rather fascinating as well.
 Machine learning and by extension deep learning is an interdisciplinary field. Its interesting
 to note how many different people from many different fields came to same concepts. Specific to this writing,
@@ -268,8 +268,8 @@ I enjoyed my time with the book. I hope you will too.&lt;&#x2F;p&gt;
 		<title>Installing tensorflow 1.13 on Elementary OS Juno.</title>
 		<published>2019-06-02T00:00:00+00:00</published>
 		<updated>2019-06-02T00:00:00+00:00</updated>
-		<link href="http://127.0.0.1:8000/blog/installing-tensorflow-on-ubuntu/" type="text/html"/>
-		<id>http://127.0.0.1:8000/blog/installing-tensorflow-on-ubuntu/</id>
+		<link href="https://schartz.github.io/blog/installing-tensorflow-on-ubuntu/" type="text/html"/>
+		<id>https://schartz.github.io/blog/installing-tensorflow-on-ubuntu/</id>
 		<content type="html">&lt;p&gt;Setting up Tensorflow with GPU support gave me good deal of pain. Internet is full of tutorials
 with older releases of Tensorflow. Some of them use an approach of installing CUDA toolkit via apt.
 This approach is not appropriate because of a number of reasons.&lt;br &#x2F;&gt;

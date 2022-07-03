@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>http://127.0.0.1:8000/</loc>
+        <loc>https://schartz.github.io/</loc>
     </url>
     <url>
-        <loc>http://127.0.0.1:8000/about/</loc>
+        <loc>https://schartz.github.io/about/</loc>
         <lastmod>2020-08-28</lastmod>
     </url>
     <url>
-        <loc>http://127.0.0.1:8000/blog/</loc>
+        <loc>https://schartz.github.io/blog/</loc>
     </url>
     <url>
-        <loc>http://127.0.0.1:8000/blog/installing-tensorflow-on-ubuntu/</loc>
+        <loc>https://schartz.github.io/blog/installing-tensorflow-on-ubuntu/</loc>
         <lastmod>2019-06-02</lastmod>
     </url>
     <url>
-        <loc>http://127.0.0.1:8000/blog/page/1/</loc>
+        <loc>https://schartz.github.io/blog/page/1/</loc>
     </url>
     <url>
-        <loc>http://127.0.0.1:8000/blog/the-shape-of-tensor/</loc>
+        <loc>https://schartz.github.io/blog/the-shape-of-tensor/</loc>
         <lastmod>2019-06-07</lastmod>
     </url>
     <url>
-        <loc>http://127.0.0.1:8000/blog/x509-certificates-explained/</loc>
+        <loc>https://schartz.github.io/blog/x509-certificates-explained/</loc>
         <lastmod>2019-07-06</lastmod>
     </url>
 </urlset>
