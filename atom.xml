@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+	<title>Schartz&#x27;s</title>
+	<subtitle>Dev blog, general blog and dev log of Schartz Rehan.</subtitle>
+	<link href="http://127.0.0.1:8000/atom.xml" rel="self" type="application/atom+xml"/>
+  <link href="http://127.0.0.1:8000"/>
+	<generator uri="https://www.getzola.org/">Zola</generator>
+	<updated>2020-08-28T00:00:00+00:00</updated>
+	<id>http://127.0.0.1:8000/atom.xml</id>
+	<entry xml:lang="en">
+		<title>About</title>
+		<published>2020-08-28T00:00:00+00:00</published>
+		<updated>2020-08-28T00:00:00+00:00</updated>
+		<link href="http://127.0.0.1:8000/about/" type="text/html"/>
+		<id>http://127.0.0.1:8000/about/</id>
+		<content type="html">&lt;p&gt;&lt;strong&gt;I am bout page&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>X.509 Certificates Explained</title>
+		<published>2019-07-06T00:00:00+00:00</published>
+		<updated>2019-07-06T00:00:00+00:00</updated>
+		<link href="http://127.0.0.1:8000/blog/x509-certificates-explained/" type="text/html"/>
+		<id>http://127.0.0.1:8000/blog/x509-certificates-explained/</id>
+		<content type="html">&lt;p&gt;To put it simply, X.509 certificate is a digital document encoded and&#x2F;or
+digitally signed according to &lt;a href=&quot;https:&#x2F;&#x2F;tools.ietf.org&#x2F;html&#x2F;rfc5280&quot;&gt;RFC 5280&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Generally speaking &lt;em&gt;X.509 certificate&lt;&#x2F;em&gt; refers to IETF&#x27;s(Internet Engineering Task Force) PKIX certificate
+and CRL profile of the X.509 certificate v3 standard. Yes there are versions of this thing.
+This version is specified in &lt;a href=&quot;https:&#x2F;&#x2F;tools.ietf.org&#x2F;html&#x2F;rfc5280&quot;&gt;RFC 5280&lt;&#x2F;a&gt;. It is also known as PKIX, full form being &amp;quot;&lt;em&gt;Public Key Infrastructure (X.509)&lt;&#x2F;em&gt;&amp;quot;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;x509-file-types&quot;&gt;X509 File types&lt;&#x2F;h3&gt;
+&lt;p&gt;There are a bunch of file type names being thrown around X.509. Occasionally and incorrectly it is said that they are all interchangeable. 
+While in come cases they may be interchangeable. It is always better to know your certificates and label them accordingly.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;encodings-may-be-used-as-file-extensions-on-windows-systems&quot;&gt;Encodings (may be used as file extensions on Windows systems)&lt;&#x2F;h4&gt;
+&lt;ul&gt;
+&lt;li&gt;.DER = The DER extension is used for binary DER encoded certificates. These files may also bear the CER or the CRT extension.
+It would be better to say that &amp;quot;&lt;strong&gt;This is a DER encoded certificate&lt;&#x2F;strong&gt;&amp;quot; rather than &amp;quot;This is DER certificate&amp;quot;.&lt;&#x2F;li&gt;
+&lt;li&gt;.PEM = The PEM extension is used for X.509v3 files which contain ASCII (Base64) encoded data prefixed with a &amp;quot;—–
+BEGIN ...&amp;quot; type of line.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h4 id=&quot;common-file-extensions&quot;&gt;Common file extensions&lt;&#x2F;h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;CRT = The CRT extension is used for certificates. The certificates may be encoded as binary DER or as ASCII PEM. The CER and
+CRT extensions are nearly synonymous. Most common among *nix systems&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;CER = alternate form of .crt (Microsoft Convention) You can use MS to convert .crt to .cer (.both DER encoded .cer, or base64[PEM]
+encoded .cer) The .cer file extension is also recognized by IE as a command to run a MS cryptoAPI command (specifically
+rundll32.exe cryptext.dll,CryptExtOpenCER) which displays a dialogue for importing and&#x2F;or viewing certificate contents.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;.KEY = The KEY extension is used both for public and private PKCS#8 keys. The keys may be encoded as binary DER or as ASCII
+PEM.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;The only time CRT and CER can safely be interchanged is when the encoding type can be identical. (ie PEM encoded CRT = PEM encoded
+CER)&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;basic-openssl-certificate-operations&quot;&gt;Basic OpenSSL Certificate Operations&lt;&#x2F;h4&gt;
+&lt;p&gt;There are four basic types of certificate manipulations. View, Transform, Combination , and Extraction&lt;&#x2F;p&gt;
+&lt;p&gt;To view PEM encoded certificates&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; x509&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -in&lt;&#x2F;span&gt;&lt;span&gt; certfile&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -text&lt;&#x2F;span&gt;&lt;span&gt; noout
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here &lt;code&gt;certfile&lt;&#x2F;code&gt; can have any of the above mentioned encodings. Following error might occur:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;unable&lt;&#x2F;span&gt;&lt;span&gt; to load certificate
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;12626:error:0906D06C:PEM&lt;&#x2F;span&gt;&lt;span&gt; routines:PEM_read_bio:no start line:pem_lib.c:647:Expecting: TRUSTED CERTIFICATE
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This typically means that you are trying to read a certificate which is in DER format.&lt;br &#x2F;&gt;
+To view a certificate use following&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; x509&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -in&lt;&#x2F;span&gt;&lt;span&gt; certfile&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -inform&lt;&#x2F;span&gt;&lt;span&gt; der&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -text -noout
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;You will encounter following error if you try to run above command on PEM encoded certificate:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;unable&lt;&#x2F;span&gt;&lt;span&gt; to load certificate
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;13978:error:0D0680A8:asn1&lt;&#x2F;span&gt;&lt;span&gt; encoding routines:ASN1_CHECK_TLEN:wrong tag:tasn_dec.c:1306:
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;13978:error:0D07803A:asn1&lt;&#x2F;span&gt;&lt;span&gt; encoding routines:ASN1_ITEM_EX_D2I:nested asn1 error:tasn_dec.c:380:Type=X509
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;PEM to DER can be transformed like following&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; x509&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -in&lt;&#x2F;span&gt;&lt;span&gt; certfile&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -outform&lt;&#x2F;span&gt;&lt;span&gt; der&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -out&lt;&#x2F;span&gt;&lt;span&gt; cert.der
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Similarly DER to PEM can be transformed like following&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; x509&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -in&lt;&#x2F;span&gt;&lt;span&gt; certfile&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -inform&lt;&#x2F;span&gt;&lt;span&gt; der&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -outform&lt;&#x2F;span&gt;&lt;span&gt; pem&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -out&lt;&#x2F;span&gt;&lt;span&gt; cert.pem
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h4 id=&quot;combining-x-509-certificate-components&quot;&gt;Combining X.509 certificate components&lt;&#x2F;h4&gt;
+&lt;p&gt;In some cases it is advantageous to combine multiple pieces of the X.509 infrastructure into a single file. One common example would be to
+combine both the private key and public key into the same certificate.
+The easiest way to combine certs keys and chains is to convert each to a PEM encoded certificate then simple copy the contents of each file
+into a new file. This is suitable for combining files to use in a number of applications.&lt;&#x2F;p&gt;
+&lt;p&gt;Quite often you will come across a file with .p12 extensions.&lt;br &#x2F;&gt;
+This type of file uses that uses PKCS#12 (Public Key Cryptography Standard #12) encryption.&lt;br &#x2F;&gt;
+It is typically used as a portable format for transferring personal private keys or other sensitive information.&lt;br &#x2F;&gt;
+It is also used by various security and encryption programs.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;extracting-components-from-certificates&quot;&gt;Extracting components from certificates&lt;&#x2F;h4&gt;
+&lt;p&gt;An X.509 certificate contains ONLY the public key and NEVER contains a private key.&lt;br &#x2F;&gt;
+To extract the public key from it use following&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; x509&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -pubkey -noout -in&lt;&#x2F;span&gt;&lt;span&gt; certfile.pem
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;To calculate fingerprint&#x2F;thumbprint&#x2F;hash&#x2F;signature of X.509 certificate in SHA256 use following&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;openssl x509 -noout -fingerprint -sha256 -inform pem -in certfile.pem
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;To calculate fingerprint&#x2F;thumbprint&#x2F;hash&#x2F;signature of public key of X.509 certificate in SHA256 use following&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;openssl x509 -in certfile.pem -pubkey -noout | grep -v &amp;#39;^-&amp;#39; | base64 -d | openssl sha256
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;If you have your certificate in DER encoding, simple add &lt;code&gt;-inform der&lt;&#x2F;code&gt; to above commands accordingly.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>The Shape of Tensor</title>
+		<published>2019-06-07T00:00:00+00:00</published>
+		<updated>2019-06-07T00:00:00+00:00</updated>
+		<link href="http://127.0.0.1:8000/blog/the-shape-of-tensor/" type="text/html"/>
+		<id>http://127.0.0.1:8000/blog/the-shape-of-tensor/</id>
+		<content type="html">&lt;p&gt;Tensors are the primary data structures used by neural networks. And they are rather fascinating as well.
+Machine learning and by extension deep learning is an interdisciplinary field. Its interesting
+to note how many different people from many different fields came to same concepts. Specific to this writing,
+the concept of tensors.&lt;&#x2F;p&gt;
+&lt;p&gt;The concept of tensor is a mathematical generalization of more specific concepts, vectors and matrices in particular.
+In neural networks transformations, input, output etc are performed via tensors.&lt;br &#x2F;&gt;
+To build a good enough concept let&#x27;s start with a matrix of some simple concepts from computer science and mathematics.&lt;&#x2F;p&gt;
+&lt;p style=&quot;text-align:center&quot;&gt;&lt;img class=&quot;no-shadow&quot; src=&quot;&#x2F;assets&#x2F;img&#x2F;posts&#x2F;eqn1.png&quot;&gt;&lt;&#x2F;p&gt;  
+&lt;p&gt;The same can also be represented via following matrix&lt;&#x2F;p&gt;
+&lt;p style=&quot;text-align:center&quot;&gt;&lt;img class=&quot;no-shadow&quot; src=&quot;&#x2F;assets&#x2F;img&#x2F;posts&#x2F;eqn2.png&quot;&gt;&lt;&#x2F;p&gt;  
+&lt;p&gt;This pseudo-mathematical notation gives us a nice one-to-one relationship between concepts of number, array and 2d-array from computer science
+to the concepts of scalar, vector and matrix in mathematics.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s write examples of above 6 concepts to better understand them&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;number&lt;&#x2F;span&gt;&lt;span&gt;   ---&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;9
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;scalar&lt;&#x2F;span&gt;&lt;span&gt;   ---&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;9
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;array&lt;&#x2F;span&gt;&lt;span&gt;    ---&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span&gt;5, 8, 3&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;vector&lt;&#x2F;span&gt;&lt;span&gt;   ---&amp;gt; (5i, 8j, 3k) 
+&lt;&#x2F;span&gt;&lt;span&gt;                   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;or 
+&lt;&#x2F;span&gt;&lt;span&gt;              &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;5i&lt;&#x2F;span&gt;&lt;span&gt; + 8j + 3k 
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;or&lt;&#x2F;span&gt;&lt;span&gt; simply 
+&lt;&#x2F;span&gt;&lt;span&gt;                (&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;5,&lt;&#x2F;span&gt;&lt;span&gt; 8, 3)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2d-array&lt;&#x2F;span&gt;&lt;span&gt; ---&amp;gt; [
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[1,&lt;&#x2F;span&gt;&lt;span&gt; 2, 3]
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[4,&lt;&#x2F;span&gt;&lt;span&gt; 5, 6]
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[7,&lt;&#x2F;span&gt;&lt;span&gt; 8, 9]
+&lt;&#x2F;span&gt;&lt;span&gt;              &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;]
+&lt;&#x2F;span&gt;&lt;span&gt;              
+&lt;&#x2F;span&gt;&lt;span&gt;              
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;matrix&lt;&#x2F;span&gt;&lt;span&gt;   ---&amp;gt; |&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;1,&lt;&#x2F;span&gt;&lt;span&gt; 2, 3|
+&lt;&#x2F;span&gt;&lt;span&gt;              |&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;4,&lt;&#x2F;span&gt;&lt;span&gt; 5, 6|
+&lt;&#x2F;span&gt;&lt;span&gt;              |&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;7,&lt;&#x2F;span&gt;&lt;span&gt; 8, 9|
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;the-index-notation&quot;&gt;The index notation&lt;&#x2F;h2&gt;
+&lt;p&gt;Upon closer inspection of the above examples it&#x27;s apparent that to access any element 
+in each representation, we need the same number of indices in the related concepts of computer science and mathematics.&lt;&#x2F;p&gt;
+&lt;p&gt;For example, to access an element in an array we need following notation&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;my_array&lt;&#x2F;span&gt;&lt;span&gt; = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span&gt;5, 8, 3&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;my_array[2]&lt;&#x2F;span&gt;&lt;span&gt; ---&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;8
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Similarly to access a component of a mathematical vector we need one index, and, vice-versa for matrix and 2d-array. We have following underlying pattern:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Indices Required&lt;&#x2F;th&gt;&lt;th&gt;Computer Science&lt;&#x2F;th&gt;&lt;th&gt;Mathematics&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;number&lt;&#x2F;td&gt;&lt;td&gt;scalar&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;td&gt;array&lt;&#x2F;td&gt;&lt;td&gt;vector&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2&lt;&#x2F;td&gt;&lt;td&gt;2d-array&lt;&#x2F;td&gt;&lt;td&gt;matrix&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;This gives us a working framework to make the generalization. &lt;&#x2F;p&gt;
+&lt;h2 id=&quot;meet-the-tensors&quot;&gt;Meet the tensors&lt;&#x2F;h2&gt;
+&lt;p&gt;When we have more than two indices to refer to a specific element in a data structures (or mathematical, structure) we stop 
+treating them with special names like scalars, vectors, matrices etc. Instead we address them  with a more generalized language.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;We call them Tensors.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;This gives us following table&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Indices Required&lt;&#x2F;th&gt;&lt;th&gt;Computer Science&lt;&#x2F;th&gt;&lt;th&gt;Mathematics&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;number&lt;&#x2F;td&gt;&lt;td&gt;scalar&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;td&gt;array&lt;&#x2F;td&gt;&lt;td&gt;vector&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2&lt;&#x2F;td&gt;&lt;td&gt;2d-array&lt;&#x2F;td&gt;&lt;td&gt;matrix&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;n&lt;&#x2F;td&gt;&lt;td&gt;nd-array&lt;&#x2F;td&gt;&lt;td&gt;tensor&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;For all practical purposes in programming. It is good enough to remember that:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Tensors are multidimensional arrays.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Coming back to the part of generalization part. It&#x27;s safe to draw following conclusions:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;scalar    ---&amp;gt; 0 dimensional tensor  ---&amp;gt; number&lt;&#x2F;li&gt;
+&lt;li&gt;vector    ---&amp;gt; 1 dimensional tensor  ---&amp;gt; simple array&lt;&#x2F;li&gt;
+&lt;li&gt;matrix    ---&amp;gt; 2 dimensional tensor  ---&amp;gt; 2d array&lt;&#x2F;li&gt;
+&lt;li&gt;nd array  ---&amp;gt; n dimensional tensor ---&amp;gt; nd array&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;The dimension of a tensor a completely different entity from what we mean when we refer to the dimension of a vector in a vector space. The dimension of a tensor does not tell us how many components exist within the tensor.&lt;&#x2F;p&gt;
+&lt;p&gt;If we have a three dimensional vector from three dimensional euclidean space, we have an ordered triple with three components.&lt;&#x2F;p&gt;
+&lt;p&gt;A three dimensional tensor, however, can have many more than three components. Our two dimensional tensor &lt;code&gt;2d-array&lt;&#x2F;code&gt; for example has nine components.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2d-array&lt;&#x2F;span&gt;&lt;span&gt; ---&amp;gt; [
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[1,&lt;&#x2F;span&gt;&lt;span&gt; 2, 3]
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[4,&lt;&#x2F;span&gt;&lt;span&gt; 5, 6]
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[7,&lt;&#x2F;span&gt;&lt;span&gt; 8, 9]
+&lt;&#x2F;span&gt;&lt;span&gt;              &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;]
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;rank-and-axes-of-tensor&quot;&gt;Rank and Axes of Tensor&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;strong&gt;A tensor&#x27;s rank is equal to the number of indices are needed to access to a specific element within the tensor.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;In our example our &lt;code&gt;2d-array&lt;&#x2F;code&gt; tensor is of rank two because we need to indices to access any element inside it.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;elem&lt;&#x2F;span&gt;&lt;span&gt; = 2d-array&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span&gt;i&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;][&lt;&#x2F;span&gt;&lt;span&gt;j&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;]
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;strong&gt;Axis refers to a particular dimension of a tensor.&lt;&#x2F;strong&gt;&lt;br &#x2F;&gt;
+In case of a tensor of rank 2, it has 2 dimensions (also called 2 axis), hence a requirement of 2 indices (one for each axis or dimension) to access any element.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;The length of each axis tells us how many indexes are available along each axis.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-shape-of-tensor&quot;&gt;The Shape of Tensor&lt;&#x2F;h2&gt;
+&lt;p&gt;The shape of a tensor is determined by the length of each axis, so if we know the shape of a given tensor, then we know the length of each axis, and this tells us how many indexes are available along each axis.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;The shape of a tensor gives us the length of each axis of the tensor.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Going back to our familiar &lt;code&gt;2d-array&lt;&#x2F;code&gt; tensor&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;2d-array&lt;&#x2F;span&gt;&lt;span&gt; ---&amp;gt; [
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[1,&lt;&#x2F;span&gt;&lt;span&gt; 2, 3]
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[4,&lt;&#x2F;span&gt;&lt;span&gt; 5, 6]
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[7,&lt;&#x2F;span&gt;&lt;span&gt; 8, 9]
+&lt;&#x2F;span&gt;&lt;span&gt;              &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;]
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We say that above tensor&#x27;s shape is &lt;code&gt;3 x 3&lt;&#x2F;code&gt; which means that it has 2 axis (or dimensions) of length 3 each.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Tensor&#x27;s shape is super important.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Higher rank tensors tend to become more and more abstract very quickly.
+In this case shape provides us some reference point to understand them.&lt;&#x2F;p&gt;
+&lt;p&gt;Additionally tensors being the data structures of neural networks flow through various layers of the network. 
+More than often they are required to be in a certain shape. &lt;&#x2F;p&gt;
+&lt;h2 id=&quot;reshaping-the-tensor&quot;&gt;Reshaping the tensor&lt;&#x2F;h2&gt;
+&lt;p&gt;Reshaping is a simple yet very powerful concept. 
+Simply put, reshaping refers to the process of changing the order of axis (dimensions) in the data structure.
+For example lets say we have a tensor of rank 2 as follows:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Shape&lt;&#x2F;span&gt;&lt;span&gt; 2 x 3
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;[
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[4,&lt;&#x2F;span&gt;&lt;span&gt; 5, 6]
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[7,&lt;&#x2F;span&gt;&lt;span&gt; 8, 9]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;]
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;It can be reshaped to various shapes as follows:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Shape&lt;&#x2F;span&gt;&lt;span&gt; 6 x 1
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;[  
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[4],  
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[5],  
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[6],  
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[7],  
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[8],  
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[9],  
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;]
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Shape&lt;&#x2F;span&gt;&lt;span&gt; 3 x 2
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;[
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[4,&lt;&#x2F;span&gt;&lt;span&gt; 7],
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[5,&lt;&#x2F;span&gt;&lt;span&gt; 8],
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[6,&lt;&#x2F;span&gt;&lt;span&gt; 9]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;]
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Shape&lt;&#x2F;span&gt;&lt;span&gt; 1 x 6
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;[
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;[4],[5],[6],[7],[8],[9],
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;]
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Important point to note about reshaping operation is that it changes the shape, ie. it changes the ordering of individual elements inside a tensor, but is does not change the underlying elements themselves.&lt;&#x2F;p&gt;
+&lt;p&gt;Above is a very crude but workable conceptual introduction to tensors.&lt;br &#x2F;&gt;
+It is by no means rigorous. However, it serves as good enough starting point while trying to work with Neural Networks from a &amp;quot;mathematically un-inclined programmer&amp;quot; perspective.&lt;&#x2F;p&gt;
+&lt;p&gt;Rigorous mathematical treatment of this subject is of utmost importance if one wishes to do anything meaningful in the area of Deep Learning.&lt;&#x2F;p&gt;
+&lt;p&gt;For a just enough introduction, this is a &lt;strong&gt;must&lt;&#x2F;strong&gt; read:
+&lt;a href=&quot;http:&#x2F;&#x2F;www.ita.uni-heidelberg.de&#x2F;%7Edullemond&#x2F;lectures&#x2F;tensor&#x2F;tensor.pdf&quot;&gt;Intruduction to Tensor Calculus, Kees Dullemond &amp;amp; Kasper Peeters&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ll also highly recommend &lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.in&#x2F;dp&#x2F;1541013638&#x2F;ref=cm_sw_r_tw_dp_U_x_uwH-CbV9MFGXN&quot;&gt;Tensor Calculus Made Simple, Taha Sochi&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+I enjoyed my time with the book. I hope you will too.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Installing tensorflow 1.13 on Elementary OS Juno.</title>
+		<published>2019-06-02T00:00:00+00:00</published>
+		<updated>2019-06-02T00:00:00+00:00</updated>
+		<link href="http://127.0.0.1:8000/blog/installing-tensorflow-on-ubuntu/" type="text/html"/>
+		<id>http://127.0.0.1:8000/blog/installing-tensorflow-on-ubuntu/</id>
+		<content type="html">&lt;p&gt;Setting up Tensorflow with GPU support gave me good deal of pain. Internet is full of tutorials
+with older releases of Tensorflow. Some of them use an approach of installing CUDA toolkit via apt.
+This approach is not appropriate because of a number of reasons.&lt;br &#x2F;&gt;
+Tensorflow 2.0 is in alpha stage now.
+It has a planned stable release in second quarter of 2019. Soon enough I&#x27;ll be upgrading to latest stable.&lt;br &#x2F;&gt;
+Nvidia drivers have a penchant for being compatible with specific versions of CUDA toolkit, to make matters 
+a bit more complicated Tensorflow requires a specific version of Nvidia drivers.&lt;&#x2F;p&gt;
+&lt;p&gt;Ubuntu graphics-driver ppa has latest Nvidia drivers &lt;code&gt;nvidia-driver-430&lt;&#x2F;code&gt; at the time of writing. However, requirements for 
+Tensorflow 13.1 are &lt;code&gt;nvidia-driver-410&lt;&#x2F;code&gt; and &lt;code&gt;cuda-toolkit-10.0&lt;&#x2F;code&gt;. cuDNN 7.5.0 is also required for Tensorflow.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s begin with a clean install.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;step1-install-nvidia-drivers&quot;&gt;Step1: Install Nvidia drivers&lt;&#x2F;h2&gt;
+&lt;p&gt;If you have &lt;code&gt;nvidia-driver-410&lt;&#x2F;code&gt; meta package installed, you can skip this step.&lt;&#x2F;p&gt;
+&lt;p&gt;Start by adding Ubuntu Graphics Driver PPA if not already added. &lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span&gt; add-apt-repository ppa:graphics-drivers&#x2F;ppa    
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span&gt; apt-get update
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Remove any nvidia drivers. We are doing a clean install&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span&gt; apt-get purge nvidia* 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span&gt; apt-get autoremove 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span&gt; apt-get autoclean 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span&gt; rm&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -rf&lt;&#x2F;span&gt;&lt;span&gt; &#x2F;usr&#x2F;local&#x2F;cuda*
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;If you have a Secure Boot UEFI enabled system it will ask you to set a password which
+you&#x27;ll need to enter at the time of reboot. This is a one time only process.
+Now reboot your system.&lt;&#x2F;p&gt;
+&lt;p&gt;Check if install was successful by running following&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;nvidia-smi
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;It should print something similar to following.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;assets&#x2F;img&#x2F;posts&#x2F;nvidiasmi.png&quot; alt=&quot;Blog starter template screenshot&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Notice the version of CUDA toolkit stated by the driver.
+Version 410 of nvidia driver for Linux is only compatible with CUDA toolkit version 10.&lt;br &#x2F;&gt;
+If your screen resolution is messed up after driver install, fix it with following.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span&gt; nvidia-xconfig
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;step2-install-cuda-toolkit-10-0&quot;&gt;Step2: Install CUDA toolkit 10.0&lt;&#x2F;h2&gt;
+&lt;p&gt;Install the dependencies&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span&gt; apt-get install g++ freeglut3-dev build-essential libx11-dev libxmu-dev libxi-dev libglu1-mesa libglu1-mesa-dev
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Head over to &lt;a href=&quot;https:&#x2F;&#x2F;developer.nvidia.com&#x2F;cuda-10.0-download-archive&quot;&gt;https:&#x2F;&#x2F;developer.nvidia.com&#x2F;cuda-10.0-download-archive&lt;&#x2F;a&gt;
+and download the CUDA archive.  Make sure to download runfile.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;assets&#x2F;img&#x2F;posts&#x2F;cudatoolkit.png&quot; alt=&quot;Blog starter template screenshot&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Install it.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span&gt; sh cuda_10.0.130_410.48_linux.run
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In the installation process installer will complain that you are about to install an unsupported configuration.
+Answer &lt;code&gt;yes&lt;&#x2F;code&gt; to that. Installer complains about &#x27;unsupported configuration&#x27;, because it&#x27;s not the latest version of CUDA toolkit.
+However, latest stable version of Tensorflow (1.13 at the time of writing) requires CUDA 10.0 specifically.&lt;br &#x2F;&gt;
+Installer will also ask to add a symlink. Answer &lt;code&gt;yes&lt;&#x2F;code&gt; to that as well.&lt;br &#x2F;&gt;
+Finally add following to your &lt;code&gt;~&#x2F;.bashrc&lt;&#x2F;code&gt; and&#x2F;or &lt;code&gt;~&#x2F;.zshrc&lt;&#x2F;code&gt; in accordance with whichever shell you use.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;export &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;PATH&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;usr&#x2F;local&#x2F;cuda-10.0&#x2F;bin&lt;&#x2F;span&gt;&lt;span&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;PATH&lt;&#x2F;span&gt;&lt;span&gt;:+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;PATH&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;}}
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;export &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;LD_LIBRARY_PATH&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;usr&#x2F;local&#x2F;cuda-10.0&#x2F;lib64&lt;&#x2F;span&gt;&lt;span&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;LD_LIBRARY_PATH&lt;&#x2F;span&gt;&lt;span&gt;:+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;LD_LIBRARY_PATH&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;}}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Afterwards load these PATH additions in your current shell session as well as run &lt;code&gt;ldconfig&lt;&#x2F;code&gt;
+Run &lt;code&gt;source ~&#x2F;.zshrc&lt;&#x2F;code&gt; if you are in Z shell.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;source &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;~&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;.bashrc
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span&gt; ldconfig
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;step3-install-cudnn-7-5-0&quot;&gt;Step3: Install cuDNN 7.5.0&lt;&#x2F;h2&gt;
+&lt;p&gt;Go to &lt;a href=&quot;https:&#x2F;&#x2F;developer.nvidia.com&#x2F;rdp&#x2F;cudnn-archive&quot;&gt;https:&#x2F;&#x2F;developer.nvidia.com&#x2F;rdp&#x2F;cudnn-archive&lt;&#x2F;a&gt; and click download cuDNN button.
+Nvidia will require you to create an account (if you don&#x27;t already have one). After logging into your Nvidia Developer Account accept the agreement
+Click on cuDNN archive which says &lt;code&gt;Download cuDNN v7.5.0 (Feb 21, 2019), for CUDA 10.0&lt;&#x2F;code&gt; and download &lt;code&gt;cuDNN Library for Linux&lt;&#x2F;code&gt;
+&lt;a href=&quot;https:&#x2F;&#x2F;developer.nvidia.com&#x2F;compute&#x2F;machine-learning&#x2F;cudnn&#x2F;secure&#x2F;v7.5.0.56&#x2F;prod&#x2F;10.0_20190219&#x2F;cudnn-10.0-linux-x64-v7.5.0.56.tgz&quot;&gt;Here is the direct download link to the same.&lt;&#x2F;a&gt;&lt;br &#x2F;&gt;
+But there is no guarantee that it will work all the time. If the direct doesn&#x27;t work, follow above steps.&lt;br &#x2F;&gt;
+Once you have downloaded the cuDNN archive put it at correct place by running:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;tar -xf&lt;&#x2F;span&gt;&lt;span&gt; cudnn-10.0-linux-x64-v7.5.0.56.tgz
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span&gt; cp&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -R&lt;&#x2F;span&gt;&lt;span&gt; cuda&#x2F;include&#x2F;* &#x2F;usr&#x2F;local&#x2F;cuda-10.0&#x2F;include
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span&gt; cp&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -R&lt;&#x2F;span&gt;&lt;span&gt; cuda&#x2F;lib64&#x2F;* &#x2F;usr&#x2F;local&#x2F;cuda-10.0&#x2F;lib64
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Also install a small dependency &lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span&gt; apt-get install libcupti-dev
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Add following to your &lt;code&gt;~&#x2F;.bashrc&lt;&#x2F;code&gt; or &lt;code&gt;~&#x2F;.zshrc&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;export &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;LD_LIBRARY_PATH&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;usr&#x2F;local&#x2F;cuda&#x2F;extras&#x2F;CUPTI&#x2F;lib64:&lt;&#x2F;span&gt;&lt;span&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;LD_LIBRARY_PATH
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And finally&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;source &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;~&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;.bashrc
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span&gt; ldconfig
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;step4-test-it&quot;&gt;Step4: Test it&lt;&#x2F;h2&gt;
+&lt;p&gt;It&#x27;s recommended that you have a virtual environment for this. 
+I prefer &lt;code&gt;virtualenvwrapper&lt;&#x2F;code&gt;. 
+You can use any tool to create virtual env.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;mkvirtualenv&lt;&#x2F;span&gt;&lt;span&gt; tfgpu
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;workon&lt;&#x2F;span&gt;&lt;span&gt; tfgpu
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pip&lt;&#x2F;span&gt;&lt;span&gt; install tensorflow-gpu==1.13.1
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pip&lt;&#x2F;span&gt;&lt;span&gt; show tensorflow-gpu
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;It should show something like this &lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;assets&#x2F;img&#x2F;posts&#x2F;tf.png&quot; alt=&quot;Blog starter template screenshot&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Now go build some &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Artificial_intelligence&quot;&gt;AI&lt;&#x2F;a&gt; &lt;&#x2F;p&gt;
+</content>
+	</entry>
+</feed>

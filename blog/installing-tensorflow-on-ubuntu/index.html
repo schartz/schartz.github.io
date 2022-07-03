@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" as="font" href="http://127.0.0.1:8000/fonts/vendor/jost/jost-v4-latin-regular.woff2" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="http://127.0.0.1:8000/fonts/vendor/jost/jost-v4-latin-700.woff2"  type="font/woff2" crossorigin>
+
+
+<link rel="stylesheet" href="http://127.0.0.1:8000/main.css">
+
+
+
+  
+  
+    
+  
+
+  
+  
+    
+    
+  
+  
+  
+    
+  
+  
+  
+  
+    
+  
+  
+  
+
+
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+
+	
+
+
+	
+
+<title>Installing tensorflow 1.13 on Elementary OS Juno. | Schartz's</title>
+<meta name="description" content="Install Tensorflow GPU 1.13 on Elementary OS Juno (Ubuntu 18.04)">
+<link rel="canonical" href="http://127.0.0.1:8000/blog/installing-tensorflow-on-ubuntu/">
+
+
+  <meta name="twitter:card" content="summary_large_image">
+  
+    <meta name="twitter:image" content="http://127.0.0.1:8000/doks.png">
+  
+  <meta name="twitter:title" content="Installing tensorflow 1.13 on Elementary OS Juno.">
+  <meta name="twitter:description" content="Install Tensorflow GPU 1.13 on Elementary OS Juno (Ubuntu 18.04)">
+  <meta name="twitter:site" content="@schartz">
+  <meta name="twitter:creator" content="@schartz">
+  
+  <meta property="og:title" content="Installing tensorflow 1.13 on Elementary OS Juno.">
+  <meta property="og:description" content="Install Tensorflow GPU 1.13 on Elementary OS Juno (Ubuntu 18.04)">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="http://127.0.0.1:8000/blog/installing-tensorflow-on-ubuntu/">
+
+  
+    <meta property="og:image" content="http://127.0.0.1:8000/doks.png">
+  
+
+  <meta property="og:updated_time" content="">
+  <meta property="og:site_name" content="Installing tensorflow 1.13 on Elementary OS Juno.">
+
+  
+
+  
+
+  
+  <meta property="article:publisher" content="https://www.facebook.com/ichunyun">
+  <meta property="article:author" content="https://www.facebook.com/ichunyun">
+  <meta property="og:locale" content="en_US">
+
+
+
+
+
+  
+
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BreadcrumbList",
+    
+      
+      
+        
+        
+        
+        
+        
+        
+        
+        
+          {
+            "@type": "ListItem",
+            "position":  1 ,
+            "name": "Home",
+            "item": "http://127.0.0.1:8000/"
+          },
+          
+          
+          {
+            "@type": "ListItem",
+            "position":  2 ,
+            "name": "Blog",
+            "item": "http://127.0.0.1:8000/blog/"
+          },
+        
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+          
+          
+          {
+            "@type": "ListItem",
+            "position":  3 ,
+            "name": "Installing Tensorflow On Ubuntu",
+            "item": "http://127.0.0.1:8000/blog/installing-tensorflow-on-ubuntu/"
+          },
+        
+      
+    
+  }
+</script>
+
+
+
+
+
+
+  <meta name="theme-color" content="#fff">
+  <link rel="apple-touch-icon" sizes="180x180" href="http://127.0.0.1:8000/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="http://127.0.0.1:8000/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="http://127.0.0.1:8000/favicon-16x16.png">
+  
+    <link rel="manifest" href="http://127.0.0.1:8000/site.webmanifest" crossorigin>
+  
+
+
+  
+
+</head>
+
+  
+    
+  
+
+<body class="page single">
+  
+    
+<div class="header-bar fixed-top"></div>
+<header class="navbar fixed-top navbar-expand-md navbar-light">
+	<div class="container">
+		<input class="menu-btn order-0" type="checkbox" id="menu-btn">
+		<label class="menu-icon d-md-none" for="menu-btn"><span class="navicon"></span></label>
+		<a class="navbar-brand order-1 order-md-0 me-auto" href="http://127.0.0.1:8000">Schartz&#x27;s</a>
+		<button id="mode" class="btn btn-link order-2 order-md-4" type="button" aria-label="Toggle mode">
+			<span class="toggle-dark"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+			<span class="toggle-light"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
+		</button>
+		<ul class="navbar-nav fork-me order-3 order-md-5">
+			
+				
+					<li class="nav-item">
+						<a class="nav-link" href="https://github.com/schartz/"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg><span class="ms-2 visually-hidden">GitHub</span></a>
+					</li>
+				
+			
+		</ul>
+		<div class="collapse navbar-collapse order-4 order-md-1">
+			<ul class="navbar-nav main-nav me-auto order-5 order-md-2">
+				
+					
+				
+				
+				
+					
+						<li class="nav-item">
+							<a class="nav-link" href="http://127.0.0.1:8000/blog/">Blog</a>
+						</li>
+					
+						<li class="nav-item">
+							<a class="nav-link" href="http://127.0.0.1:8000/resume/">Resume</a>
+						</li>
+					
+				
+			</ul>
+			<div class="break order-6 d-md-none"></div>
+			
+				<form class="navbar-form flex-grow-1 order-7 order-md-3">
+					<input id="userinput" class="form-control is-search" type="search" placeholder="Search ..."
+						aria-label="Search ..." autocomplete="off">
+					<div id="suggestions" class="shadow bg-white rounded"></div>
+				</form>
+			
+		</div>
+	</div>
+</header>
+
+  
+
+  
+<div class="wrap container" role="document">
+  <div class="content">
+    <div class="row justify-content-center">
+      <div class="col-md-12 col-lg-10 col-xxl-8">
+        <article>
+          <div class="page-header">
+            <h1>Installing tensorflow 1.13 on Elementary OS Juno.</h1>
+          </div>
+          
+          <p>Setting up Tensorflow with GPU support gave me good deal of pain. Internet is full of tutorials
+with older releases of Tensorflow. Some of them use an approach of installing CUDA toolkit via apt.
+This approach is not appropriate because of a number of reasons.<br />
+Tensorflow 2.0 is in alpha stage now.
+It has a planned stable release in second quarter of 2019. Soon enough I'll be upgrading to latest stable.<br />
+Nvidia drivers have a penchant for being compatible with specific versions of CUDA toolkit, to make matters 
+a bit more complicated Tensorflow requires a specific version of Nvidia drivers.</p>
+<p>Ubuntu graphics-driver ppa has latest Nvidia drivers <code>nvidia-driver-430</code> at the time of writing. However, requirements for 
+Tensorflow 13.1 are <code>nvidia-driver-410</code> and <code>cuda-toolkit-10.0</code>. cuDNN 7.5.0 is also required for Tensorflow.</p>
+<p>Let's begin with a clean install.</p>
+<h2 id="step1-install-nvidia-drivers">Step1: Install Nvidia drivers</h2>
+<p>If you have <code>nvidia-driver-410</code> meta package installed, you can skip this step.</p>
+<p>Start by adding Ubuntu Graphics Driver PPA if not already added. </p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">sudo</span><span> add-apt-repository ppa:graphics-drivers/ppa    
+</span><span style="color:#bf616a;">sudo</span><span> apt-get update
+</span></code></pre>
+<p>Remove any nvidia drivers. We are doing a clean install</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">sudo</span><span> apt-get purge nvidia* 
+</span><span style="color:#bf616a;">sudo</span><span> apt-get autoremove 
+</span><span style="color:#bf616a;">sudo</span><span> apt-get autoclean 
+</span><span style="color:#bf616a;">sudo</span><span> rm</span><span style="color:#bf616a;"> -rf</span><span> /usr/local/cuda*
+</span></code></pre>
+<p>If you have a Secure Boot UEFI enabled system it will ask you to set a password which
+you'll need to enter at the time of reboot. This is a one time only process.
+Now reboot your system.</p>
+<p>Check if install was successful by running following</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">nvidia-smi
+</span></code></pre>
+<p>It should print something similar to following.</p>
+<p><img src="/assets/img/posts/nvidiasmi.png" alt="Blog starter template screenshot" /></p>
+<p>Notice the version of CUDA toolkit stated by the driver.
+Version 410 of nvidia driver for Linux is only compatible with CUDA toolkit version 10.<br />
+If your screen resolution is messed up after driver install, fix it with following.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">sudo</span><span> nvidia-xconfig
+</span></code></pre>
+<h2 id="step2-install-cuda-toolkit-10-0">Step2: Install CUDA toolkit 10.0</h2>
+<p>Install the dependencies</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">sudo</span><span> apt-get install g++ freeglut3-dev build-essential libx11-dev libxmu-dev libxi-dev libglu1-mesa libglu1-mesa-dev
+</span></code></pre>
+<p>Head over to <a href="https://developer.nvidia.com/cuda-10.0-download-archive">https://developer.nvidia.com/cuda-10.0-download-archive</a>
+and download the CUDA archive.  Make sure to download runfile.</p>
+<p><img src="/assets/img/posts/cudatoolkit.png" alt="Blog starter template screenshot" /></p>
+<p>Install it.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">sudo</span><span> sh cuda_10.0.130_410.48_linux.run
+</span></code></pre>
+<p>In the installation process installer will complain that you are about to install an unsupported configuration.
+Answer <code>yes</code> to that. Installer complains about 'unsupported configuration', because it's not the latest version of CUDA toolkit.
+However, latest stable version of Tensorflow (1.13 at the time of writing) requires CUDA 10.0 specifically.<br />
+Installer will also ask to add a symlink. Answer <code>yes</code> to that as well.<br />
+Finally add following to your <code>~/.bashrc</code> and/or <code>~/.zshrc</code> in accordance with whichever shell you use.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#b48ead;">export </span><span style="color:#bf616a;">PATH</span><span>=</span><span style="color:#a3be8c;">/usr/local/cuda-10.0/bin</span><span>$</span><span style="color:#a3be8c;">{</span><span style="color:#bf616a;">PATH</span><span>:+</span><span style="color:#a3be8c;">:</span><span>$</span><span style="color:#a3be8c;">{</span><span style="color:#bf616a;">PATH</span><span style="color:#a3be8c;">}}
+</span><span style="color:#b48ead;">export </span><span style="color:#bf616a;">LD_LIBRARY_PATH</span><span>=</span><span style="color:#a3be8c;">/usr/local/cuda-10.0/lib64</span><span>$</span><span style="color:#a3be8c;">{</span><span style="color:#bf616a;">LD_LIBRARY_PATH</span><span>:+</span><span style="color:#a3be8c;">:</span><span>$</span><span style="color:#a3be8c;">{</span><span style="color:#bf616a;">LD_LIBRARY_PATH</span><span style="color:#a3be8c;">}}
+</span></code></pre>
+<p>Afterwards load these PATH additions in your current shell session as well as run <code>ldconfig</code>
+Run <code>source ~/.zshrc</code> if you are in Z shell.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#96b5b4;">source </span><span style="color:#bf616a;">~</span><span>/.bashrc
+</span><span style="color:#bf616a;">sudo</span><span> ldconfig
+</span></code></pre>
+<h2 id="step3-install-cudnn-7-5-0">Step3: Install cuDNN 7.5.0</h2>
+<p>Go to <a href="https://developer.nvidia.com/rdp/cudnn-archive">https://developer.nvidia.com/rdp/cudnn-archive</a> and click download cuDNN button.
+Nvidia will require you to create an account (if you don't already have one). After logging into your Nvidia Developer Account accept the agreement
+Click on cuDNN archive which says <code>Download cuDNN v7.5.0 (Feb 21, 2019), for CUDA 10.0</code> and download <code>cuDNN Library for Linux</code>
+<a href="https://developer.nvidia.com/compute/machine-learning/cudnn/secure/v7.5.0.56/prod/10.0_20190219/cudnn-10.0-linux-x64-v7.5.0.56.tgz">Here is the direct download link to the same.</a><br />
+But there is no guarantee that it will work all the time. If the direct doesn't work, follow above steps.<br />
+Once you have downloaded the cuDNN archive put it at correct place by running:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">tar -xf</span><span> cudnn-10.0-linux-x64-v7.5.0.56.tgz
+</span><span style="color:#bf616a;">sudo</span><span> cp</span><span style="color:#bf616a;"> -R</span><span> cuda/include/* /usr/local/cuda-10.0/include
+</span><span style="color:#bf616a;">sudo</span><span> cp</span><span style="color:#bf616a;"> -R</span><span> cuda/lib64/* /usr/local/cuda-10.0/lib64
+</span></code></pre>
+<p>Also install a small dependency </p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">sudo</span><span> apt-get install libcupti-dev
+</span></code></pre>
+<p>Add following to your <code>~/.bashrc</code> or <code>~/.zshrc</code></p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#b48ead;">export </span><span style="color:#bf616a;">LD_LIBRARY_PATH</span><span>=</span><span style="color:#a3be8c;">/usr/local/cuda/extras/CUPTI/lib64:</span><span>$</span><span style="color:#bf616a;">LD_LIBRARY_PATH
+</span></code></pre>
+<p>And finally</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#96b5b4;">source </span><span style="color:#bf616a;">~</span><span>/.bashrc
+</span><span style="color:#bf616a;">sudo</span><span> ldconfig
+</span></code></pre>
+<h2 id="step4-test-it">Step4: Test it</h2>
+<p>It's recommended that you have a virtual environment for this. 
+I prefer <code>virtualenvwrapper</code>. 
+You can use any tool to create virtual env.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">mkvirtualenv</span><span> tfgpu
+</span><span style="color:#bf616a;">workon</span><span> tfgpu
+</span><span style="color:#bf616a;">pip</span><span> install tensorflow-gpu==1.13.1
+</span><span style="color:#bf616a;">pip</span><span> show tensorflow-gpu
+</span></code></pre>
+<p>It should show something like this </p>
+<p><img src="/assets/img/posts/tf.png" alt="Blog starter template screenshot" /></p>
+<p>Now go build some <a href="https://en.wikipedia.org/wiki/Artificial_intelligence">AI</a> </p>
+
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  
+    
+<footer class="footer text-muted">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 order-last order-lg-center">
+                <p>
+                    Built with <span><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 490 490" style="width: 20px; stroke: red; fill: red;" xml:space="preserve">
+                            <path id="XMLID_25_" d="M316.554,108.336c4.553,6.922,2.629,16.223-4.296,20.774c-3.44,2.261-6.677,4.928-9.621,7.929
+	c-2.938,2.995-6.825,4.497-10.715,4.497c-3.791,0-7.585-1.427-10.506-4.291c-5.917-5.801-6.009-15.298-0.207-21.212
+	c4.439-4.524,9.338-8.559,14.562-11.992C302.698,99.491,312.002,101.414,316.554,108.336z M447.022,285.869
+	c-1.506,1.536-148.839,151.704-148.839,151.704C283.994,452.035,265.106,460,245,460s-38.994-7.965-53.183-22.427L42.978,285.869
+	c-57.304-58.406-57.304-153.441,0-211.847C70.83,45.634,107.882,30,147.31,30c36.369,0,70.72,13.304,97.69,37.648
+	C271.971,43.304,306.32,30,342.689,30c39.428,0,76.481,15.634,104.332,44.021C504.326,132.428,504.326,227.463,447.022,285.869z
+	 M425.596,95.028C403.434,72.44,373.991,60,342.69,60c-31.301,0-60.745,12.439-82.906,35.027c-1.122,1.144-2.129,2.533-3.538,3.777
+	c-7.536,6.654-16.372,6.32-22.491,0c-1.308-1.352-2.416-2.633-3.538-3.777C208.055,72.44,178.612,60,147.31,60
+	c-31.301,0-60.744,12.439-82.906,35.027c-45.94,46.824-45.94,123.012,0,169.836c1.367,1.393,148.839,151.704,148.839,151.704
+	C221.742,425.229,233.02,430,245,430c11.98,0,23.258-4.771,31.757-13.433l148.839-151.703l0,0
+	C471.535,218.04,471.535,141.852,425.596,95.028z M404.169,116.034c-8.975-9.148-19.475-16.045-31.208-20.499
+	c-7.746-2.939-16.413,0.953-19.355,8.698c-2.942,7.744,0.953,16.407,8.701,19.348c7.645,2.902,14.521,7.431,20.436,13.459
+	c23.211,23.658,23.211,62.153,0,85.811l-52.648,53.661c-5.803,5.915-5.711,15.412,0.206,21.212
+	c2.921,2.863,6.714,4.291,10.506,4.291c3.889,0,7.776-1.502,10.714-4.497l52.648-53.661
+	C438.744,208.616,438.744,151.275,404.169,116.034z" />
+                        </svg></span> and <a href="https://www.getzola.org/">Zola</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+  
+
+  
+<script type="text/javascript" src="http://127.0.0.1:8000/js/main.js" defer></script>
+
+  <script type="text/javascript" src="http://127.0.0.1:8000/plugins/elasticlunr.min.js" defer></script>
+  <script type="text/javascript" src="http://127.0.0.1:8000/search_index.en.js" defer></script>
+  <script type="text/javascript" src="http://127.0.0.1:8000/js/search.js" defer></script>
+
+  
+</body>
+</html>

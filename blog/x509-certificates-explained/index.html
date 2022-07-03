@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" as="font" href="http://127.0.0.1:8000/fonts/vendor/jost/jost-v4-latin-regular.woff2" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="http://127.0.0.1:8000/fonts/vendor/jost/jost-v4-latin-700.woff2"  type="font/woff2" crossorigin>
+
+
+<link rel="stylesheet" href="http://127.0.0.1:8000/main.css">
+
+
+
+  
+  
+    
+  
+
+  
+  
+    
+    
+  
+  
+  
+    
+  
+  
+  
+  
+    
+  
+  
+  
+
+
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+
+	
+
+
+	
+
+<title>X.509 Certificates Explained | Schartz's</title>
+<meta name="description" content="X.509 Certificates Explained">
+<link rel="canonical" href="http://127.0.0.1:8000/blog/x509-certificates-explained/">
+
+
+  <meta name="twitter:card" content="summary_large_image">
+  
+    <meta name="twitter:image" content="http://127.0.0.1:8000/doks.png">
+  
+  <meta name="twitter:title" content="X.509 Certificates Explained">
+  <meta name="twitter:description" content="X.509 Certificates Explained">
+  <meta name="twitter:site" content="@schartz">
+  <meta name="twitter:creator" content="@schartz">
+  
+  <meta property="og:title" content="X.509 Certificates Explained">
+  <meta property="og:description" content="X.509 Certificates Explained">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="http://127.0.0.1:8000/blog/x509-certificates-explained/">
+
+  
+    <meta property="og:image" content="http://127.0.0.1:8000/doks.png">
+  
+
+  <meta property="og:updated_time" content="">
+  <meta property="og:site_name" content="X.509 Certificates Explained">
+
+  
+
+  
+
+  
+  <meta property="article:publisher" content="https://www.facebook.com/ichunyun">
+  <meta property="article:author" content="https://www.facebook.com/ichunyun">
+  <meta property="og:locale" content="en_US">
+
+
+
+
+
+  
+
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BreadcrumbList",
+    
+      
+      
+        
+        
+        
+        
+        
+        
+        
+        
+          {
+            "@type": "ListItem",
+            "position":  1 ,
+            "name": "Home",
+            "item": "http://127.0.0.1:8000/"
+          },
+          
+          
+          {
+            "@type": "ListItem",
+            "position":  2 ,
+            "name": "Blog",
+            "item": "http://127.0.0.1:8000/blog/"
+          },
+        
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+          
+          
+          {
+            "@type": "ListItem",
+            "position":  3 ,
+            "name": "X509 Certificates Explained",
+            "item": "http://127.0.0.1:8000/blog/x509-certificates-explained/"
+          },
+        
+      
+    
+  }
+</script>
+
+
+
+
+
+
+  <meta name="theme-color" content="#fff">
+  <link rel="apple-touch-icon" sizes="180x180" href="http://127.0.0.1:8000/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="http://127.0.0.1:8000/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="http://127.0.0.1:8000/favicon-16x16.png">
+  
+    <link rel="manifest" href="http://127.0.0.1:8000/site.webmanifest" crossorigin>
+  
+
+
+  
+
+</head>
+
+  
+    
+  
+
+<body class="page single">
+  
+    
+<div class="header-bar fixed-top"></div>
+<header class="navbar fixed-top navbar-expand-md navbar-light">
+	<div class="container">
+		<input class="menu-btn order-0" type="checkbox" id="menu-btn">
+		<label class="menu-icon d-md-none" for="menu-btn"><span class="navicon"></span></label>
+		<a class="navbar-brand order-1 order-md-0 me-auto" href="http://127.0.0.1:8000">Schartz&#x27;s</a>
+		<button id="mode" class="btn btn-link order-2 order-md-4" type="button" aria-label="Toggle mode">
+			<span class="toggle-dark"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+			<span class="toggle-light"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
+		</button>
+		<ul class="navbar-nav fork-me order-3 order-md-5">
+			
+				
+					<li class="nav-item">
+						<a class="nav-link" href="https://github.com/schartz/"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg><span class="ms-2 visually-hidden">GitHub</span></a>
+					</li>
+				
+			
+		</ul>
+		<div class="collapse navbar-collapse order-4 order-md-1">
+			<ul class="navbar-nav main-nav me-auto order-5 order-md-2">
+				
+					
+				
+				
+				
+					
+						<li class="nav-item">
+							<a class="nav-link" href="http://127.0.0.1:8000/blog/">Blog</a>
+						</li>
+					
+						<li class="nav-item">
+							<a class="nav-link" href="http://127.0.0.1:8000/resume/">Resume</a>
+						</li>
+					
+				
+			</ul>
+			<div class="break order-6 d-md-none"></div>
+			
+				<form class="navbar-form flex-grow-1 order-7 order-md-3">
+					<input id="userinput" class="form-control is-search" type="search" placeholder="Search ..."
+						aria-label="Search ..." autocomplete="off">
+					<div id="suggestions" class="shadow bg-white rounded"></div>
+				</form>
+			
+		</div>
+	</div>
+</header>
+
+  
+
+  
+<div class="wrap container" role="document">
+  <div class="content">
+    <div class="row justify-content-center">
+      <div class="col-md-12 col-lg-10 col-xxl-8">
+        <article>
+          <div class="page-header">
+            <h1>X.509 Certificates Explained</h1>
+          </div>
+          
+          <p>To put it simply, X.509 certificate is a digital document encoded and/or
+digitally signed according to <a href="https://tools.ietf.org/html/rfc5280">RFC 5280</a></p>
+<p>Generally speaking <em>X.509 certificate</em> refers to IETF's(Internet Engineering Task Force) PKIX certificate
+and CRL profile of the X.509 certificate v3 standard. Yes there are versions of this thing.
+This version is specified in <a href="https://tools.ietf.org/html/rfc5280">RFC 5280</a>. It is also known as PKIX, full form being &quot;<em>Public Key Infrastructure (X.509)</em>&quot;</p>
+<h3 id="x509-file-types">X509 File types</h3>
+<p>There are a bunch of file type names being thrown around X.509. Occasionally and incorrectly it is said that they are all interchangeable. 
+While in come cases they may be interchangeable. It is always better to know your certificates and label them accordingly.</p>
+<h4 id="encodings-may-be-used-as-file-extensions-on-windows-systems">Encodings (may be used as file extensions on Windows systems)</h4>
+<ul>
+<li>.DER = The DER extension is used for binary DER encoded certificates. These files may also bear the CER or the CRT extension.
+It would be better to say that &quot;<strong>This is a DER encoded certificate</strong>&quot; rather than &quot;This is DER certificate&quot;.</li>
+<li>.PEM = The PEM extension is used for X.509v3 files which contain ASCII (Base64) encoded data prefixed with a &quot;—–
+BEGIN ...&quot; type of line.</li>
+</ul>
+<h4 id="common-file-extensions">Common file extensions</h4>
+<ul>
+<li>
+<p>CRT = The CRT extension is used for certificates. The certificates may be encoded as binary DER or as ASCII PEM. The CER and
+CRT extensions are nearly synonymous. Most common among *nix systems</p>
+</li>
+<li>
+<p>CER = alternate form of .crt (Microsoft Convention) You can use MS to convert .crt to .cer (.both DER encoded .cer, or base64[PEM]
+encoded .cer) The .cer file extension is also recognized by IE as a command to run a MS cryptoAPI command (specifically
+rundll32.exe cryptext.dll,CryptExtOpenCER) which displays a dialogue for importing and/or viewing certificate contents.</p>
+</li>
+<li>
+<p>.KEY = The KEY extension is used both for public and private PKCS#8 keys. The keys may be encoded as binary DER or as ASCII
+PEM.</p>
+</li>
+</ul>
+<p>The only time CRT and CER can safely be interchanged is when the encoding type can be identical. (ie PEM encoded CRT = PEM encoded
+CER)</p>
+<h4 id="basic-openssl-certificate-operations">Basic OpenSSL Certificate Operations</h4>
+<p>There are four basic types of certificate manipulations. View, Transform, Combination , and Extraction</p>
+<p>To view PEM encoded certificates</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">openssl</span><span> x509</span><span style="color:#bf616a;"> -in</span><span> certfile</span><span style="color:#bf616a;"> -text</span><span> noout
+</span></code></pre>
+<p>Here <code>certfile</code> can have any of the above mentioned encodings. Following error might occur:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">unable</span><span> to load certificate
+</span><span style="color:#bf616a;">12626:error:0906D06C:PEM</span><span> routines:PEM_read_bio:no start line:pem_lib.c:647:Expecting: TRUSTED CERTIFICATE
+</span></code></pre>
+<p>This typically means that you are trying to read a certificate which is in DER format.<br />
+To view a certificate use following</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">openssl</span><span> x509</span><span style="color:#bf616a;"> -in</span><span> certfile</span><span style="color:#bf616a;"> -inform</span><span> der</span><span style="color:#bf616a;"> -text -noout
+</span></code></pre>
+<p>You will encounter following error if you try to run above command on PEM encoded certificate:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">unable</span><span> to load certificate
+</span><span style="color:#bf616a;">13978:error:0D0680A8:asn1</span><span> encoding routines:ASN1_CHECK_TLEN:wrong tag:tasn_dec.c:1306:
+</span><span style="color:#bf616a;">13978:error:0D07803A:asn1</span><span> encoding routines:ASN1_ITEM_EX_D2I:nested asn1 error:tasn_dec.c:380:Type=X509
+</span></code></pre>
+<p>PEM to DER can be transformed like following</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">openssl</span><span> x509</span><span style="color:#bf616a;"> -in</span><span> certfile</span><span style="color:#bf616a;"> -outform</span><span> der</span><span style="color:#bf616a;"> -out</span><span> cert.der
+</span></code></pre>
+<p>Similarly DER to PEM can be transformed like following</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">openssl</span><span> x509</span><span style="color:#bf616a;"> -in</span><span> certfile</span><span style="color:#bf616a;"> -inform</span><span> der</span><span style="color:#bf616a;"> -outform</span><span> pem</span><span style="color:#bf616a;"> -out</span><span> cert.pem
+</span></code></pre>
+<h4 id="combining-x-509-certificate-components">Combining X.509 certificate components</h4>
+<p>In some cases it is advantageous to combine multiple pieces of the X.509 infrastructure into a single file. One common example would be to
+combine both the private key and public key into the same certificate.
+The easiest way to combine certs keys and chains is to convert each to a PEM encoded certificate then simple copy the contents of each file
+into a new file. This is suitable for combining files to use in a number of applications.</p>
+<p>Quite often you will come across a file with .p12 extensions.<br />
+This type of file uses that uses PKCS#12 (Public Key Cryptography Standard #12) encryption.<br />
+It is typically used as a portable format for transferring personal private keys or other sensitive information.<br />
+It is also used by various security and encryption programs.</p>
+<h4 id="extracting-components-from-certificates">Extracting components from certificates</h4>
+<p>An X.509 certificate contains ONLY the public key and NEVER contains a private key.<br />
+To extract the public key from it use following</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">openssl</span><span> x509</span><span style="color:#bf616a;"> -pubkey -noout -in</span><span> certfile.pem
+</span></code></pre>
+<p>To calculate fingerprint/thumbprint/hash/signature of X.509 certificate in SHA256 use following</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>openssl x509 -noout -fingerprint -sha256 -inform pem -in certfile.pem
+</span></code></pre>
+<p>To calculate fingerprint/thumbprint/hash/signature of public key of X.509 certificate in SHA256 use following</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>openssl x509 -in certfile.pem -pubkey -noout | grep -v &#39;^-&#39; | base64 -d | openssl sha256
+</span></code></pre>
+<p>If you have your certificate in DER encoding, simple add <code>-inform der</code> to above commands accordingly.</p>
+
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  
+    
+<footer class="footer text-muted">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 order-last order-lg-center">
+                <p>
+                    Built with <span><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 490 490" style="width: 20px; stroke: red; fill: red;" xml:space="preserve">
+                            <path id="XMLID_25_" d="M316.554,108.336c4.553,6.922,2.629,16.223-4.296,20.774c-3.44,2.261-6.677,4.928-9.621,7.929
+	c-2.938,2.995-6.825,4.497-10.715,4.497c-3.791,0-7.585-1.427-10.506-4.291c-5.917-5.801-6.009-15.298-0.207-21.212
+	c4.439-4.524,9.338-8.559,14.562-11.992C302.698,99.491,312.002,101.414,316.554,108.336z M447.022,285.869
+	c-1.506,1.536-148.839,151.704-148.839,151.704C283.994,452.035,265.106,460,245,460s-38.994-7.965-53.183-22.427L42.978,285.869
+	c-57.304-58.406-57.304-153.441,0-211.847C70.83,45.634,107.882,30,147.31,30c36.369,0,70.72,13.304,97.69,37.648
+	C271.971,43.304,306.32,30,342.689,30c39.428,0,76.481,15.634,104.332,44.021C504.326,132.428,504.326,227.463,447.022,285.869z
+	 M425.596,95.028C403.434,72.44,373.991,60,342.69,60c-31.301,0-60.745,12.439-82.906,35.027c-1.122,1.144-2.129,2.533-3.538,3.777
+	c-7.536,6.654-16.372,6.32-22.491,0c-1.308-1.352-2.416-2.633-3.538-3.777C208.055,72.44,178.612,60,147.31,60
+	c-31.301,0-60.744,12.439-82.906,35.027c-45.94,46.824-45.94,123.012,0,169.836c1.367,1.393,148.839,151.704,148.839,151.704
+	C221.742,425.229,233.02,430,245,430c11.98,0,23.258-4.771,31.757-13.433l148.839-151.703l0,0
+	C471.535,218.04,471.535,141.852,425.596,95.028z M404.169,116.034c-8.975-9.148-19.475-16.045-31.208-20.499
+	c-7.746-2.939-16.413,0.953-19.355,8.698c-2.942,7.744,0.953,16.407,8.701,19.348c7.645,2.902,14.521,7.431,20.436,13.459
+	c23.211,23.658,23.211,62.153,0,85.811l-52.648,53.661c-5.803,5.915-5.711,15.412,0.206,21.212
+	c2.921,2.863,6.714,4.291,10.506,4.291c3.889,0,7.776-1.502,10.714-4.497l52.648-53.661
+	C438.744,208.616,438.744,151.275,404.169,116.034z" />
+                        </svg></span> and <a href="https://www.getzola.org/">Zola</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+  
+
+  
+<script type="text/javascript" src="http://127.0.0.1:8000/js/main.js" defer></script>
+
+  <script type="text/javascript" src="http://127.0.0.1:8000/plugins/elasticlunr.min.js" defer></script>
+  <script type="text/javascript" src="http://127.0.0.1:8000/search_index.en.js" defer></script>
+  <script type="text/javascript" src="http://127.0.0.1:8000/js/search.js" defer></script>
+
+  
+</body>
+</html>

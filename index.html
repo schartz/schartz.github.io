@@ -1,277 +1,279 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="description" content="I needed an obligatory &#039;my corner of Internet&#039;, so here it is.">
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <meta property="og:title" content="Schartz&#039;s"/>
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="/"/>
-        <meta property="og:description" content="I needed an obligatory &#039;my corner of Internet&#039;, so here it is." />
+  <link rel="preload" as="font" href="http://127.0.0.1:8000/fonts/vendor/jost/jost-v4-latin-regular.woff2" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="http://127.0.0.1:8000/fonts/vendor/jost/jost-v4-latin-700.woff2"  type="font/woff2" crossorigin>
 
-        <title>Schartz&#039;s</title>
 
-        <link rel="home" href="">
-        <link rel="icon" href="/favicon.ico">
-        <link href="/blog/feed.atom" type="application/atom+xml" rel="alternate" title="Schartz&#039;s Atom Feed">
+<link rel="stylesheet" href="http://127.0.0.1:8000/main.css">
 
-        
-        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,400i,700,700i,800,800i" rel="stylesheet">
-        <link rel="stylesheet" href="/assets/build/css/main.css">
-    </head>
 
-    <body class="flex flex-col justify-between min-h-screen bg-gray-100 text-gray-800 leading-normal font-sans">
-        <header class="flex items-center shadow bg-white border-b h-24 py-4" role="banner">
-            <div class="container flex items-center max-w-8xl mx-auto px-4 lg:px-8">
-                <div class="flex items-center">
-                    <a href="/" title="Schartz&#039;s home" class="inline-flex items-center">
-                        <img class="h-8 md:h-10 mr-3" src="/assets/img/logo.svg" alt="Schartz&#039;s logo" />
 
-                        <h1 class="text-lg md:text-2xl text-blue-800 font-semibold hover:text-blue-600 my-0">Schartz&#039;s</h1>
-                    </a>
-                </div>
-
-                <div id="vue-search" class="flex flex-1 justify-end items-center">
-                    <search></search>
-
-                    <nav class="hidden lg:flex items-center justify-end text-lg">
-    <a title="Schartz&#039;s Blog" href="/blog"
-        class="ml-6 text-grey-darker hover:text-blue-dark ">
-        Blog
-    </a>
-
-    <a title="Schartz&#039;s About" href="/about"
-        class="ml-6 text-grey-darker hover:text-blue-dark ">
-        About
-    </a>
-
-    <a title="Schartz&#039;s Resume" href="/resume" target="_blank"
-        class="ml-6 text-grey-darker hover:text-blue-dark ">
-        Resume
-    </a>
-</nav>
-
-                    <button class="flex justify-center items-center bg-blue border border-blue h-10 px-5 rounded-full lg:hidden focus:outline-none"
-    onclick="navMenu.toggle()"
->
-    <svg id="js-nav-menu-show" xmlns="http://www.w3.org/2000/svg"
-        class="fill-current text-white h-9 w-4" viewBox="0 0 32 32"
-    >
-        <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z"/>
-    </svg>
-
-    <svg id="js-nav-menu-hide" xmlns="http://www.w3.org/2000/svg"
-        class="hidden fill-current text-white h-9 w-4" viewBox="0 0 36 30"
-    >
-        <polygon points="32.8,4.4 28.6,0.2 18,10.8 7.4,0.2 3.2,4.4 13.8,15 3.2,25.6 7.4,29.8 18,19.2 28.6,29.8 32.8,25.6 22.2,15 "/>
-    </svg>
-</button>
-
-                </div>
-            </div>
-        </header>
-
-        <nav id="js-nav-menu" class="nav-menu hidden lg:hidden">
-    <ul class="list-reset my-0">
-        <li class="pl-4">
-            <a
-                title="Schartz&#039;s Blog"
-                href="/blog"
-                class="nav-menu__item hover:text-blue "
-            >Blog</a>
-        </li>
-        <li class="pl-4">
-            <a
-                title="Schartz&#039;s About"
-                href="/about"
-                class="nav-menu__item hover:text-blue "
-            >About</a>
-        </li>
-        <li class="pl-4">
-            <a
-                title="Schartz&#039;s Resume"
-                href="/resume"
-                target="_blank"
-                class="nav-menu__item hover:text-blue "
-            >Resume</a>
-        </li>
-    </ul>
-</nav>
-
-        <main role="main" class="flex-auto w-full container max-w-4xl mx-auto py-16 px-6">
-                
+  
+  
     
+  
 
-            <div class="flex flex-col md:flex-row md:-mx-6">
-                            <div class="w-full md:w-1/2 md:mx-6">
-                    <div class="flex flex-col mb-4">
-    <p class="text-gray-700 font-medium my-2">
-        July 6, 2019
-    </p>
 
-    <h2 class="text-3xl mt-0">
-        <a
-            href="/blog/july-07-2019-understanding-x509-certificates"
-            title="Read more - X.509 Certificates Explained"
-            class="text-gray-900 font-extrabold"
-        >X.509 Certificates Explained</a>
-    </h2>
+  
+    
+  
+  
+  
+    
+  
+  
+  
+  
+  
 
-    <p class="mb-4 mt-0">To put it simply, X.509 certificate is a digital document encoded and/or
-digitally signed according to RFC 5280
 
-Generally speaking X.509 certificate refers to IETF's(Internet Engineering Task Force)...</p>
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 
-    <a
-        href="/blog/july-07-2019-understanding-x509-certificates"
-        title="Read more - X.509 Certificates Explained"
-        class="uppercase font-semibold tracking-wide mb-2"
-    >Read</a>
-</div>
-                </div>
 
-                                    <hr class="block md:hidden w-full border-b mt-2 mb-6">
-                                            <div class="w-full md:w-1/2 md:mx-6">
-                    <div class="flex flex-col mb-4">
-    <p class="text-gray-700 font-medium my-2">
-        June 7, 2019
-    </p>
+	
 
-    <h2 class="text-3xl mt-0">
-        <a
-            href="/blog/june-2-2019-the-shape-of-tensor"
-            title="Read more - The Shape of Tensor"
-            class="text-gray-900 font-extrabold"
-        >The Shape of Tensor</a>
-    </h2>
 
-    <p class="mb-4 mt-0">Tensors are the primary data structures used by neural networks. And they are rather fascinating as well.
-Machine learning and by extension deep learning is an interdisciplinary field. Its...</p>
+	
 
-    <a
-        href="/blog/june-2-2019-the-shape-of-tensor"
-        title="Read more - The Shape of Tensor"
-        class="uppercase font-semibold tracking-wide mb-2"
-    >Read</a>
-</div>
-                </div>
+<title>Schartz's | Modern Documentation Theme</title>
+<meta name="description" content="Dev blog, general blog and dev log of Schartz Rehan.">
+<link rel="canonical" href="http://127.0.0.1:8000/">
 
-                                    </div>
 
-                    <hr class="w-full border-b mt-2 mb-6">
-                    <div class="flex flex-col md:flex-row md:-mx-6">
-                            <div class="w-full md:w-1/2 md:mx-6">
-                    <div class="flex flex-col mb-4">
-    <p class="text-gray-700 font-medium my-2">
-        June 2, 2019
-    </p>
+  <meta name="twitter:card" content="summary_large_image">
+  
+    <meta name="twitter:image" content="http://127.0.0.1:8000/doks.png">
+  
+  <meta name="twitter:title" content="Schartz&#x27;s">
+  <meta name="twitter:description" content="Dev blog, general blog and dev log of Schartz Rehan.">
+  <meta name="twitter:site" content="@schartz">
+  <meta name="twitter:creator" content="@schartz">
+  
+  <meta property="og:title" content="Schartz&#x27;s">
+  <meta property="og:description" content="Dev blog, general blog and dev log of Schartz Rehan.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://127.0.0.1:8000/">
 
-    <h2 class="text-3xl mt-0">
-        <a
-            href="/blog/06-02-2019-install-tfgpu131-on-ubuntu"
-            title="Read more - Install Tensorflow GPU 1.13 on Elementary OS Juno (Ubuntu 18.04)"
-            class="text-gray-900 font-extrabold"
-        >Install Tensorflow GPU 1.13 on Elementary OS Juno (Ubuntu 18.04)</a>
-    </h2>
+  
+    <meta property="og:image" content="http://127.0.0.1:8000/doks.png">
+  
 
-    <p class="mb-4 mt-0">Setting up Tensorflow with GPU support gave me good deal of pain. Internet is full of tutorials
-with older releases of Tensorflow. Some of them use an approach of installing CUDA toolkit via apt....</p>
+  <meta property="og:updated_time" content="2021-05-01T08:08:08+08:00">
+  <meta property="og:site_name" content="Schartz&#x27;s">
 
-    <a
-        href="/blog/06-02-2019-install-tfgpu131-on-ubuntu"
-        title="Read more - Install Tensorflow GPU 1.13 on Elementary OS Juno (Ubuntu 18.04)"
-        class="uppercase font-semibold tracking-wide mb-2"
-    >Read</a>
-</div>
-                </div>
+  
 
-                                    <hr class="block md:hidden w-full border-b mt-2 mb-6">
-                                            <div class="w-full md:w-1/2 md:mx-6">
-                    <div class="flex flex-col mb-4">
-    <p class="text-gray-700 font-medium my-2">
-        May 29, 2019
-    </p>
+  
 
-    <h2 class="text-3xl mt-0">
-        <a
-            href="/blog/my-first-blog-post"
-            title="Read more - Hello Blogging"
-            class="text-gray-900 font-extrabold"
-        >Hello Blogging</a>
-    </h2>
+  
+  <meta property="article:publisher" content="https://www.facebook.com/ichunyun">
+  <meta property="article:author" content="https://www.facebook.com/ichunyun">
+  <meta property="og:locale" content="en_US">
 
-    <p class="mb-4 mt-0"><code>This is the start of your first blog post.</code>
 
-This is what JigSaw told me as I booted things up for my first (serious-ish) blogging attempt.
-I have been thinking about creating a blog for...</p>
 
-    <a
-        href="/blog/my-first-blog-post"
-        title="Read more - Hello Blogging"
-        class="uppercase font-semibold tracking-wide mb-2"
-    >Read</a>
-</div>
-                </div>
-
-                                    </div>
-
-                    <hr class="w-full border-b mt-2 mb-6">
-                    <div class="flex flex-col md:flex-row md:-mx-6">
-                            <div class="w-full md:w-1/2 md:mx-6">
-                    <div class="flex flex-col mb-4">
-    <p class="text-gray-700 font-medium my-2">
-        December 23, 2018
-    </p>
-
-    <h2 class="text-3xl mt-0">
-        <a
-            href="/blog/custom-404-page"
-            title="Read more - Custom 404 Pages"
-            class="text-gray-900 font-extrabold"
-        >Custom 404 Pages</a>
-    </h2>
-
-    <p class="mb-4 mt-0">This starter template includes a custom 404 Not Found error page, located at <code>/source/404.blade.php</code>. To preview the 404 page, you can visit <code>/404</code> in your browser....</p>
-
-    <a
-        href="/blog/custom-404-page"
-        title="Read more - Custom 404 Pages"
-        class="uppercase font-semibold tracking-wide mb-2"
-    >Read</a>
-</div>
-                </div>
-
-                                    </div>
-
-                    </main>
-
-        <footer class="bg-white text-center text-sm mt-12 py-4" role="contentinfo">
-            <ul class="flex flex-col md:flex-row justify-center list-none">
-                <li class="md:mr-2">
-                    &copy; <a href="https://tighten.co" title="Tighten website">Tighten</a> 2021.
-                </li>
-
-                <li>
-                    Built with <a href="http://jigsaw.tighten.co" title="Jigsaw by Tighten">Jigsaw</a>
-                    and <a href="https://tailwindcss.com" title="Tailwind CSS, a utility-first CSS framework">Tailwind CSS</a>.
-                </li>
-            </ul>
-        </footer>
-
-        <script src="/assets/build/js/main.js"></script>
-
-        <script>
-    const navMenu = {
-        toggle() {
-            const menu = document.getElementById('js-nav-menu');
-            menu.classList.toggle('hidden');
-            menu.classList.toggle('lg:block');
-            document.getElementById('js-nav-menu-hide').classList.toggle('hidden');
-            document.getElementById('js-nav-menu-show').classList.toggle('hidden');
-        },
+  
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "url": "/",
+      "name": "Schartz&#x27;s",
+      "logo": "/logo-doks.png",
+      "sameAs": [
+        "https://twitter.com/schartz",
+        
+        "https://github.com/schartz"
+      ]
     }
+    </script>
+  
+  
+  
+
+
+
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BreadcrumbList",
+    
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Home",
+      "item": "http://127.0.0.1:8000/"
+    },
+    
+  }
 </script>
-    </body>
+
+
+
+
+
+
+  <meta name="theme-color" content="#fff">
+  <link rel="apple-touch-icon" sizes="180x180" href="http://127.0.0.1:8000/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="http://127.0.0.1:8000/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="http://127.0.0.1:8000/favicon-16x16.png">
+  
+    <link rel="manifest" href="http://127.0.0.1:8000/site.webmanifest" crossorigin>
+  
+
+
+  
+
+</head>
+
+<body class="home">
+  
+    
+<div class="header-bar fixed-top"></div>
+<header class="navbar fixed-top navbar-expand-md navbar-light">
+	<div class="container">
+		<input class="menu-btn order-0" type="checkbox" id="menu-btn">
+		<label class="menu-icon d-md-none" for="menu-btn"><span class="navicon"></span></label>
+		<a class="navbar-brand order-1 order-md-0 me-auto" href="http://127.0.0.1:8000">Schartz&#x27;s</a>
+		<button id="mode" class="btn btn-link order-2 order-md-4" type="button" aria-label="Toggle mode">
+			<span class="toggle-dark"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+			<span class="toggle-light"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
+		</button>
+		<ul class="navbar-nav fork-me order-3 order-md-5">
+			
+				
+					<li class="nav-item">
+						<a class="nav-link" href="https://github.com/schartz/"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg><span class="ms-2 visually-hidden">GitHub</span></a>
+					</li>
+				
+			
+		</ul>
+		<div class="collapse navbar-collapse order-4 order-md-1">
+			<ul class="navbar-nav main-nav me-auto order-5 order-md-2">
+				
+					
+				
+				
+				
+					
+						<li class="nav-item">
+							<a class="nav-link" href="http://127.0.0.1:8000/blog/">Blog</a>
+						</li>
+					
+						<li class="nav-item">
+							<a class="nav-link" href="http://127.0.0.1:8000/resume/">Resume</a>
+						</li>
+					
+				
+			</ul>
+			<div class="break order-6 d-md-none"></div>
+			
+				<form class="navbar-form flex-grow-1 order-7 order-md-3">
+					<input id="userinput" class="form-control is-search" type="search" placeholder="Search ..."
+						aria-label="Search ..." autocomplete="off">
+					<div id="suggestions" class="shadow bg-white rounded"></div>
+				</form>
+			
+		</div>
+	</div>
+</header>
+
+  
+
+  
+<div class="wrap container" role="document">
+  <div class="content">
+    <section class="section container-fluid mt-n3 pb-3">
+      <div class="row justify-content-center">
+        <div class="col-lg-12 text-center">
+          <h1 class="mt-0">Schartz&#x27;s Site</h1>
+        </div>
+        <div class="col-lg-9 col-xl-8 text-center">
+          <p class="lead"><b>You have stumbled upon dev blog, general blog and dev-log of Schartz Rehan.</b></p>
+
+          <p class="meta"> </p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+
+<section class="section section-lg">
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-12">
+          <p>
+            I am a Software architect with an inclination towards machine learning, distributed computing and all things cloud.
+            I like software stacks but I find myself sometimes stuck with algebraic stacks. 
+          </p>
+          <p>
+            I'm currently working as Director of Technology at <a href="https://allps.ch">ALLPS GmbH</a>
+          </p>
+        </div>
+    </div>
+  </div>
+</section>
+
+<!--  -->
+
+<section class="section section-sm container-fluid">
+  <div class="row justify-content-center text-center">
+    <div class="col-lg-9"></div>
+  </div>
+</section>
+
+
+  
+    
+<footer class="footer text-muted">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 order-last order-lg-center">
+                <p>
+                    Built with <span><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 490 490" style="width: 20px; stroke: red; fill: red;" xml:space="preserve">
+                            <path id="XMLID_25_" d="M316.554,108.336c4.553,6.922,2.629,16.223-4.296,20.774c-3.44,2.261-6.677,4.928-9.621,7.929
+	c-2.938,2.995-6.825,4.497-10.715,4.497c-3.791,0-7.585-1.427-10.506-4.291c-5.917-5.801-6.009-15.298-0.207-21.212
+	c4.439-4.524,9.338-8.559,14.562-11.992C302.698,99.491,312.002,101.414,316.554,108.336z M447.022,285.869
+	c-1.506,1.536-148.839,151.704-148.839,151.704C283.994,452.035,265.106,460,245,460s-38.994-7.965-53.183-22.427L42.978,285.869
+	c-57.304-58.406-57.304-153.441,0-211.847C70.83,45.634,107.882,30,147.31,30c36.369,0,70.72,13.304,97.69,37.648
+	C271.971,43.304,306.32,30,342.689,30c39.428,0,76.481,15.634,104.332,44.021C504.326,132.428,504.326,227.463,447.022,285.869z
+	 M425.596,95.028C403.434,72.44,373.991,60,342.69,60c-31.301,0-60.745,12.439-82.906,35.027c-1.122,1.144-2.129,2.533-3.538,3.777
+	c-7.536,6.654-16.372,6.32-22.491,0c-1.308-1.352-2.416-2.633-3.538-3.777C208.055,72.44,178.612,60,147.31,60
+	c-31.301,0-60.744,12.439-82.906,35.027c-45.94,46.824-45.94,123.012,0,169.836c1.367,1.393,148.839,151.704,148.839,151.704
+	C221.742,425.229,233.02,430,245,430c11.98,0,23.258-4.771,31.757-13.433l148.839-151.703l0,0
+	C471.535,218.04,471.535,141.852,425.596,95.028z M404.169,116.034c-8.975-9.148-19.475-16.045-31.208-20.499
+	c-7.746-2.939-16.413,0.953-19.355,8.698c-2.942,7.744,0.953,16.407,8.701,19.348c7.645,2.902,14.521,7.431,20.436,13.459
+	c23.211,23.658,23.211,62.153,0,85.811l-52.648,53.661c-5.803,5.915-5.711,15.412,0.206,21.212
+	c2.921,2.863,6.714,4.291,10.506,4.291c3.889,0,7.776-1.502,10.714-4.497l52.648-53.661
+	C438.744,208.616,438.744,151.275,404.169,116.034z" />
+                        </svg></span> and <a href="https://www.getzola.org/">Zola</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+  
+
+  
+<script type="text/javascript" src="http://127.0.0.1:8000/js/main.js" defer></script>
+
+  <script type="text/javascript" src="http://127.0.0.1:8000/plugins/elasticlunr.min.js" defer></script>
+  <script type="text/javascript" src="http://127.0.0.1:8000/search_index.en.js" defer></script>
+  <script type="text/javascript" src="http://127.0.0.1:8000/js/search.js" defer></script>
+
+  
+</body>
 </html>

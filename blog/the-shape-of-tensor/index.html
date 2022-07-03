@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" as="font" href="http://127.0.0.1:8000/fonts/vendor/jost/jost-v4-latin-regular.woff2" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="http://127.0.0.1:8000/fonts/vendor/jost/jost-v4-latin-700.woff2"  type="font/woff2" crossorigin>
+
+
+<link rel="stylesheet" href="http://127.0.0.1:8000/main.css">
+
+
+
+  
+  
+    
+  
+
+  
+  
+    
+    
+  
+  
+  
+    
+  
+  
+  
+  
+    
+  
+  
+  
+
+
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+
+	
+
+
+	
+
+<title>The Shape of Tensor | Schartz's</title>
+<meta name="description" content="The Shape of Tensor">
+<link rel="canonical" href="http://127.0.0.1:8000/blog/the-shape-of-tensor/">
+
+
+  <meta name="twitter:card" content="summary_large_image">
+  
+    <meta name="twitter:image" content="http://127.0.0.1:8000/doks.png">
+  
+  <meta name="twitter:title" content="The Shape of Tensor">
+  <meta name="twitter:description" content="The Shape of Tensor">
+  <meta name="twitter:site" content="@schartz">
+  <meta name="twitter:creator" content="@schartz">
+  
+  <meta property="og:title" content="The Shape of Tensor">
+  <meta property="og:description" content="The Shape of Tensor">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="http://127.0.0.1:8000/blog/the-shape-of-tensor/">
+
+  
+    <meta property="og:image" content="http://127.0.0.1:8000/doks.png">
+  
+
+  <meta property="og:updated_time" content="">
+  <meta property="og:site_name" content="The Shape of Tensor">
+
+  
+
+  
+
+  
+  <meta property="article:publisher" content="https://www.facebook.com/ichunyun">
+  <meta property="article:author" content="https://www.facebook.com/ichunyun">
+  <meta property="og:locale" content="en_US">
+
+
+
+
+
+  
+
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BreadcrumbList",
+    
+      
+      
+        
+        
+        
+        
+        
+        
+        
+        
+          {
+            "@type": "ListItem",
+            "position":  1 ,
+            "name": "Home",
+            "item": "http://127.0.0.1:8000/"
+          },
+          
+          
+          {
+            "@type": "ListItem",
+            "position":  2 ,
+            "name": "Blog",
+            "item": "http://127.0.0.1:8000/blog/"
+          },
+        
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+          
+          
+          {
+            "@type": "ListItem",
+            "position":  3 ,
+            "name": "The Shape Of Tensor",
+            "item": "http://127.0.0.1:8000/blog/the-shape-of-tensor/"
+          },
+        
+      
+    
+  }
+</script>
+
+
+
+
+
+
+  <meta name="theme-color" content="#fff">
+  <link rel="apple-touch-icon" sizes="180x180" href="http://127.0.0.1:8000/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="http://127.0.0.1:8000/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="http://127.0.0.1:8000/favicon-16x16.png">
+  
+    <link rel="manifest" href="http://127.0.0.1:8000/site.webmanifest" crossorigin>
+  
+
+
+  
+
+</head>
+
+  
+    
+  
+
+<body class="page single">
+  
+    
+<div class="header-bar fixed-top"></div>
+<header class="navbar fixed-top navbar-expand-md navbar-light">
+	<div class="container">
+		<input class="menu-btn order-0" type="checkbox" id="menu-btn">
+		<label class="menu-icon d-md-none" for="menu-btn"><span class="navicon"></span></label>
+		<a class="navbar-brand order-1 order-md-0 me-auto" href="http://127.0.0.1:8000">Schartz&#x27;s</a>
+		<button id="mode" class="btn btn-link order-2 order-md-4" type="button" aria-label="Toggle mode">
+			<span class="toggle-dark"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+			<span class="toggle-light"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
+		</button>
+		<ul class="navbar-nav fork-me order-3 order-md-5">
+			
+				
+					<li class="nav-item">
+						<a class="nav-link" href="https://github.com/schartz/"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg><span class="ms-2 visually-hidden">GitHub</span></a>
+					</li>
+				
+			
+		</ul>
+		<div class="collapse navbar-collapse order-4 order-md-1">
+			<ul class="navbar-nav main-nav me-auto order-5 order-md-2">
+				
+					
+				
+				
+				
+					
+						<li class="nav-item">
+							<a class="nav-link" href="http://127.0.0.1:8000/blog/">Blog</a>
+						</li>
+					
+						<li class="nav-item">
+							<a class="nav-link" href="http://127.0.0.1:8000/resume/">Resume</a>
+						</li>
+					
+				
+			</ul>
+			<div class="break order-6 d-md-none"></div>
+			
+				<form class="navbar-form flex-grow-1 order-7 order-md-3">
+					<input id="userinput" class="form-control is-search" type="search" placeholder="Search ..."
+						aria-label="Search ..." autocomplete="off">
+					<div id="suggestions" class="shadow bg-white rounded"></div>
+				</form>
+			
+		</div>
+	</div>
+</header>
+
+  
+
+  
+<div class="wrap container" role="document">
+  <div class="content">
+    <div class="row justify-content-center">
+      <div class="col-md-12 col-lg-10 col-xxl-8">
+        <article>
+          <div class="page-header">
+            <h1>The Shape of Tensor</h1>
+          </div>
+          
+          <p>Tensors are the primary data structures used by neural networks. And they are rather fascinating as well.
+Machine learning and by extension deep learning is an interdisciplinary field. Its interesting
+to note how many different people from many different fields came to same concepts. Specific to this writing,
+the concept of tensors.</p>
+<p>The concept of tensor is a mathematical generalization of more specific concepts, vectors and matrices in particular.
+In neural networks transformations, input, output etc are performed via tensors.<br />
+To build a good enough concept let's start with a matrix of some simple concepts from computer science and mathematics.</p>
+<p style="text-align:center"><img class="no-shadow" src="/assets/img/posts/eqn1.png"></p>  
+<p>The same can also be represented via following matrix</p>
+<p style="text-align:center"><img class="no-shadow" src="/assets/img/posts/eqn2.png"></p>  
+<p>This pseudo-mathematical notation gives us a nice one-to-one relationship between concepts of number, array and 2d-array from computer science
+to the concepts of scalar, vector and matrix in mathematics.</p>
+<p>Let's write examples of above 6 concepts to better understand them</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span>
+</span><span style="color:#bf616a;">number</span><span>   ---&gt; </span><span style="color:#d08770;">9
+</span><span style="color:#bf616a;">scalar</span><span>   ---&gt; </span><span style="color:#d08770;">9
+</span><span>
+</span><span>
+</span><span>
+</span><span style="color:#bf616a;">array</span><span>    ---&gt; </span><span style="color:#b48ead;">[</span><span>5, 8, 3</span><span style="color:#b48ead;">]
+</span><span style="color:#bf616a;">vector</span><span>   ---&gt; (5i, 8j, 3k) 
+</span><span>                   </span><span style="color:#bf616a;">or 
+</span><span>              </span><span style="color:#bf616a;">5i</span><span> + 8j + 3k 
+</span><span>                </span><span style="color:#bf616a;">or</span><span> simply 
+</span><span>                (</span><span style="color:#bf616a;">5,</span><span> 8, 3)
+</span><span>
+</span><span>
+</span><span>
+</span><span style="color:#bf616a;">2d-array</span><span> ---&gt; [
+</span><span>                </span><span style="color:#bf616a;">[1,</span><span> 2, 3]
+</span><span>                </span><span style="color:#bf616a;">[4,</span><span> 5, 6]
+</span><span>                </span><span style="color:#bf616a;">[7,</span><span> 8, 9]
+</span><span>              </span><span style="color:#bf616a;">]
+</span><span>              
+</span><span>              
+</span><span style="color:#bf616a;">matrix</span><span>   ---&gt; |</span><span style="color:#bf616a;">1,</span><span> 2, 3|
+</span><span>              |</span><span style="color:#bf616a;">4,</span><span> 5, 6|
+</span><span>              |</span><span style="color:#bf616a;">7,</span><span> 8, 9|
+</span><span>
+</span></code></pre>
+<h2 id="the-index-notation">The index notation</h2>
+<p>Upon closer inspection of the above examples it's apparent that to access any element 
+in each representation, we need the same number of indices in the related concepts of computer science and mathematics.</p>
+<p>For example, to access an element in an array we need following notation</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">my_array</span><span> = </span><span style="color:#b48ead;">[</span><span>5, 8, 3</span><span style="color:#b48ead;">]
+</span><span style="color:#bf616a;">my_array[2]</span><span> ---&gt; </span><span style="color:#d08770;">8
+</span></code></pre>
+<p>Similarly to access a component of a mathematical vector we need one index, and, vice-versa for matrix and 2d-array. We have following underlying pattern:</p>
+<table><thead><tr><th>Indices Required</th><th>Computer Science</th><th>Mathematics</th></tr></thead><tbody>
+<tr><td>0</td><td>number</td><td>scalar</td></tr>
+<tr><td>1</td><td>array</td><td>vector</td></tr>
+<tr><td>2</td><td>2d-array</td><td>matrix</td></tr>
+</tbody></table>
+<p>This gives us a working framework to make the generalization. </p>
+<h2 id="meet-the-tensors">Meet the tensors</h2>
+<p>When we have more than two indices to refer to a specific element in a data structures (or mathematical, structure) we stop 
+treating them with special names like scalars, vectors, matrices etc. Instead we address them  with a more generalized language.</p>
+<p><strong>We call them Tensors.</strong></p>
+<p>This gives us following table</p>
+<table><thead><tr><th>Indices Required</th><th>Computer Science</th><th>Mathematics</th></tr></thead><tbody>
+<tr><td>0</td><td>number</td><td>scalar</td></tr>
+<tr><td>1</td><td>array</td><td>vector</td></tr>
+<tr><td>2</td><td>2d-array</td><td>matrix</td></tr>
+<tr><td>n</td><td>nd-array</td><td>tensor</td></tr>
+</tbody></table>
+<p>For all practical purposes in programming. It is good enough to remember that:</p>
+<p><strong>Tensors are multidimensional arrays.</strong></p>
+<p>Coming back to the part of generalization part. It's safe to draw following conclusions:</p>
+<ul>
+<li>scalar    ---&gt; 0 dimensional tensor  ---&gt; number</li>
+<li>vector    ---&gt; 1 dimensional tensor  ---&gt; simple array</li>
+<li>matrix    ---&gt; 2 dimensional tensor  ---&gt; 2d array</li>
+<li>nd array  ---&gt; n dimensional tensor ---&gt; nd array</li>
+</ul>
+<p>The dimension of a tensor a completely different entity from what we mean when we refer to the dimension of a vector in a vector space. The dimension of a tensor does not tell us how many components exist within the tensor.</p>
+<p>If we have a three dimensional vector from three dimensional euclidean space, we have an ordered triple with three components.</p>
+<p>A three dimensional tensor, however, can have many more than three components. Our two dimensional tensor <code>2d-array</code> for example has nine components.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">2d-array</span><span> ---&gt; [
+</span><span>                </span><span style="color:#bf616a;">[1,</span><span> 2, 3]
+</span><span>                </span><span style="color:#bf616a;">[4,</span><span> 5, 6]
+</span><span>                </span><span style="color:#bf616a;">[7,</span><span> 8, 9]
+</span><span>              </span><span style="color:#bf616a;">]
+</span></code></pre>
+<h2 id="rank-and-axes-of-tensor">Rank and Axes of Tensor</h2>
+<p><strong>A tensor's rank is equal to the number of indices are needed to access to a specific element within the tensor.</strong></p>
+<p>In our example our <code>2d-array</code> tensor is of rank two because we need to indices to access any element inside it.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">elem</span><span> = 2d-array</span><span style="color:#b48ead;">[</span><span>i</span><span style="color:#b48ead;">][</span><span>j</span><span style="color:#b48ead;">]
+</span></code></pre>
+<p><strong>Axis refers to a particular dimension of a tensor.</strong><br />
+In case of a tensor of rank 2, it has 2 dimensions (also called 2 axis), hence a requirement of 2 indices (one for each axis or dimension) to access any element.</p>
+<p><strong>The length of each axis tells us how many indexes are available along each axis.</strong></p>
+<h2 id="the-shape-of-tensor">The Shape of Tensor</h2>
+<p>The shape of a tensor is determined by the length of each axis, so if we know the shape of a given tensor, then we know the length of each axis, and this tells us how many indexes are available along each axis.</p>
+<p><strong>The shape of a tensor gives us the length of each axis of the tensor.</strong></p>
+<p>Going back to our familiar <code>2d-array</code> tensor</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">2d-array</span><span> ---&gt; [
+</span><span>                </span><span style="color:#bf616a;">[1,</span><span> 2, 3]
+</span><span>                </span><span style="color:#bf616a;">[4,</span><span> 5, 6]
+</span><span>                </span><span style="color:#bf616a;">[7,</span><span> 8, 9]
+</span><span>              </span><span style="color:#bf616a;">]
+</span></code></pre>
+<p>We say that above tensor's shape is <code>3 x 3</code> which means that it has 2 axis (or dimensions) of length 3 each.</p>
+<p><strong>Tensor's shape is super important.</strong></p>
+<p>Higher rank tensors tend to become more and more abstract very quickly.
+In this case shape provides us some reference point to understand them.</p>
+<p>Additionally tensors being the data structures of neural networks flow through various layers of the network. 
+More than often they are required to be in a certain shape. </p>
+<h2 id="reshaping-the-tensor">Reshaping the tensor</h2>
+<p>Reshaping is a simple yet very powerful concept. 
+Simply put, reshaping refers to the process of changing the order of axis (dimensions) in the data structure.
+For example lets say we have a tensor of rank 2 as follows:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">Shape</span><span> 2 x 3
+</span><span>
+</span><span style="color:#96b5b4;">[
+</span><span>  </span><span style="color:#bf616a;">[4,</span><span> 5, 6]
+</span><span>  </span><span style="color:#bf616a;">[7,</span><span> 8, 9]
+</span><span style="color:#bf616a;">]
+</span></code></pre>
+<p>It can be reshaped to various shapes as follows:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">Shape</span><span> 6 x 1
+</span><span>
+</span><span style="color:#96b5b4;">[  
+</span><span>   </span><span style="color:#bf616a;">[4],  
+</span><span>   </span><span style="color:#bf616a;">[5],  
+</span><span>   </span><span style="color:#bf616a;">[6],  
+</span><span>   </span><span style="color:#bf616a;">[7],  
+</span><span>   </span><span style="color:#bf616a;">[8],  
+</span><span>   </span><span style="color:#bf616a;">[9],  
+</span><span style="color:#bf616a;">]
+</span><span>
+</span><span style="color:#bf616a;">Shape</span><span> 3 x 2
+</span><span>
+</span><span style="color:#96b5b4;">[
+</span><span>    </span><span style="color:#bf616a;">[4,</span><span> 7],
+</span><span>    </span><span style="color:#bf616a;">[5,</span><span> 8],
+</span><span>    </span><span style="color:#bf616a;">[6,</span><span> 9]
+</span><span style="color:#bf616a;">]
+</span><span>
+</span><span>
+</span><span style="color:#bf616a;">Shape</span><span> 1 x 6
+</span><span>
+</span><span style="color:#96b5b4;">[
+</span><span>    </span><span style="color:#bf616a;">[4],[5],[6],[7],[8],[9],
+</span><span style="color:#bf616a;">]
+</span><span>
+</span></code></pre>
+<p>Important point to note about reshaping operation is that it changes the shape, ie. it changes the ordering of individual elements inside a tensor, but is does not change the underlying elements themselves.</p>
+<p>Above is a very crude but workable conceptual introduction to tensors.<br />
+It is by no means rigorous. However, it serves as good enough starting point while trying to work with Neural Networks from a &quot;mathematically un-inclined programmer&quot; perspective.</p>
+<p>Rigorous mathematical treatment of this subject is of utmost importance if one wishes to do anything meaningful in the area of Deep Learning.</p>
+<p>For a just enough introduction, this is a <strong>must</strong> read:
+<a href="http://www.ita.uni-heidelberg.de/%7Edullemond/lectures/tensor/tensor.pdf">Intruduction to Tensor Calculus, Kees Dullemond &amp; Kasper Peeters</a>.</p>
+<p>I'll also highly recommend <a href="https://www.amazon.in/dp/1541013638/ref=cm_sw_r_tw_dp_U_x_uwH-CbV9MFGXN">Tensor Calculus Made Simple, Taha Sochi</a><br />
+I enjoyed my time with the book. I hope you will too.</p>
+
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  
+    
+<footer class="footer text-muted">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 order-last order-lg-center">
+                <p>
+                    Built with <span><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 490 490" style="width: 20px; stroke: red; fill: red;" xml:space="preserve">
+                            <path id="XMLID_25_" d="M316.554,108.336c4.553,6.922,2.629,16.223-4.296,20.774c-3.44,2.261-6.677,4.928-9.621,7.929
+	c-2.938,2.995-6.825,4.497-10.715,4.497c-3.791,0-7.585-1.427-10.506-4.291c-5.917-5.801-6.009-15.298-0.207-21.212
+	c4.439-4.524,9.338-8.559,14.562-11.992C302.698,99.491,312.002,101.414,316.554,108.336z M447.022,285.869
+	c-1.506,1.536-148.839,151.704-148.839,151.704C283.994,452.035,265.106,460,245,460s-38.994-7.965-53.183-22.427L42.978,285.869
+	c-57.304-58.406-57.304-153.441,0-211.847C70.83,45.634,107.882,30,147.31,30c36.369,0,70.72,13.304,97.69,37.648
+	C271.971,43.304,306.32,30,342.689,30c39.428,0,76.481,15.634,104.332,44.021C504.326,132.428,504.326,227.463,447.022,285.869z
+	 M425.596,95.028C403.434,72.44,373.991,60,342.69,60c-31.301,0-60.745,12.439-82.906,35.027c-1.122,1.144-2.129,2.533-3.538,3.777
+	c-7.536,6.654-16.372,6.32-22.491,0c-1.308-1.352-2.416-2.633-3.538-3.777C208.055,72.44,178.612,60,147.31,60
+	c-31.301,0-60.744,12.439-82.906,35.027c-45.94,46.824-45.94,123.012,0,169.836c1.367,1.393,148.839,151.704,148.839,151.704
+	C221.742,425.229,233.02,430,245,430c11.98,0,23.258-4.771,31.757-13.433l148.839-151.703l0,0
+	C471.535,218.04,471.535,141.852,425.596,95.028z M404.169,116.034c-8.975-9.148-19.475-16.045-31.208-20.499
+	c-7.746-2.939-16.413,0.953-19.355,8.698c-2.942,7.744,0.953,16.407,8.701,19.348c7.645,2.902,14.521,7.431,20.436,13.459
+	c23.211,23.658,23.211,62.153,0,85.811l-52.648,53.661c-5.803,5.915-5.711,15.412,0.206,21.212
+	c2.921,2.863,6.714,4.291,10.506,4.291c3.889,0,7.776-1.502,10.714-4.497l52.648-53.661
+	C438.744,208.616,438.744,151.275,404.169,116.034z" />
+                        </svg></span> and <a href="https://www.getzola.org/">Zola</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+  
+
+  
+<script type="text/javascript" src="http://127.0.0.1:8000/js/main.js" defer></script>
+
+  <script type="text/javascript" src="http://127.0.0.1:8000/plugins/elasticlunr.min.js" defer></script>
+  <script type="text/javascript" src="http://127.0.0.1:8000/search_index.en.js" defer></script>
+  <script type="text/javascript" src="http://127.0.0.1:8000/js/search.js" defer></script>
+
+  
+</body>
+</html>
