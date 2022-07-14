@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" as="font" href="https://schartz.github.io/fonts/vendor/jost/jost-v4-latin-regular.woff2" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="https://schartz.github.io/fonts/vendor/jost/jost-v4-latin-700.woff2"  type="font/woff2" crossorigin>
+
+
+<link rel="stylesheet" href="https://schartz.github.io/main.css">
+
+
+
+  
+  
+    
+  
+
+  
+  
+    
+    
+  
+  
+  
+    
+  
+  
+  
+  
+    
+  
+  
+  
+
+
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+
+	
+
+
+	
+
+<title>Estimating memory requirements of transformer networks | Schartz's</title>
+<meta name="description" content="Getting a grip about how much memory you will need for training&#x2F;fine tuning your transformer model">
+<link rel="canonical" href="https://schartz.github.io/blog/estimating-memory-requirements-of-transformers/">
+
+
+  <meta name="twitter:card" content="summary_large_image">
+  
+    <meta name="twitter:image" content="https://schartz.github.io/doks.png">
+  
+  <meta name="twitter:title" content="Estimating memory requirements of transformer networks">
+  <meta name="twitter:description" content="Getting a grip about how much memory you will need for training&#x2F;fine tuning your transformer model">
+  <meta name="twitter:site" content="@schartz">
+  <meta name="twitter:creator" content="@schartz">
+  
+  <meta property="og:title" content="Estimating memory requirements of transformer networks">
+  <meta property="og:description" content="Getting a grip about how much memory you will need for training&#x2F;fine tuning your transformer model">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://schartz.github.io/blog/estimating-memory-requirements-of-transformers/">
+
+  
+    <meta property="og:image" content="https://schartz.github.io/doks.png">
+  
+
+  <meta property="og:updated_time" content="">
+  <meta property="og:site_name" content="Estimating memory requirements of transformer networks">
+
+  
+
+  
+
+  
+  <meta property="article:publisher" content="https://www.facebook.com/schartz">
+  <meta property="article:author" content="https://www.facebook.com/schartz">
+  <meta property="og:locale" content="en_US">
+
+
+
+
+
+  
+
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BreadcrumbList",
+    
+      
+      
+        
+        
+        
+        
+        
+        
+        
+        
+          {
+            "@type": "ListItem",
+            "position":  1 ,
+            "name": "Home",
+            "item": "https://schartz.github.io/"
+          },
+          
+          
+          {
+            "@type": "ListItem",
+            "position":  2 ,
+            "name": "Blog",
+            "item": "https://schartz.github.io/blog/"
+          },
+        
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+          
+          
+          {
+            "@type": "ListItem",
+            "position":  3 ,
+            "name": "Estimating Memory Requirements Of Transformers",
+            "item": "https://schartz.github.io/blog/estimating-memory-requirements-of-transformers/"
+          },
+        
+      
+    
+  }
+</script>
+
+
+
+
+
+
+  <meta name="theme-color" content="#fff">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://schartz.github.io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://schartz.github.io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://schartz.github.io/favicon-16x16.png">
+  
+    <link rel="manifest" href="https://schartz.github.io/site.webmanifest" crossorigin>
+  
+
+
+  
+
+</head>
+
+  
+    
+  
+
+<body class="page single">
+  
+    
+<div class="header-bar fixed-top"></div>
+<header class="navbar fixed-top navbar-expand-md navbar-light">
+	<div class="container">
+		<input class="menu-btn order-0" type="checkbox" id="menu-btn">
+		<label class="menu-icon d-md-none" for="menu-btn"><span class="navicon"></span></label>
+		<a class="navbar-brand order-1 order-md-0 me-auto" href="https://schartz.github.io">Schartz&#x27;s</a>
+		<button id="mode" class="btn btn-link order-2 order-md-4" type="button" aria-label="Toggle mode">
+			<span class="toggle-dark"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+			<span class="toggle-light"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
+		</button>
+		<ul class="navbar-nav fork-me order-3 order-md-5">
+			
+				
+					<li class="nav-item">
+						<a class="nav-link" href="https://github.com/schartz/"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg><span class="ms-2 visually-hidden">GitHub</span></a>
+					</li>
+				
+			
+		</ul>
+		<div class="collapse navbar-collapse order-4 order-md-1">
+			<ul class="navbar-nav main-nav me-auto order-5 order-md-2">
+				
+					
+				
+				
+				
+					
+						<li class="nav-item">
+							<a class="nav-link" href="https://schartz.github.io/blog/">Blog</a>
+						</li>
+					
+						<li class="nav-item">
+							<a class="nav-link" href="https://schartz.github.io/resume/">Resume</a>
+						</li>
+					
+				
+			</ul>
+			<div class="break order-6 d-md-none"></div>
+			
+				<form class="navbar-form flex-grow-1 order-7 order-md-3">
+					<input id="userinput" class="form-control is-search" type="search" placeholder="Search ..."
+						aria-label="Search ..." autocomplete="off">
+					<div id="suggestions" class="shadow bg-white rounded"></div>
+				</form>
+			
+		</div>
+	</div>
+</header>
+
+  
+
+  
+<div class="wrap container" role="document">
+  <div class="content">
+    <div class="row justify-content-center">
+      <div class="col-md-12 col-lg-10 col-xxl-8">
+        <article>
+          <div class="page-header">
+            <h1>Estimating memory requirements of transformer networks</h1>
+          </div>
+          
+          <p>Fine-tuning GPT/Bert based models for custom tasks I often found myself in the unfortunate situation of &quot;Cuda out of memory&quot;. Turns out
+that the transformer models are memory intensive. In addition to this, the memory reuirements increase with the sequence length.</p>
+<p>It will be of interest to get some idea of how much memory is needed to finetune/train the model. A rough estimate will help in estimating the resources needed for the task.</p>
+<p>If you are short at time or don't want to go into details. You can skip to <a href="https://schartz.github.io/blog/estimating-memory-requirements-of-transformers/#tldr">TL;DR</a> and <a href="https://schartz.github.io/blog/estimating-memory-requirements-of-transformers/#insights">insights</a>.</p>
+<p>All neural network are trained with back propagation. Keeping this in mind following simple relation appears to give us memory usage</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>total_memory = memory_modal + memory_activations + memory_gradients
+</span></code></pre>
+<p>Here <code>memory_modal</code> means the memory required to store all parameters of the model.
+Activations are calculated and stored in forward pass. Gradients are calculated using activations. Also number of gradients are generally equal to number of parameters, resulting in <code>memory_gradients = memory_modal</code>. Hence, we can write:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>total_memory = memory_modal + 2 * memory_activations
+</span></code></pre>
+<p>In essence we need to find the values for <code>memory_modal</code> and <code>memory_activations</code> to estimate the total memory required.</p>
+<h3 id="estimating-model-s-memory-requirements">Estimating model's memory requirements</h3>
+<p>Lets take GPT as an example. GPT consists of a number of transformer blocks (let's call it <code>n_tr_blocks</code> from now on). Each transformer block consists of following structure:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>multi_headed_attention --&gt; layer_normalization --&gt; MLP --&gt;layer_normalization
+</span></code></pre>
+<p>Each <code>multi_headed_attention</code> element consists of <code>value nets</code>, <code>key</code> and <code>query</code>. Let's say that each of these have <code>n_head</code> attention heads and <code>dim</code> dimensions. MLP also has a dimension of <code>n_head * dim</code>. The memory needed to store these will be </p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>total_memory = memory of multi_headed_attention + memory of MLP
+</span><span>			 = memory of value nets + memory of key + memory of query + memory of MLP
+</span><span>			 = square_of(n_head * dim) + square_of(n_head * dim) + square_of(n_head * dim) + square_of(n_head * dim)
+</span><span>			 = 4*square_of(n_head * dim)
+</span></code></pre>
+<p>Since our modal contains <code>n_tr_blocks</code> units of these blocks. Total memory required by the modal becomes.</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>memory_modal = 4*n_tr_blocks*square_of(n_head * dim)
+</span></code></pre>
+<p>Above estimation does not take into account the memory required for biases, since that is mostly static and does not depend on things like batch size, input sequence etc.</p>
+<h3 id="estimating-model-activation-s-memory-requirements">Estimating model activation's memory requirements</h3>
+<p>Multi headed attention is generally a softmax. More specifically it can written as:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>multi_headed_attention = softmax(query * key * sequence_length) * value_net
+</span></code></pre>
+<p><code>query</code> <code>key</code> and <code>value_net</code> all have a tensor shape of </p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>[batch_size, n_head, sequence_length, dim]
+</span></code></pre>
+<p><code>query * key * sequence_length</code> operation gives following resultant shape:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>[batch_size, n_head, sequence_length, sequence_length]
+</span></code></pre>
+<p>This finally gives the memory cost of activation function as</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>memory_softmax  = batch_size * n_head * square_of(sequence_length)
+</span></code></pre>
+<p><code>query * key * sequence_length</code> operation multiplied by <code>value_net</code> has the shape of <code>[batch_size, n_head, sequence_length, dim]</code>. MLP also has the same shape. So memory cost of these operations become:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>memory of MLP  = batch_size * n_head * sequence_length * dim
+</span><span>memory of value_net  = batch_size * n_head * sequence_length * dim
+</span></code></pre>
+<p>This gives us the memory of model activation per block:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>mem_act = memory_softmax + memory_value_net + memory_MLP
+</span><span>		= batch_size * n_head * square_of(sequence_length)
+</span><span>		  + batch_size * n_head * sequence_length * dim
+</span><span>		  + batch_size * n_head * sequence_length * dim
+</span><span>		= batch_size * n_head * sequence_length * (sequence_length + 2*dim)
+</span></code></pre>
+<p>Memory of model activation across the model will be:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>n_tr_blocks * (batch_size * n_head * sequence_length * (sequence_length + 2*dim))
+</span></code></pre>
+<h3 id="summing-it-all-up">Summing it all up</h3>
+<p>To sum up total memory needed for fine-tuning/training transformer models is:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>total_memory = memory_modal + 2 * memory_activations
+</span></code></pre>
+<p>Memory for modal is:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>memory_modal = 4*n_tr_blocks*square_of(n_head * dim)
+</span></code></pre>
+<p>And memory for model activations is:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>n_tr_blocks * (batch_size * n_head * sequence_length * (sequence_length + 2*dim))
+</span></code></pre>
+<p>These rough formulas can be written more succintly using following notation.</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>R = n_tr_blocks = number of transformer blocks in the model
+</span><span>N = n_head = number of attention heads
+</span><span>D = dim = dimension of each attention head
+</span><span>B = batch_size = batch size
+</span><span>S = sequence_length = input sequence length
+</span><span>
+</span><span>
+</span><span>
+</span><span>memory modal = 4 * R * N^2 * D^2
+</span><span>
+</span><span>memory activations = RBNS(S + 2D)
+</span></code></pre>
+<p>Total memory consumption if modal training is</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>M = (4 * R * N^2 * D^2) + RBNS(S + 2D)
+</span></code></pre>
+<p>If we have a very long sequence lengths <code>S &gt;&gt; D</code> <code>S + 2D &lt;--&gt; S</code> hence <code>M</code> in this case becomes:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>M = (4 * R * N^2 * D^2) + RBNS(S) = 4*R*N^2*D^2 + RBNS^2
+</span><span>
+</span><span>M is directly proportional to square of length of input sequence for large sequences
+</span><span>M is lineraly proportional to the batch size.
+</span></code></pre>
+<h2 id="tldr">TLDR</h2>
+<p>These rough formula for estimating the memory requirements of fine tuning transformer models</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>R = n_tr_blocks = number of transformer blocks in the model
+</span><span>N = n_head = number of attention heads
+</span><span>D = dim = dimension of each attention head
+</span><span>B = batch_size = batch size
+</span><span>S = sequence_length = input sequence length
+</span><span>
+</span><span>
+</span><span>
+</span><span>memory modal = 4 * R * N^2 * D^2
+</span><span>
+</span><span>memory activations = RBNS(S + 2D)
+</span><span>
+</span><span>total memory required = ((4 * R * N^2 * D^2) + RBNS(S + 2D)) * float64 memory in bytes
+</span></code></pre>
+<h3 id="insights">Insights</h3>
+<ol>
+<li>
+<p><strong>Memory consumption is directly proportional to square of length of input sequence for large sequences</strong></p>
+</li>
+<li>
+<p><strong>Memory consumption is lineraly proportional to the batch size.</strong></p>
+</li>
+</ol>
+
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  
+    
+<footer class="footer text-muted">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 order-last order-lg-center">
+                <p>
+                    Built with <span><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 490 490" style="width: 20px; stroke: red; fill: red;" xml:space="preserve">
+                            <path id="XMLID_25_" d="M316.554,108.336c4.553,6.922,2.629,16.223-4.296,20.774c-3.44,2.261-6.677,4.928-9.621,7.929
+	c-2.938,2.995-6.825,4.497-10.715,4.497c-3.791,0-7.585-1.427-10.506-4.291c-5.917-5.801-6.009-15.298-0.207-21.212
+	c4.439-4.524,9.338-8.559,14.562-11.992C302.698,99.491,312.002,101.414,316.554,108.336z M447.022,285.869
+	c-1.506,1.536-148.839,151.704-148.839,151.704C283.994,452.035,265.106,460,245,460s-38.994-7.965-53.183-22.427L42.978,285.869
+	c-57.304-58.406-57.304-153.441,0-211.847C70.83,45.634,107.882,30,147.31,30c36.369,0,70.72,13.304,97.69,37.648
+	C271.971,43.304,306.32,30,342.689,30c39.428,0,76.481,15.634,104.332,44.021C504.326,132.428,504.326,227.463,447.022,285.869z
+	 M425.596,95.028C403.434,72.44,373.991,60,342.69,60c-31.301,0-60.745,12.439-82.906,35.027c-1.122,1.144-2.129,2.533-3.538,3.777
+	c-7.536,6.654-16.372,6.32-22.491,0c-1.308-1.352-2.416-2.633-3.538-3.777C208.055,72.44,178.612,60,147.31,60
+	c-31.301,0-60.744,12.439-82.906,35.027c-45.94,46.824-45.94,123.012,0,169.836c1.367,1.393,148.839,151.704,148.839,151.704
+	C221.742,425.229,233.02,430,245,430c11.98,0,23.258-4.771,31.757-13.433l148.839-151.703l0,0
+	C471.535,218.04,471.535,141.852,425.596,95.028z M404.169,116.034c-8.975-9.148-19.475-16.045-31.208-20.499
+	c-7.746-2.939-16.413,0.953-19.355,8.698c-2.942,7.744,0.953,16.407,8.701,19.348c7.645,2.902,14.521,7.431,20.436,13.459
+	c23.211,23.658,23.211,62.153,0,85.811l-52.648,53.661c-5.803,5.915-5.711,15.412,0.206,21.212
+	c2.921,2.863,6.714,4.291,10.506,4.291c3.889,0,7.776-1.502,10.714-4.497l52.648-53.661
+	C438.744,208.616,438.744,151.275,404.169,116.034z" />
+                        </svg></span> and <a href="https://www.getzola.org/">Zola</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+  
+
+  
+<script type="text/javascript" src="https://schartz.github.io/js/main.js" defer></script>
+
+  <script type="text/javascript" src="https://schartz.github.io/plugins/elasticlunr.min.js" defer></script>
+  <script type="text/javascript" src="https://schartz.github.io/search_index.en.js" defer></script>
+  <script type="text/javascript" src="https://schartz.github.io/js/search.js" defer></script>
+
+  
+</body>
+</html>

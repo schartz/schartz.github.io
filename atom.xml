@@ -5,8 +5,134 @@
 	<link href="https://schartz.github.io/atom.xml" rel="self" type="application/atom+xml"/>
   <link href="https://schartz.github.io"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2020-08-28T00:00:00+00:00</updated>
+	<updated>2021-07-14T00:00:00+00:00</updated>
 	<id>https://schartz.github.io/atom.xml</id>
+	<entry xml:lang="en">
+		<title>Estimating memory requirements of transformer networks</title>
+		<published>2021-07-14T00:00:00+00:00</published>
+		<updated>2021-07-14T00:00:00+00:00</updated>
+		<link href="https://schartz.github.io/blog/estimating-memory-requirements-of-transformers/" type="text/html"/>
+		<id>https://schartz.github.io/blog/estimating-memory-requirements-of-transformers/</id>
+		<content type="html">&lt;p&gt;Fine-tuning GPT&#x2F;Bert based models for custom tasks I often found myself in the unfortunate situation of &amp;quot;Cuda out of memory&amp;quot;. Turns out
+that the transformer models are memory intensive. In addition to this, the memory reuirements increase with the sequence length.&lt;&#x2F;p&gt;
+&lt;p&gt;It will be of interest to get some idea of how much memory is needed to finetune&#x2F;train the model. A rough estimate will help in estimating the resources needed for the task.&lt;&#x2F;p&gt;
+&lt;p&gt;If you are short at time or don&#x27;t want to go into details. You can skip to &lt;a href=&quot;https:&#x2F;&#x2F;schartz.github.io&#x2F;blog&#x2F;estimating-memory-requirements-of-transformers&#x2F;#tldr&quot;&gt;TL;DR&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;schartz.github.io&#x2F;blog&#x2F;estimating-memory-requirements-of-transformers&#x2F;#insights&quot;&gt;insights&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;All neural network are trained with back propagation. Keeping this in mind following simple relation appears to give us memory usage&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;total_memory = memory_modal + memory_activations + memory_gradients
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here &lt;code&gt;memory_modal&lt;&#x2F;code&gt; means the memory required to store all parameters of the model.
+Activations are calculated and stored in forward pass. Gradients are calculated using activations. Also number of gradients are generally equal to number of parameters, resulting in &lt;code&gt;memory_gradients = memory_modal&lt;&#x2F;code&gt;. Hence, we can write:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;total_memory = memory_modal + 2 * memory_activations
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In essence we need to find the values for &lt;code&gt;memory_modal&lt;&#x2F;code&gt; and &lt;code&gt;memory_activations&lt;&#x2F;code&gt; to estimate the total memory required.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;estimating-model-s-memory-requirements&quot;&gt;Estimating model&#x27;s memory requirements&lt;&#x2F;h3&gt;
+&lt;p&gt;Lets take GPT as an example. GPT consists of a number of transformer blocks (let&#x27;s call it &lt;code&gt;n_tr_blocks&lt;&#x2F;code&gt; from now on). Each transformer block consists of following structure:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;multi_headed_attention --&amp;gt; layer_normalization --&amp;gt; MLP --&amp;gt;layer_normalization
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Each &lt;code&gt;multi_headed_attention&lt;&#x2F;code&gt; element consists of &lt;code&gt;value nets&lt;&#x2F;code&gt;, &lt;code&gt;key&lt;&#x2F;code&gt; and &lt;code&gt;query&lt;&#x2F;code&gt;. Let&#x27;s say that each of these have &lt;code&gt;n_head&lt;&#x2F;code&gt; attention heads and &lt;code&gt;dim&lt;&#x2F;code&gt; dimensions. MLP also has a dimension of &lt;code&gt;n_head * dim&lt;&#x2F;code&gt;. The memory needed to store these will be &lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;total_memory = memory of multi_headed_attention + memory of MLP
+&lt;&#x2F;span&gt;&lt;span&gt;			 = memory of value nets + memory of key + memory of query + memory of MLP
+&lt;&#x2F;span&gt;&lt;span&gt;			 = square_of(n_head * dim) + square_of(n_head * dim) + square_of(n_head * dim) + square_of(n_head * dim)
+&lt;&#x2F;span&gt;&lt;span&gt;			 = 4*square_of(n_head * dim)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Since our modal contains &lt;code&gt;n_tr_blocks&lt;&#x2F;code&gt; units of these blocks. Total memory required by the modal becomes.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;memory_modal = 4*n_tr_blocks*square_of(n_head * dim)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Above estimation does not take into account the memory required for biases, since that is mostly static and does not depend on things like batch size, input sequence etc.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;estimating-model-activation-s-memory-requirements&quot;&gt;Estimating model activation&#x27;s memory requirements&lt;&#x2F;h3&gt;
+&lt;p&gt;Multi headed attention is generally a softmax. More specifically it can written as:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;multi_headed_attention = softmax(query * key * sequence_length) * value_net
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;code&gt;query&lt;&#x2F;code&gt; &lt;code&gt;key&lt;&#x2F;code&gt; and &lt;code&gt;value_net&lt;&#x2F;code&gt; all have a tensor shape of &lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;[batch_size, n_head, sequence_length, dim]
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;code&gt;query * key * sequence_length&lt;&#x2F;code&gt; operation gives following resultant shape:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;[batch_size, n_head, sequence_length, sequence_length]
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This finally gives the memory cost of activation function as&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;memory_softmax  = batch_size * n_head * square_of(sequence_length)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;code&gt;query * key * sequence_length&lt;&#x2F;code&gt; operation multiplied by &lt;code&gt;value_net&lt;&#x2F;code&gt; has the shape of &lt;code&gt;[batch_size, n_head, sequence_length, dim]&lt;&#x2F;code&gt;. MLP also has the same shape. So memory cost of these operations become:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;memory of MLP  = batch_size * n_head * sequence_length * dim
+&lt;&#x2F;span&gt;&lt;span&gt;memory of value_net  = batch_size * n_head * sequence_length * dim
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This gives us the memory of model activation per block:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;mem_act = memory_softmax + memory_value_net + memory_MLP
+&lt;&#x2F;span&gt;&lt;span&gt;		= batch_size * n_head * square_of(sequence_length)
+&lt;&#x2F;span&gt;&lt;span&gt;		  + batch_size * n_head * sequence_length * dim
+&lt;&#x2F;span&gt;&lt;span&gt;		  + batch_size * n_head * sequence_length * dim
+&lt;&#x2F;span&gt;&lt;span&gt;		= batch_size * n_head * sequence_length * (sequence_length + 2*dim)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Memory of model activation across the model will be:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;n_tr_blocks * (batch_size * n_head * sequence_length * (sequence_length + 2*dim))
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;summing-it-all-up&quot;&gt;Summing it all up&lt;&#x2F;h3&gt;
+&lt;p&gt;To sum up total memory needed for fine-tuning&#x2F;training transformer models is:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;total_memory = memory_modal + 2 * memory_activations
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Memory for modal is:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;memory_modal = 4*n_tr_blocks*square_of(n_head * dim)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And memory for model activations is:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;n_tr_blocks * (batch_size * n_head * sequence_length * (sequence_length + 2*dim))
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;These rough formulas can be written more succintly using following notation.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;R = n_tr_blocks = number of transformer blocks in the model
+&lt;&#x2F;span&gt;&lt;span&gt;N = n_head = number of attention heads
+&lt;&#x2F;span&gt;&lt;span&gt;D = dim = dimension of each attention head
+&lt;&#x2F;span&gt;&lt;span&gt;B = batch_size = batch size
+&lt;&#x2F;span&gt;&lt;span&gt;S = sequence_length = input sequence length
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;memory modal = 4 * R * N^2 * D^2
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;memory activations = RBNS(S + 2D)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Total memory consumption if modal training is&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;M = (4 * R * N^2 * D^2) + RBNS(S + 2D)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;If we have a very long sequence lengths &lt;code&gt;S &amp;gt;&amp;gt; D&lt;&#x2F;code&gt; &lt;code&gt;S + 2D &amp;lt;--&amp;gt; S&lt;&#x2F;code&gt; hence &lt;code&gt;M&lt;&#x2F;code&gt; in this case becomes:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;M = (4 * R * N^2 * D^2) + RBNS(S) = 4*R*N^2*D^2 + RBNS^2
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;M is directly proportional to square of length of input sequence for large sequences
+&lt;&#x2F;span&gt;&lt;span&gt;M is lineraly proportional to the batch size.
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;tldr&quot;&gt;TLDR&lt;&#x2F;h2&gt;
+&lt;p&gt;These rough formula for estimating the memory requirements of fine tuning transformer models&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;R = n_tr_blocks = number of transformer blocks in the model
+&lt;&#x2F;span&gt;&lt;span&gt;N = n_head = number of attention heads
+&lt;&#x2F;span&gt;&lt;span&gt;D = dim = dimension of each attention head
+&lt;&#x2F;span&gt;&lt;span&gt;B = batch_size = batch size
+&lt;&#x2F;span&gt;&lt;span&gt;S = sequence_length = input sequence length
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;memory modal = 4 * R * N^2 * D^2
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;memory activations = RBNS(S + 2D)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;total memory required = ((4 * R * N^2 * D^2) + RBNS(S + 2D)) * float64 memory in bytes
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;insights&quot;&gt;Insights&lt;&#x2F;h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Memory consumption is directly proportional to square of length of input sequence for large sequences&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Memory consumption is lineraly proportional to the batch size.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Transformers and attention: a quick intro for the impatient in plain english</title>
+		<published>2021-07-10T00:00:00+00:00</published>
+		<updated>2021-07-10T00:00:00+00:00</updated>
+		<link href="https://schartz.github.io/blog/transformers-and-attention/" type="text/html"/>
+		<id>https://schartz.github.io/blog/transformers-and-attention/</id>
+		<content type="html"></content>
+	</entry>
 	<entry xml:lang="en">
 		<title>About</title>
 		<published>2020-08-28T00:00:00+00:00</published>
