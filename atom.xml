@@ -5,13 +5,250 @@
 	<link href="https://schartz.github.io/atom.xml" rel="self" type="application/atom+xml"/>
   <link href="https://schartz.github.io"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2021-07-14T00:00:00+00:00</updated>
+	<updated>2022-07-29T00:00:00+00:00</updated>
 	<id>https://schartz.github.io/atom.xml</id>
 	<entry xml:lang="en">
+		<title>TLS and mTLS deep dive</title>
+		<published>2022-07-29T00:00:00+00:00</published>
+		<updated>2022-07-29T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://schartz.github.io/blog/tls-and-mtls-deep-dive/" type="text/html"/>
+		<id>https://schartz.github.io/blog/tls-and-mtls-deep-dive/</id>
+		<content type="html">&lt;p&gt;mTLS or MTLS is an acronym for &lt;strong&gt;Mutual Transport Layer Security&lt;&#x2F;strong&gt;. TLS(Transport Layer Security) is the encryption 
+protocol which powers the HTTPS. mTLS is a spin on TLS where both client and server are going to exchange certificates before communication begins.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s understand this in plain english.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;1-tls&quot;&gt;1 TLS&lt;&#x2F;h3&gt;
+&lt;p&gt;TLS (sometimes referred as SSL) is a very widely used protocol. It is used to secure a client server communication by encrypting the communicated information. It involves &lt;strong&gt;Public key infrastructure (PKI)&lt;&#x2F;strong&gt;, &lt;strong&gt;TLS Certificates&lt;&#x2F;strong&gt;, &lt;strong&gt;TLS Handshakes&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;1-1-public-key-infrastructure-pki&quot;&gt;1.1 Public key infrastructure (PKI)&lt;&#x2F;h4&gt;
+&lt;ul&gt;
+&lt;li&gt;You have two keys, called Public and Private keys.&lt;&#x2F;li&gt;
+&lt;li&gt;Both of these keys come with a set expiration period.&lt;&#x2F;li&gt;
+&lt;li&gt;Data encrypted by Public key can only be decrypted by its Private key.&lt;&#x2F;li&gt;
+&lt;li&gt;Data encrypted by Private key can only be decrypted by its Public key.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;data --------&amp;gt; [public key] -----&amp;gt; encrypted data
+&lt;&#x2F;span&gt;&lt;span&gt;										  |
+&lt;&#x2F;span&gt;&lt;span&gt;										 \|&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;						data &amp;lt;--------[private key]
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;data --------&amp;gt; [private key] -----&amp;gt; encrypted data
+&lt;&#x2F;span&gt;&lt;span&gt;										  |
+&lt;&#x2F;span&gt;&lt;span&gt;										 \|&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;						data &amp;lt;--------[public key]
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The server freely provides Public key to anyone. But the guards the Private key with it&#x27;s life.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;1-2-tls-certificates&quot;&gt;1.2 TLS Certificates&lt;&#x2F;h4&gt;
+&lt;p&gt;A TLS certificate is a data file that contains the &lt;strong&gt;public key&lt;&#x2F;strong&gt;, information of the &lt;strong&gt;encryption algorithm&lt;&#x2F;strong&gt;,  information of the &lt;strong&gt;certificate issuer&lt;&#x2F;strong&gt;, and the certificate&#x27;s &lt;strong&gt;expiration date&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;TLS certificates are issued by a trusted third party called certificate authority. Sometimes written as CA or CA authority.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;letsencrypt.org&#x2F;&quot;&gt;Let&#x27;s encrypt&lt;&#x2F;a&gt; is one such trusted certificate issuer authority among many others.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;TLS certificate = Public key + 
+&lt;&#x2F;span&gt;&lt;span&gt;				  encryption algorithm infromation + 
+&lt;&#x2F;span&gt;&lt;span&gt;				  identity information + 
+&lt;&#x2F;span&gt;&lt;span&gt;				  expiry date
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h4 id=&quot;1-3-tls-handshakes&quot;&gt;1.3 TLS Handshakes&lt;&#x2F;h4&gt;
+&lt;p&gt;The TLS handshake is the process to achive 2 things mainly:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Checking the TLS certificate validity &lt;&#x2F;li&gt;
+&lt;li&gt;Making sure that the server actually owns the private key.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;First part is done by validating the certifcate against a list of root CA certificates which are already available on the client side.&lt;br &#x2F;&gt;
+On linux systems, typically a file located at &lt;code&gt;&#x2F;etc&#x2F;ssl&#x2F;certs&#x2F;ca-certificates.crt&lt;&#x2F;code&gt; contains the verification certificates of all the trusted certificate authorities. If this check fails, client shall panick about an untrusted certificate.&lt;&#x2F;p&gt;
+&lt;p&gt;Second part is done by asking the server to decrypt something encrypted by the Public file from the provided certificate.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;2-how-tls-works&quot;&gt;2 How TLS works&lt;&#x2F;h3&gt;
+&lt;p&gt;With above concepts, working of TLS is fairly straightforward.&lt;&#x2F;p&gt;
+&lt;p&gt;In TLS, the server has a TLS certificate and the key pair as well. Process goes something like following:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Client connects to server&lt;&#x2F;li&gt;
+&lt;li&gt;Server sends its TLS certificate&lt;&#x2F;li&gt;
+&lt;li&gt;Client verifies the server&#x27;s certificate (TLS handshake)&lt;&#x2F;li&gt;
+&lt;li&gt;Client and server exchange information over encrypted TLS connection&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;tls.png&quot; alt=&quot;TLS Working&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;3-how-mtls-works&quot;&gt;3 How mTLS works&lt;&#x2F;h3&gt;
+&lt;p&gt;Mutual Transport Level Security is built on top of TLS. Process is very similar, but with an added twist of client bringing it&#x27;s own certificate and key pair to picture. mTLS process looks like following:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Client connects to server&lt;&#x2F;li&gt;
+&lt;li&gt;Server sends its TLS certificate&lt;&#x2F;li&gt;
+&lt;li&gt;Client verifies the server&#x27;s certificate (TLS handshake)&lt;&#x2F;li&gt;
+&lt;li&gt;Client sends its TLS certificate&lt;&#x2F;li&gt;
+&lt;li&gt;Server verifies the client&#x27;s certificate (TLS handshake, again)&lt;&#x2F;li&gt;
+&lt;li&gt;Server grants access&lt;&#x2F;li&gt;
+&lt;li&gt;Client and server exchange information over encrypted TLS connection&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;mtls.png&quot; alt=&quot;TLS Working&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;4-code-time&quot;&gt;4 Code time&lt;&#x2F;h3&gt;
+&lt;p&gt;To get going we shall need &lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;A root certificate to sign both client and server certificates&lt;&#x2F;li&gt;
+&lt;li&gt;A server certificate&lt;&#x2F;li&gt;
+&lt;li&gt;A client certificate&lt;&#x2F;li&gt;
+&lt;li&gt;NGINX in docker to run the mTLS configured server&lt;&#x2F;li&gt;
+&lt;li&gt;Humble &lt;code&gt;curl&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;We shall go ahead with a simple bash file to get our certificates&lt;&#x2F;p&gt;
+&lt;p&gt;Start by creating an file &lt;code&gt;mtls_test.sh&lt;&#x2F;code&gt; and enter the following contents.&lt;&#x2F;p&gt;
+&lt;p&gt;Save this file in an empty directory.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;#!&#x2F;bin&#x2F;bash
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;mkdir&lt;&#x2F;span&gt;&lt;span&gt; certs
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;cd&lt;&#x2F;span&gt;&lt;span&gt; certs
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# save pass in a file for root certificate
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;printf&lt;&#x2F;span&gt;&lt;span&gt; secret &amp;gt; ca_passphrase.txt
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# generate 4096 bit RSA private key in des3 fromat. This will require passphrase
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; genrsa&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -des3 -passout&lt;&#x2F;span&gt;&lt;span&gt; file:ca_passphrase.txt&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -out&lt;&#x2F;span&gt;&lt;span&gt; ca.key 4096
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# convert ca.key from des3 to RSA format. This too shall require passphrase
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; rsa&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -passin&lt;&#x2F;span&gt;&lt;span&gt; file:ca_passphrase.txt&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -in&lt;&#x2F;span&gt;&lt;span&gt; ca.key&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -out&lt;&#x2F;span&gt;&lt;span&gt; ca.key
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# now create a certificate (aka public key of ca.key + signature) for this private key
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; req&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -new -passin&lt;&#x2F;span&gt;&lt;span&gt; file:ca_passphrase.txt&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -x509 -days&lt;&#x2F;span&gt;&lt;span&gt; 3650&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -key&lt;&#x2F;span&gt;&lt;span&gt; ca.key&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -subj &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;CN=*.test.server&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -out&lt;&#x2F;span&gt;&lt;span&gt; ca.crt
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# save pass in a file for server certificate
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;printf&lt;&#x2F;span&gt;&lt;span&gt; secret &amp;gt; passphrase.txt
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# generate a 2048 bit private key for server in des3 format
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; genrsa&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -des3 -passout&lt;&#x2F;span&gt;&lt;span&gt; file:passphrase.txt&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -out&lt;&#x2F;span&gt;&lt;span&gt; server.key 2048
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# use this private key to create a certificate signing request (CSR) for server
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; req&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -new -passin&lt;&#x2F;span&gt;&lt;span&gt; file:passphrase.txt&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -key&lt;&#x2F;span&gt;&lt;span&gt; server.key&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -subj &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;CN=*.test.server&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -out&lt;&#x2F;span&gt;&lt;span&gt; server.csr
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# now create a certificate (aka public key of server.key + signature) for this private key
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# we are making this certificate valid for 365 days. Also sign it with the certificate authority
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; x509&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -req -days&lt;&#x2F;span&gt;&lt;span&gt; 365&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -in&lt;&#x2F;span&gt;&lt;span&gt; server.csr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -CA&lt;&#x2F;span&gt;&lt;span&gt; ca.crt&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -CAkey&lt;&#x2F;span&gt;&lt;span&gt; ca.key&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -set_serial&lt;&#x2F;span&gt;&lt;span&gt; 01&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -out&lt;&#x2F;span&gt;&lt;span&gt; server.crt
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# save pass in a file for server certificate
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;printf&lt;&#x2F;span&gt;&lt;span&gt; secret &amp;gt; client_passphrase.txt
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# generate a 2048 bit private key for server in des3 format
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; genrsa&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -des3 -passout&lt;&#x2F;span&gt;&lt;span&gt; file:client_passphrase.txt&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -out&lt;&#x2F;span&gt;&lt;span&gt; client.key 2048
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# convert client.key from des3 to RSA format.
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; rsa&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -passin&lt;&#x2F;span&gt;&lt;span&gt; file:client_passphrase.txt&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -in&lt;&#x2F;span&gt;&lt;span&gt; client.key&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -out&lt;&#x2F;span&gt;&lt;span&gt; client.key
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# use this private key to create a certificate signing request (CSR) for server
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; req&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -new -key&lt;&#x2F;span&gt;&lt;span&gt; client.key&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -subj &lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&#x2F;CN=*.test.client&lt;&#x2F;span&gt;&lt;span&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -out&lt;&#x2F;span&gt;&lt;span&gt; client.csr
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# now create a certificate (aka public key of server.key + signature) for this private key
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# we are making this certificate valid for 365 days. Also sign it with the certificate authority
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; x509&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -req -days&lt;&#x2F;span&gt;&lt;span&gt; 365&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -in&lt;&#x2F;span&gt;&lt;span&gt; client.csr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -CA&lt;&#x2F;span&gt;&lt;span&gt; ca.crt&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -CAkey&lt;&#x2F;span&gt;&lt;span&gt; ca.key&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -set_serial&lt;&#x2F;span&gt;&lt;span&gt; 01&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -out&lt;&#x2F;span&gt;&lt;span&gt; client.crt
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Next let&#x27;s write a simple nginx configuration equipped with mTLS. Put the following contents in a file called &lt;code&gt;nginx.conf&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;conf&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-conf &quot;&gt;&lt;code class=&quot;language-conf&quot; data-lang=&quot;conf&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;server &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;error_log &lt;&#x2F;span&gt;&lt;span&gt;&#x2F;var&#x2F;log&#x2F;nginx&#x2F;error.log debug;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;listen &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;443&lt;&#x2F;span&gt;&lt;span&gt; ssl;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;server_name  &lt;&#x2F;span&gt;&lt;span&gt;test.your.hostname;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ssl_password_file &lt;&#x2F;span&gt;&lt;span&gt;&#x2F;etc&#x2F;nginx&#x2F;certs&#x2F;password;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ssl_certificate &lt;&#x2F;span&gt;&lt;span&gt;&#x2F;etc&#x2F;nginx&#x2F;certs&#x2F;tls.crt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ssl_certificate_key &lt;&#x2F;span&gt;&lt;span&gt;&#x2F;etc&#x2F;nginx&#x2F;certs&#x2F;tls.key;
+&lt;&#x2F;span&gt;&lt;span&gt; 
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ssl_client_certificate &lt;&#x2F;span&gt;&lt;span&gt;&#x2F;etc&#x2F;nginx&#x2F;mtls&#x2F;ca.crt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ssl_verify_client &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;on&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ssl_verify_depth  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt; 
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;ssl_protocols             &lt;&#x2F;span&gt;&lt;span&gt;TLSv1 TLSv1.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt; TLSv1.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt; 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;    location &lt;&#x2F;span&gt;&lt;span&gt;&#x2F; {
+&lt;&#x2F;span&gt;&lt;span&gt;    	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;200 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;This is an mTLS connection!  \(^o^)&#x2F;  &amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt; 
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Lastly run this configuration on NGINX in docker&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;docker&lt;&#x2F;span&gt;&lt;span&gt; run&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --rm --name&lt;&#x2F;span&gt;&lt;span&gt; mtls-nginx \
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;		-p&lt;&#x2F;span&gt;&lt;span&gt; 443:443 \
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;		-v &lt;&#x2F;span&gt;&lt;span&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pwd&lt;&#x2F;span&gt;&lt;span&gt;)&#x2F;certs&#x2F;ca.crt:&#x2F;etc&#x2F;nginx&#x2F;mtls&#x2F;ca.crt \
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;		-v &lt;&#x2F;span&gt;&lt;span&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pwd&lt;&#x2F;span&gt;&lt;span&gt;)&#x2F;certs&#x2F;server.key:&#x2F;etc&#x2F;nginx&#x2F;certs&#x2F;tls.key \
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;		-v &lt;&#x2F;span&gt;&lt;span&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pwd&lt;&#x2F;span&gt;&lt;span&gt;)&#x2F;certs&#x2F;server.crt:&#x2F;etc&#x2F;nginx&#x2F;certs&#x2F;tls.crt \
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;		-v &lt;&#x2F;span&gt;&lt;span&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pwd&lt;&#x2F;span&gt;&lt;span&gt;)&#x2F;nginx.conf:&#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;nginx.conf \
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;		-v &lt;&#x2F;span&gt;&lt;span&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pwd&lt;&#x2F;span&gt;&lt;span&gt;)&#x2F;certs&#x2F;passphrase.txt:&#x2F;etc&#x2F;nginx&#x2F;certs&#x2F;password \
+&lt;&#x2F;span&gt;&lt;span&gt;		nginx
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Terminal should print info about nginx worker process:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;log&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-log &quot;&gt;&lt;code class=&quot;language-log&quot; data-lang=&quot;log&quot;&gt;&lt;span&gt;2022&#x2F;07&#x2F;29 09:27:29 [notice] 1#1: using the &amp;quot;epoll&amp;quot; event method
+&lt;&#x2F;span&gt;&lt;span&gt;2022&#x2F;07&#x2F;29 09:27:29 [notice] 1#1: nginx&#x2F;1.23.1
+&lt;&#x2F;span&gt;&lt;span&gt;2022&#x2F;07&#x2F;29 09:27:29 [notice] 1#1: built by gcc 10.2.1 20210110 (Debian 10.2.1-6) 
+&lt;&#x2F;span&gt;&lt;span&gt;2022&#x2F;07&#x2F;29 09:27:29 [notice] 1#1: OS: Linux 5.15.55-2-lts
+&lt;&#x2F;span&gt;&lt;span&gt;2022&#x2F;07&#x2F;29 09:27:29 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+&lt;&#x2F;span&gt;&lt;span&gt;2022&#x2F;07&#x2F;29 09:27:29 [notice] 1#1: start worker processes
+&lt;&#x2F;span&gt;&lt;span&gt;......
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now in a separate terminal we can use curl to verify the mTLS in action.&lt;&#x2F;p&gt;
+&lt;p&gt;First we shall try to connet &lt;code&gt;curl&lt;&#x2F;code&gt; without client certificate exchange:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span&gt; curl https:&#x2F;&#x2F;localhost&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --insecure                                                                                                                                                          
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;html&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;head&amp;gt;&amp;lt;title&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;400 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;No&lt;&#x2F;span&gt;&lt;span&gt; required SSL certificate was sent&amp;lt;&#x2F;title&amp;gt;&amp;lt;&#x2F;head&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;body&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;center&amp;gt;&amp;lt;h1&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;400 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Bad&lt;&#x2F;span&gt;&lt;span&gt; Request&amp;lt;&#x2F;h1&amp;gt;&amp;lt;&#x2F;center&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;center&amp;gt;No &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;required&lt;&#x2F;span&gt;&lt;span&gt; SSL certificate was sent&amp;lt;&#x2F;center&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;hr&amp;gt;&amp;lt;center&amp;gt;nginx&#x2F;1.23.1&amp;lt;&#x2F;center&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;body&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;html&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now we shall try to connect &lt;code&gt;curl&lt;&#x2F;code&gt; with client side certificates exchange:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span&gt; curl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;  --key&lt;&#x2F;span&gt;&lt;span&gt; certs&#x2F;client.key&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --cert&lt;&#x2F;span&gt;&lt;span&gt; certs&#x2F;client.crt https:&#x2F;&#x2F;127.0.0.1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --insecure                                                                                                              
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;This&lt;&#x2F;span&gt;&lt;span&gt; is an mTLS connection!  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\(&lt;&#x2F;span&gt;&lt;span&gt;^o^)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;&#x2F;  
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We can peek under the hood by specifying &lt;code&gt;-v&lt;&#x2F;code&gt; switch with &lt;code&gt;curl&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span&gt; curl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -v  --key&lt;&#x2F;span&gt;&lt;span&gt; certs&#x2F;client.key&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --cert&lt;&#x2F;span&gt;&lt;span&gt; certs&#x2F;client.crt https:&#x2F;&#x2F;127.0.0.1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --insecure                                                                                                          
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;   Trying 127.0.0.1:443...
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; Connected to 127.0.0.1 (127.0.0.1) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;port&lt;&#x2F;span&gt;&lt;span&gt; 443 (#0)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; ALPN: offers h2
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; ALPN: offers http&#x2F;1.1
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; TLSv1.3 (OUT)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span&gt; TLS handshake, Client hello (1)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; TLSv1.3 (IN)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span&gt; TLS handshake, Server hello (2)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; TLSv1.2 (IN)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span&gt; TLS handshake, Certificate (11)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; TLSv1.2 (IN)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span&gt; TLS handshake, Server key exchange (12)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; TLSv1.2 (IN)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span&gt; TLS handshake, Request CERT (13)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; TLSv1.2 (IN)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span&gt; TLS handshake, Server finished (14)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; TLSv1.2 (OUT)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span&gt; TLS handshake, Certificate (11)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; TLSv1.2 (OUT)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span&gt; TLS handshake, Client key exchange (16)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; TLSv1.2 (OUT)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span&gt; TLS handshake, CERT verify (15)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; TLSv1.2 (OUT)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span&gt; TLS change cipher, Change cipher spec (1)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; TLSv1.2 (OUT)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span&gt; TLS handshake, Finished (20)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; TLSv1.2 (IN)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span&gt; TLS handshake, Finished (20)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; SSL connection using TLSv1.2 &#x2F; ECDHE-RSA-AES256-GCM-SHA384
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; ALPN: server accepted http&#x2F;1.1
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; Server certificate:
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;  subject: CN=*.test.server
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;  start date: Jul 29 09:30:20 2022 GMT
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;  expire date: Jul 29 09:30:20 2023 GMT
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;  issuer: CN=*.test.server
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;  SSL certificate verify result: self signed certificate (18)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;,&lt;&#x2F;span&gt;&lt;span&gt; continuing anyway.
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; GET &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span&gt; HTTP&#x2F;1.1
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; Host: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;127.0.0.1
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; User-Agent: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;curl&#x2F;7.84.0
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; Accept: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&#x2F;*
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; Mark bundle as not supporting multiuse
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt; HTTP&#x2F;1.1 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;200&lt;&#x2F;span&gt;&lt;span&gt; OK
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt; Server: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;nginx&#x2F;1.23.1
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt; Date: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;Fri,&lt;&#x2F;span&gt;&lt;span&gt; 29 Jul 2022 09:34:23 GMT
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt; Content-Type: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;application&#x2F;octet-stream
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt; Content-Length: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;57
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt; Connection: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;keep-alive
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt; 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; Connection &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;#0 to host 127.0.0.1 left intact
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;This&lt;&#x2F;span&gt;&lt;span&gt; is an mTLS connection!  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\(&lt;&#x2F;span&gt;&lt;span&gt;^o^)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;&#x2F;  
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We can see both the handshakes in action!&lt;&#x2F;p&gt;
+&lt;p&gt;Congratulations now you know TLS and MTLS.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
 		<title>Estimating memory requirements of transformer networks</title>
-		<published>2021-07-14T00:00:00+00:00</published>
-		<updated>2021-07-14T00:00:00+00:00</updated>
-		<link href="https://schartz.github.io/blog/estimating-memory-requirements-of-transformers/" type="text/html"/>
+		<published>2022-07-14T00:00:00+00:00</published>
+		<updated>2022-07-14T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://schartz.github.io/blog/estimating-memory-requirements-of-transformers/" type="text/html"/>
 		<id>https://schartz.github.io/blog/estimating-memory-requirements-of-transformers/</id>
 		<content type="html">&lt;p&gt;Fine-tuning GPT&#x2F;Bert based models for custom tasks I often found myself in the unfortunate situation of &amp;quot;Cuda out of memory&amp;quot;. Turns out
 that the transformer models are memory intensive. In addition to this, the memory reuirements increase with the sequence length.&lt;&#x2F;p&gt;
@@ -129,7 +366,7 @@ Activations are calculated and stored in forward pass. Gradients are calculated 
 		<title>Transformers and attention: a quick intro for the impatient in plain english</title>
 		<published>2021-07-10T00:00:00+00:00</published>
 		<updated>2021-07-10T00:00:00+00:00</updated>
-		<link href="https://schartz.github.io/blog/transformers-and-attention/" type="text/html"/>
+		<link rel="alternate" href="https://schartz.github.io/blog/transformers-and-attention/" type="text/html"/>
 		<id>https://schartz.github.io/blog/transformers-and-attention/</id>
 		<content type="html"></content>
 	</entry>
@@ -137,7 +374,7 @@ Activations are calculated and stored in forward pass. Gradients are calculated 
 		<title>About</title>
 		<published>2020-08-28T00:00:00+00:00</published>
 		<updated>2020-08-28T00:00:00+00:00</updated>
-		<link href="https://schartz.github.io/about/" type="text/html"/>
+		<link rel="alternate" href="https://schartz.github.io/about/" type="text/html"/>
 		<id>https://schartz.github.io/about/</id>
 		<content type="html">&lt;p&gt;&lt;strong&gt;I am bout page&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
 </content>
@@ -146,7 +383,7 @@ Activations are calculated and stored in forward pass. Gradients are calculated 
 		<title>X.509 Certificates Explained</title>
 		<published>2019-07-06T00:00:00+00:00</published>
 		<updated>2019-07-06T00:00:00+00:00</updated>
-		<link href="https://schartz.github.io/blog/x509-certificates-explained/" type="text/html"/>
+		<link rel="alternate" href="https://schartz.github.io/blog/x509-certificates-explained/" type="text/html"/>
 		<id>https://schartz.github.io/blog/x509-certificates-explained/</id>
 		<content type="html">&lt;p&gt;To put it simply, X.509 certificate is a digital document encoded and&#x2F;or
 digitally signed according to &lt;a href=&quot;https:&#x2F;&#x2F;tools.ietf.org&#x2F;html&#x2F;rfc5280&quot;&gt;RFC 5280&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
@@ -232,7 +469,7 @@ To extract the public key from it use following&lt;&#x2F;p&gt;
 		<title>The Shape of Tensor</title>
 		<published>2019-06-07T00:00:00+00:00</published>
 		<updated>2019-06-07T00:00:00+00:00</updated>
-		<link href="https://schartz.github.io/blog/the-shape-of-tensor/" type="text/html"/>
+		<link rel="alternate" href="https://schartz.github.io/blog/the-shape-of-tensor/" type="text/html"/>
 		<id>https://schartz.github.io/blog/the-shape-of-tensor/</id>
 		<content type="html">&lt;p&gt;Tensors are the primary data structures used by neural networks. And they are rather fascinating as well.
 Machine learning and by extension deep learning is an interdisciplinary field. Its interesting
@@ -394,7 +631,7 @@ I enjoyed my time with the book. I hope you will too.&lt;&#x2F;p&gt;
 		<title>Installing tensorflow 1.13 on Elementary OS Juno.</title>
 		<published>2019-06-02T00:00:00+00:00</published>
 		<updated>2019-06-02T00:00:00+00:00</updated>
-		<link href="https://schartz.github.io/blog/installing-tensorflow-on-ubuntu/" type="text/html"/>
+		<link rel="alternate" href="https://schartz.github.io/blog/installing-tensorflow-on-ubuntu/" type="text/html"/>
 		<id>https://schartz.github.io/blog/installing-tensorflow-on-ubuntu/</id>
 		<content type="html">&lt;p&gt;Setting up Tensorflow with GPU support gave me good deal of pain. Internet is full of tutorials
 with older releases of Tensorflow. Some of them use an approach of installing CUDA toolkit via apt.

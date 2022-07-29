@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" as="font" href="https://schartz.github.io/fonts/vendor/jost/jost-v4-latin-regular.woff2" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="https://schartz.github.io/fonts/vendor/jost/jost-v4-latin-700.woff2"  type="font/woff2" crossorigin>
+
+
+<link rel="stylesheet" href="https://schartz.github.io/main.css">
+
+
+
+  
+  
+    
+  
+
+  
+  
+    
+    
+  
+  
+  
+    
+  
+  
+  
+  
+    
+  
+  
+  
+
+
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+
+	
+
+
+	
+
+<title>TLS and mTLS deep dive | Schartz's</title>
+<meta name="description" content="Understanding what is mTLS by setting it up in NGINX">
+<link rel="canonical" href="https://schartz.github.io/blog/tls-and-mtls-deep-dive/">
+
+
+  <meta name="twitter:card" content="summary_large_image">
+  
+    <meta name="twitter:image" content="https://schartz.github.io/doks.png">
+  
+  <meta name="twitter:title" content="TLS and mTLS deep dive">
+  <meta name="twitter:description" content="Understanding what is mTLS by setting it up in NGINX">
+  <meta name="twitter:site" content="@schartz">
+  <meta name="twitter:creator" content="@schartz">
+  
+  <meta property="og:title" content="TLS and mTLS deep dive">
+  <meta property="og:description" content="Understanding what is mTLS by setting it up in NGINX">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://schartz.github.io/blog/tls-and-mtls-deep-dive/">
+
+  
+    <meta property="og:image" content="https://schartz.github.io/doks.png">
+  
+
+  <meta property="og:updated_time" content="">
+  <meta property="og:site_name" content="TLS and mTLS deep dive">
+
+  
+
+  
+
+  
+  <meta property="article:publisher" content="https://www.facebook.com/schartz">
+  <meta property="article:author" content="https://www.facebook.com/schartz">
+  <meta property="og:locale" content="en_US">
+
+
+
+
+
+  
+
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BreadcrumbList",
+    
+      
+      
+        
+        
+        
+        
+        
+        
+        
+        
+          {
+            "@type": "ListItem",
+            "position":  1 ,
+            "name": "Home",
+            "item": "https://schartz.github.io/"
+          },
+          
+          
+          {
+            "@type": "ListItem",
+            "position":  2 ,
+            "name": "Blog",
+            "item": "https://schartz.github.io/blog/"
+          },
+        
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+          
+          
+          {
+            "@type": "ListItem",
+            "position":  3 ,
+            "name": "Tls And Mtls Deep Dive",
+            "item": "https://schartz.github.io/blog/tls-and-mtls-deep-dive/"
+          },
+        
+      
+    
+  }
+</script>
+
+
+
+
+
+
+  <meta name="theme-color" content="#fff">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://schartz.github.io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://schartz.github.io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://schartz.github.io/favicon-16x16.png">
+  
+    <link rel="manifest" href="https://schartz.github.io/site.webmanifest" crossorigin>
+  
+
+
+  
+
+</head>
+
+  
+    
+  
+
+<body class="page single">
+  
+    
+<div class="header-bar fixed-top"></div>
+<header class="navbar fixed-top navbar-expand-md navbar-light">
+	<div class="container">
+		<input class="menu-btn order-0" type="checkbox" id="menu-btn">
+		<label class="menu-icon d-md-none" for="menu-btn"><span class="navicon"></span></label>
+		<a class="navbar-brand order-1 order-md-0 me-auto" href="https://schartz.github.io">Schartz&#x27;s</a>
+		<button id="mode" class="btn btn-link order-2 order-md-4" type="button" aria-label="Toggle mode">
+			<span class="toggle-dark"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+			<span class="toggle-light"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
+		</button>
+		<ul class="navbar-nav fork-me order-3 order-md-5">
+			
+				
+					<li class="nav-item">
+						<a class="nav-link" href="https://github.com/schartz/"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg><span class="ms-2 visually-hidden">GitHub</span></a>
+					</li>
+				
+			
+		</ul>
+		<div class="collapse navbar-collapse order-4 order-md-1">
+			<ul class="navbar-nav main-nav me-auto order-5 order-md-2">
+				
+					
+				
+				
+				
+					
+						<li class="nav-item">
+							<a class="nav-link" href="https://schartz.github.io/blog/">Blog</a>
+						</li>
+					
+						<li class="nav-item">
+							<a class="nav-link" href="https://schartz.github.io/resume/">Resume</a>
+						</li>
+					
+				
+			</ul>
+			<div class="break order-6 d-md-none"></div>
+			
+				<form class="navbar-form flex-grow-1 order-7 order-md-3">
+					<input id="userinput" class="form-control is-search" type="search" placeholder="Search ..."
+						aria-label="Search ..." autocomplete="off">
+					<div id="suggestions" class="shadow bg-white rounded"></div>
+				</form>
+			
+		</div>
+	</div>
+</header>
+
+  
+
+  
+<div class="wrap container" role="document">
+  <div class="content">
+    <div class="row justify-content-center">
+      <div class="col-md-12 col-lg-10 col-xxl-8">
+        <article>
+          <div class="page-header">
+            <h1>TLS and mTLS deep dive</h1>
+          </div>
+          
+          <p>mTLS or MTLS is an acronym for <strong>Mutual Transport Layer Security</strong>. TLS(Transport Layer Security) is the encryption 
+protocol which powers the HTTPS. mTLS is a spin on TLS where both client and server are going to exchange certificates before communication begins.</p>
+<p>Let's understand this in plain english.</p>
+<h3 id="1-tls">1 TLS</h3>
+<p>TLS (sometimes referred as SSL) is a very widely used protocol. It is used to secure a client server communication by encrypting the communicated information. It involves <strong>Public key infrastructure (PKI)</strong>, <strong>TLS Certificates</strong>, <strong>TLS Handshakes</strong>.</p>
+<h4 id="1-1-public-key-infrastructure-pki">1.1 Public key infrastructure (PKI)</h4>
+<ul>
+<li>You have two keys, called Public and Private keys.</li>
+<li>Both of these keys come with a set expiration period.</li>
+<li>Data encrypted by Public key can only be decrypted by its Private key.</li>
+<li>Data encrypted by Private key can only be decrypted by its Public key.</li>
+</ul>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>data --------&gt; [public key] -----&gt; encrypted data
+</span><span>										  |
+</span><span>										 \|/
+</span><span>						data &lt;--------[private key]
+</span><span>
+</span><span>
+</span><span>
+</span><span>
+</span><span>data --------&gt; [private key] -----&gt; encrypted data
+</span><span>										  |
+</span><span>										 \|/
+</span><span>						data &lt;--------[public key]
+</span><span>
+</span></code></pre>
+<p>The server freely provides Public key to anyone. But the guards the Private key with it's life.</p>
+<h4 id="1-2-tls-certificates">1.2 TLS Certificates</h4>
+<p>A TLS certificate is a data file that contains the <strong>public key</strong>, information of the <strong>encryption algorithm</strong>,  information of the <strong>certificate issuer</strong>, and the certificate's <strong>expiration date</strong>.</p>
+<p>TLS certificates are issued by a trusted third party called certificate authority. Sometimes written as CA or CA authority.</p>
+<p><a href="https://letsencrypt.org/">Let's encrypt</a> is one such trusted certificate issuer authority among many others.</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>TLS certificate = Public key + 
+</span><span>				  encryption algorithm infromation + 
+</span><span>				  identity information + 
+</span><span>				  expiry date
+</span></code></pre>
+<h4 id="1-3-tls-handshakes">1.3 TLS Handshakes</h4>
+<p>The TLS handshake is the process to achive 2 things mainly:</p>
+<ol>
+<li>Checking the TLS certificate validity </li>
+<li>Making sure that the server actually owns the private key.</li>
+</ol>
+<p>First part is done by validating the certifcate against a list of root CA certificates which are already available on the client side.<br />
+On linux systems, typically a file located at <code>/etc/ssl/certs/ca-certificates.crt</code> contains the verification certificates of all the trusted certificate authorities. If this check fails, client shall panick about an untrusted certificate.</p>
+<p>Second part is done by asking the server to decrypt something encrypted by the Public file from the provided certificate.</p>
+<h3 id="2-how-tls-works">2 How TLS works</h3>
+<p>With above concepts, working of TLS is fairly straightforward.</p>
+<p>In TLS, the server has a TLS certificate and the key pair as well. Process goes something like following:</p>
+<ol>
+<li>Client connects to server</li>
+<li>Server sends its TLS certificate</li>
+<li>Client verifies the server's certificate (TLS handshake)</li>
+<li>Client and server exchange information over encrypted TLS connection</li>
+</ol>
+<p><img src="/images/tls.png" alt="TLS Working" /></p>
+<h3 id="3-how-mtls-works">3 How mTLS works</h3>
+<p>Mutual Transport Level Security is built on top of TLS. Process is very similar, but with an added twist of client bringing it's own certificate and key pair to picture. mTLS process looks like following:</p>
+<ol>
+<li>Client connects to server</li>
+<li>Server sends its TLS certificate</li>
+<li>Client verifies the server's certificate (TLS handshake)</li>
+<li>Client sends its TLS certificate</li>
+<li>Server verifies the client's certificate (TLS handshake, again)</li>
+<li>Server grants access</li>
+<li>Client and server exchange information over encrypted TLS connection</li>
+</ol>
+<p><img src="/images/mtls.png" alt="TLS Working" /></p>
+<h3 id="4-code-time">4 Code time</h3>
+<p>To get going we shall need </p>
+<ol>
+<li>A root certificate to sign both client and server certificates</li>
+<li>A server certificate</li>
+<li>A client certificate</li>
+<li>NGINX in docker to run the mTLS configured server</li>
+<li>Humble <code>curl</code></li>
+</ol>
+<p>We shall go ahead with a simple bash file to get our certificates</p>
+<p>Start by creating an file <code>mtls_test.sh</code> and enter the following contents.</p>
+<p>Save this file in an empty directory.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#65737e;">#!/bin/bash
+</span><span>
+</span><span style="color:#bf616a;">mkdir</span><span> certs
+</span><span style="color:#96b5b4;">cd</span><span> certs
+</span><span>
+</span><span style="color:#65737e;"># save pass in a file for root certificate
+</span><span style="color:#96b5b4;">printf</span><span> secret &gt; ca_passphrase.txt
+</span><span>
+</span><span style="color:#65737e;"># generate 4096 bit RSA private key in des3 fromat. This will require passphrase
+</span><span style="color:#bf616a;">openssl</span><span> genrsa</span><span style="color:#bf616a;"> -des3 -passout</span><span> file:ca_passphrase.txt</span><span style="color:#bf616a;"> -out</span><span> ca.key 4096
+</span><span>
+</span><span style="color:#65737e;"># convert ca.key from des3 to RSA format. This too shall require passphrase
+</span><span style="color:#bf616a;">openssl</span><span> rsa</span><span style="color:#bf616a;"> -passin</span><span> file:ca_passphrase.txt</span><span style="color:#bf616a;"> -in</span><span> ca.key</span><span style="color:#bf616a;"> -out</span><span> ca.key
+</span><span>
+</span><span style="color:#65737e;"># now create a certificate (aka public key of ca.key + signature) for this private key
+</span><span style="color:#bf616a;">openssl</span><span> req</span><span style="color:#bf616a;"> -new -passin</span><span> file:ca_passphrase.txt</span><span style="color:#bf616a;"> -x509 -days</span><span> 3650</span><span style="color:#bf616a;"> -key</span><span> ca.key</span><span style="color:#bf616a;"> -subj </span><span>&quot;</span><span style="color:#a3be8c;">/CN=*.test.server</span><span>&quot;</span><span style="color:#bf616a;"> -out</span><span> ca.crt
+</span><span>
+</span><span>
+</span><span>
+</span><span style="color:#65737e;"># save pass in a file for server certificate
+</span><span style="color:#96b5b4;">printf</span><span> secret &gt; passphrase.txt
+</span><span>
+</span><span style="color:#65737e;"># generate a 2048 bit private key for server in des3 format
+</span><span style="color:#bf616a;">openssl</span><span> genrsa</span><span style="color:#bf616a;"> -des3 -passout</span><span> file:passphrase.txt</span><span style="color:#bf616a;"> -out</span><span> server.key 2048
+</span><span>
+</span><span style="color:#65737e;"># use this private key to create a certificate signing request (CSR) for server
+</span><span style="color:#bf616a;">openssl</span><span> req</span><span style="color:#bf616a;"> -new -passin</span><span> file:passphrase.txt</span><span style="color:#bf616a;"> -key</span><span> server.key</span><span style="color:#bf616a;"> -subj </span><span>&quot;</span><span style="color:#a3be8c;">/CN=*.test.server</span><span>&quot;</span><span style="color:#bf616a;"> -out</span><span> server.csr
+</span><span>
+</span><span style="color:#65737e;"># now create a certificate (aka public key of server.key + signature) for this private key
+</span><span style="color:#65737e;"># we are making this certificate valid for 365 days. Also sign it with the certificate authority
+</span><span style="color:#bf616a;">openssl</span><span> x509</span><span style="color:#bf616a;"> -req -days</span><span> 365</span><span style="color:#bf616a;"> -in</span><span> server.csr</span><span style="color:#bf616a;"> -CA</span><span> ca.crt</span><span style="color:#bf616a;"> -CAkey</span><span> ca.key</span><span style="color:#bf616a;"> -set_serial</span><span> 01</span><span style="color:#bf616a;"> -out</span><span> server.crt
+</span><span>
+</span><span>
+</span><span style="color:#65737e;"># save pass in a file for server certificate
+</span><span style="color:#96b5b4;">printf</span><span> secret &gt; client_passphrase.txt
+</span><span>
+</span><span style="color:#65737e;"># generate a 2048 bit private key for server in des3 format
+</span><span style="color:#bf616a;">openssl</span><span> genrsa</span><span style="color:#bf616a;"> -des3 -passout</span><span> file:client_passphrase.txt</span><span style="color:#bf616a;"> -out</span><span> client.key 2048
+</span><span>
+</span><span style="color:#65737e;"># convert client.key from des3 to RSA format.
+</span><span style="color:#bf616a;">openssl</span><span> rsa</span><span style="color:#bf616a;"> -passin</span><span> file:client_passphrase.txt</span><span style="color:#bf616a;"> -in</span><span> client.key</span><span style="color:#bf616a;"> -out</span><span> client.key
+</span><span>
+</span><span style="color:#65737e;"># use this private key to create a certificate signing request (CSR) for server
+</span><span style="color:#bf616a;">openssl</span><span> req</span><span style="color:#bf616a;"> -new -key</span><span> client.key</span><span style="color:#bf616a;"> -subj </span><span>&quot;</span><span style="color:#a3be8c;">/CN=*.test.client</span><span>&quot;</span><span style="color:#bf616a;"> -out</span><span> client.csr
+</span><span>
+</span><span style="color:#65737e;"># now create a certificate (aka public key of server.key + signature) for this private key
+</span><span style="color:#65737e;"># we are making this certificate valid for 365 days. Also sign it with the certificate authority
+</span><span style="color:#bf616a;">openssl</span><span> x509</span><span style="color:#bf616a;"> -req -days</span><span> 365</span><span style="color:#bf616a;"> -in</span><span> client.csr</span><span style="color:#bf616a;"> -CA</span><span> ca.crt</span><span style="color:#bf616a;"> -CAkey</span><span> ca.key</span><span style="color:#bf616a;"> -set_serial</span><span> 01</span><span style="color:#bf616a;"> -out</span><span> client.crt
+</span></code></pre>
+<p>Next let's write a simple nginx configuration equipped with mTLS. Put the following contents in a file called <code>nginx.conf</code></p>
+<pre data-lang="conf" style="background-color:#2b303b;color:#c0c5ce;" class="language-conf "><code class="language-conf" data-lang="conf"><span style="color:#b48ead;">server </span><span>{
+</span><span style="color:#bf616a;">error_log </span><span>/var/log/nginx/error.log debug;
+</span><span>    </span><span style="color:#bf616a;">listen </span><span style="color:#d08770;">443</span><span> ssl;
+</span><span>    </span><span style="color:#bf616a;">server_name  </span><span>test.your.hostname;
+</span><span>    </span><span style="color:#bf616a;">ssl_password_file </span><span>/etc/nginx/certs/password;
+</span><span>    </span><span style="color:#bf616a;">ssl_certificate </span><span>/etc/nginx/certs/tls.crt;
+</span><span>    </span><span style="color:#bf616a;">ssl_certificate_key </span><span>/etc/nginx/certs/tls.key;
+</span><span> 
+</span><span>    </span><span style="color:#bf616a;">ssl_client_certificate </span><span>/etc/nginx/mtls/ca.crt;
+</span><span>    </span><span style="color:#bf616a;">ssl_verify_client </span><span style="color:#d08770;">on</span><span>;
+</span><span>    </span><span style="color:#bf616a;">ssl_verify_depth  </span><span style="color:#d08770;">3</span><span>;
+</span><span> 
+</span><span>    </span><span style="color:#bf616a;">ssl_protocols             </span><span>TLSv1 TLSv1.</span><span style="color:#d08770;">1</span><span> TLSv1.</span><span style="color:#d08770;">2</span><span>;
+</span><span> 
+</span><span style="color:#b48ead;">    location </span><span>/ {
+</span><span>    	</span><span style="color:#bf616a;">return </span><span style="color:#d08770;">200 </span><span style="color:#a3be8c;">&quot;This is an mTLS connection!  \(^o^)/  &quot;</span><span>;
+</span><span>    }
+</span><span> 
+</span><span>}
+</span></code></pre>
+<p>Lastly run this configuration on NGINX in docker</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">docker</span><span> run</span><span style="color:#bf616a;"> --rm --name</span><span> mtls-nginx \
+</span><span style="color:#bf616a;">		-p</span><span> 443:443 \
+</span><span style="color:#bf616a;">		-v </span><span>$(</span><span style="color:#bf616a;">pwd</span><span>)/certs/ca.crt:/etc/nginx/mtls/ca.crt \
+</span><span style="color:#bf616a;">		-v </span><span>$(</span><span style="color:#bf616a;">pwd</span><span>)/certs/server.key:/etc/nginx/certs/tls.key \
+</span><span style="color:#bf616a;">		-v </span><span>$(</span><span style="color:#bf616a;">pwd</span><span>)/certs/server.crt:/etc/nginx/certs/tls.crt \
+</span><span style="color:#bf616a;">		-v </span><span>$(</span><span style="color:#bf616a;">pwd</span><span>)/nginx.conf:/etc/nginx/conf.d/nginx.conf \
+</span><span style="color:#bf616a;">		-v </span><span>$(</span><span style="color:#bf616a;">pwd</span><span>)/certs/passphrase.txt:/etc/nginx/certs/password \
+</span><span>		nginx
+</span></code></pre>
+<p>Terminal should print info about nginx worker process:</p>
+<pre data-lang="log" style="background-color:#2b303b;color:#c0c5ce;" class="language-log "><code class="language-log" data-lang="log"><span>2022/07/29 09:27:29 [notice] 1#1: using the &quot;epoll&quot; event method
+</span><span>2022/07/29 09:27:29 [notice] 1#1: nginx/1.23.1
+</span><span>2022/07/29 09:27:29 [notice] 1#1: built by gcc 10.2.1 20210110 (Debian 10.2.1-6) 
+</span><span>2022/07/29 09:27:29 [notice] 1#1: OS: Linux 5.15.55-2-lts
+</span><span>2022/07/29 09:27:29 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+</span><span>2022/07/29 09:27:29 [notice] 1#1: start worker processes
+</span><span>......
+</span></code></pre>
+<p>Now in a separate terminal we can use curl to verify the mTLS in action.</p>
+<p>First we shall try to connet <code>curl</code> without client certificate exchange:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span>
+</span><span style="color:#bf616a;">$</span><span> curl https://localhost/</span><span style="color:#bf616a;"> --insecure                                                                                                                                                          
+</span><span>&lt;html&gt;
+</span><span>&lt;head&gt;&lt;title&gt;</span><span style="color:#d08770;">400 </span><span style="color:#bf616a;">No</span><span> required SSL certificate was sent&lt;/title&gt;&lt;/head&gt;
+</span><span>&lt;body&gt;
+</span><span>&lt;center&gt;&lt;h1&gt;</span><span style="color:#d08770;">400 </span><span style="color:#bf616a;">Bad</span><span> Request&lt;/h1&gt;&lt;/center&gt;
+</span><span>&lt;center&gt;No </span><span style="color:#bf616a;">required</span><span> SSL certificate was sent&lt;/center&gt;
+</span><span>&lt;hr&gt;&lt;center&gt;nginx/1.23.1&lt;/center&gt;
+</span><span>&lt;/body&gt;
+</span><span>&lt;/html&gt;
+</span></code></pre>
+<p>Now we shall try to connect <code>curl</code> with client side certificates exchange:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">$</span><span> curl</span><span style="color:#bf616a;">  --key</span><span> certs/client.key</span><span style="color:#bf616a;"> --cert</span><span> certs/client.crt https://127.0.0.1</span><span style="color:#bf616a;"> --insecure                                                                                                              
+</span><span style="color:#bf616a;">This</span><span> is an mTLS connection!  </span><span style="color:#96b5b4;">\(</span><span>^o^)</span><span style="color:#bf616a;">/  
+</span></code></pre>
+<p>We can peek under the hood by specifying <code>-v</code> switch with <code>curl</code></p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">$</span><span> curl</span><span style="color:#bf616a;"> -v  --key</span><span> certs/client.key</span><span style="color:#bf616a;"> --cert</span><span> certs/client.crt https://127.0.0.1</span><span style="color:#bf616a;"> --insecure                                                                                                          
+</span><span style="color:#bf616a;">*</span><span>   Trying 127.0.0.1:443...
+</span><span style="color:#bf616a;">*</span><span> Connected to 127.0.0.1 (127.0.0.1) </span><span style="color:#bf616a;">port</span><span> 443 (#0)
+</span><span style="color:#bf616a;">*</span><span> ALPN: offers h2
+</span><span style="color:#bf616a;">*</span><span> ALPN: offers http/1.1
+</span><span style="color:#bf616a;">*</span><span> TLSv1.3 (OUT)</span><span style="color:#bf616a;">,</span><span> TLS handshake, Client hello (1)</span><span style="color:#96b5b4;">:
+</span><span style="color:#bf616a;">*</span><span> TLSv1.3 (IN)</span><span style="color:#bf616a;">,</span><span> TLS handshake, Server hello (2)</span><span style="color:#96b5b4;">:
+</span><span style="color:#bf616a;">*</span><span> TLSv1.2 (IN)</span><span style="color:#bf616a;">,</span><span> TLS handshake, Certificate (11)</span><span style="color:#96b5b4;">:
+</span><span style="color:#bf616a;">*</span><span> TLSv1.2 (IN)</span><span style="color:#bf616a;">,</span><span> TLS handshake, Server key exchange (12)</span><span style="color:#96b5b4;">:
+</span><span style="color:#bf616a;">*</span><span> TLSv1.2 (IN)</span><span style="color:#bf616a;">,</span><span> TLS handshake, Request CERT (13)</span><span style="color:#96b5b4;">:
+</span><span style="color:#bf616a;">*</span><span> TLSv1.2 (IN)</span><span style="color:#bf616a;">,</span><span> TLS handshake, Server finished (14)</span><span style="color:#96b5b4;">:
+</span><span style="color:#bf616a;">*</span><span> TLSv1.2 (OUT)</span><span style="color:#bf616a;">,</span><span> TLS handshake, Certificate (11)</span><span style="color:#96b5b4;">:
+</span><span style="color:#bf616a;">*</span><span> TLSv1.2 (OUT)</span><span style="color:#bf616a;">,</span><span> TLS handshake, Client key exchange (16)</span><span style="color:#96b5b4;">:
+</span><span style="color:#bf616a;">*</span><span> TLSv1.2 (OUT)</span><span style="color:#bf616a;">,</span><span> TLS handshake, CERT verify (15)</span><span style="color:#96b5b4;">:
+</span><span style="color:#bf616a;">*</span><span> TLSv1.2 (OUT)</span><span style="color:#bf616a;">,</span><span> TLS change cipher, Change cipher spec (1)</span><span style="color:#96b5b4;">:
+</span><span style="color:#bf616a;">*</span><span> TLSv1.2 (OUT)</span><span style="color:#bf616a;">,</span><span> TLS handshake, Finished (20)</span><span style="color:#96b5b4;">:
+</span><span style="color:#bf616a;">*</span><span> TLSv1.2 (IN)</span><span style="color:#bf616a;">,</span><span> TLS handshake, Finished (20)</span><span style="color:#96b5b4;">:
+</span><span style="color:#bf616a;">*</span><span> SSL connection using TLSv1.2 / ECDHE-RSA-AES256-GCM-SHA384
+</span><span style="color:#bf616a;">*</span><span> ALPN: server accepted http/1.1
+</span><span style="color:#bf616a;">*</span><span> Server certificate:
+</span><span style="color:#bf616a;">*</span><span>  subject: CN=*.test.server
+</span><span style="color:#bf616a;">*</span><span>  start date: Jul 29 09:30:20 2022 GMT
+</span><span style="color:#bf616a;">*</span><span>  expire date: Jul 29 09:30:20 2023 GMT
+</span><span style="color:#bf616a;">*</span><span>  issuer: CN=*.test.server
+</span><span style="color:#bf616a;">*</span><span>  SSL certificate verify result: self signed certificate (18)</span><span style="color:#bf616a;">,</span><span> continuing anyway.
+</span><span>&gt; GET </span><span style="color:#bf616a;">/</span><span> HTTP/1.1
+</span><span>&gt; Host: </span><span style="color:#bf616a;">127.0.0.1
+</span><span>&gt; User-Agent: </span><span style="color:#bf616a;">curl/7.84.0
+</span><span>&gt; Accept: </span><span style="color:#bf616a;">*/*
+</span><span>&gt; 
+</span><span style="color:#bf616a;">*</span><span> Mark bundle as not supporting multiuse
+</span><span>&lt; HTTP/1.1 </span><span style="color:#bf616a;">200</span><span> OK
+</span><span>&lt; Server: </span><span style="color:#bf616a;">nginx/1.23.1
+</span><span>&lt; Date: </span><span style="color:#bf616a;">Fri,</span><span> 29 Jul 2022 09:34:23 GMT
+</span><span>&lt; Content-Type: </span><span style="color:#bf616a;">application/octet-stream
+</span><span>&lt; Content-Length: </span><span style="color:#bf616a;">57
+</span><span>&lt; Connection: </span><span style="color:#bf616a;">keep-alive
+</span><span>&lt; 
+</span><span style="color:#bf616a;">*</span><span> Connection </span><span style="color:#65737e;">#0 to host 127.0.0.1 left intact
+</span><span style="color:#bf616a;">This</span><span> is an mTLS connection!  </span><span style="color:#96b5b4;">\(</span><span>^o^)</span><span style="color:#bf616a;">/  
+</span></code></pre>
+<p>We can see both the handshakes in action!</p>
+<p>Congratulations now you know TLS and MTLS.</p>
+
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  
+    
+<footer class="footer text-muted">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 order-last order-lg-center">
+                <p>
+                    Built with <span><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 490 490" style="width: 20px; stroke: red; fill: red;" xml:space="preserve">
+                            <path id="XMLID_25_" d="M316.554,108.336c4.553,6.922,2.629,16.223-4.296,20.774c-3.44,2.261-6.677,4.928-9.621,7.929
+	c-2.938,2.995-6.825,4.497-10.715,4.497c-3.791,0-7.585-1.427-10.506-4.291c-5.917-5.801-6.009-15.298-0.207-21.212
+	c4.439-4.524,9.338-8.559,14.562-11.992C302.698,99.491,312.002,101.414,316.554,108.336z M447.022,285.869
+	c-1.506,1.536-148.839,151.704-148.839,151.704C283.994,452.035,265.106,460,245,460s-38.994-7.965-53.183-22.427L42.978,285.869
+	c-57.304-58.406-57.304-153.441,0-211.847C70.83,45.634,107.882,30,147.31,30c36.369,0,70.72,13.304,97.69,37.648
+	C271.971,43.304,306.32,30,342.689,30c39.428,0,76.481,15.634,104.332,44.021C504.326,132.428,504.326,227.463,447.022,285.869z
+	 M425.596,95.028C403.434,72.44,373.991,60,342.69,60c-31.301,0-60.745,12.439-82.906,35.027c-1.122,1.144-2.129,2.533-3.538,3.777
+	c-7.536,6.654-16.372,6.32-22.491,0c-1.308-1.352-2.416-2.633-3.538-3.777C208.055,72.44,178.612,60,147.31,60
+	c-31.301,0-60.744,12.439-82.906,35.027c-45.94,46.824-45.94,123.012,0,169.836c1.367,1.393,148.839,151.704,148.839,151.704
+	C221.742,425.229,233.02,430,245,430c11.98,0,23.258-4.771,31.757-13.433l148.839-151.703l0,0
+	C471.535,218.04,471.535,141.852,425.596,95.028z M404.169,116.034c-8.975-9.148-19.475-16.045-31.208-20.499
+	c-7.746-2.939-16.413,0.953-19.355,8.698c-2.942,7.744,0.953,16.407,8.701,19.348c7.645,2.902,14.521,7.431,20.436,13.459
+	c23.211,23.658,23.211,62.153,0,85.811l-52.648,53.661c-5.803,5.915-5.711,15.412,0.206,21.212
+	c2.921,2.863,6.714,4.291,10.506,4.291c3.889,0,7.776-1.502,10.714-4.497l52.648-53.661
+	C438.744,208.616,438.744,151.275,404.169,116.034z" />
+                        </svg></span> and <a href="https://www.getzola.org/">Zola</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+  
+
+  
+<script type="text/javascript" src="https://schartz.github.io/js/main.js" defer></script>
+
+  <script type="text/javascript" src="https://schartz.github.io/plugins/elasticlunr.min.js" defer></script>
+  <script type="text/javascript" src="https://schartz.github.io/search_index.en.js" defer></script>
+  <script type="text/javascript" src="https://schartz.github.io/js/search.js" defer></script>
+
+  
+</body>
+</html>
