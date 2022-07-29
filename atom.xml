@@ -16,15 +16,15 @@
 		<content type="html">&lt;p&gt;&lt;em&gt;You can grab the code of this article &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;schartz&#x2F;mTLSNGinx&quot;&gt;here on github&lt;&#x2F;a&gt;&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;mTLS or MTLS is an acronym for &lt;strong&gt;Mutual Transport Layer Security&lt;&#x2F;strong&gt;. TLS(Transport Layer Security) is the encryption 
 protocol which powers the HTTPS. mTLS is a spin on TLS where both client and server are going to exchange certificates before communication begins.&lt;&#x2F;p&gt;
-&lt;p&gt;Let&#x27;s understand this in plain english.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s understand this in plain English.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;1-tls&quot;&gt;1 TLS&lt;&#x2F;h3&gt;
-&lt;p&gt;TLS (sometimes referred as SSL) is a very widely used protocol. It is used to secure a client server communication by encrypting the communicated information. It involves &lt;strong&gt;Public key infrastructure (PKI)&lt;&#x2F;strong&gt;, &lt;strong&gt;TLS Certificates&lt;&#x2F;strong&gt;, &lt;strong&gt;TLS Handshakes&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;TLS (sometimes referred as SSL) is a very widely used protocol. It is used to secure client server communication by encrypting the communicated information. It involves &lt;strong&gt;Public key infrastructure (PKI)&lt;&#x2F;strong&gt;, &lt;strong&gt;TLS Certificates&lt;&#x2F;strong&gt;, &lt;strong&gt;TLS Handshakes&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
 &lt;h4 id=&quot;1-1-public-key-infrastructure-pki&quot;&gt;1.1 Public key infrastructure (PKI)&lt;&#x2F;h4&gt;
 &lt;ul&gt;
 &lt;li&gt;You have two keys, called Public and Private keys.&lt;&#x2F;li&gt;
 &lt;li&gt;Both of these keys come with a set expiration period.&lt;&#x2F;li&gt;
-&lt;li&gt;Data encrypted by Public key can only be decrypted by its Private key.&lt;&#x2F;li&gt;
-&lt;li&gt;Data encrypted by Private key can only be decrypted by its Public key.&lt;&#x2F;li&gt;
+&lt;li&gt;Data encrypted by the Public key can only be decrypted by its Private key.&lt;&#x2F;li&gt;
+&lt;li&gt;Data encrypted by the Private key can only be decrypted by its Public key.&lt;&#x2F;li&gt;
 &lt;&#x2F;ul&gt;
 &lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;data --------&amp;gt; [public key] -----&amp;gt; encrypted data
 &lt;&#x2F;span&gt;&lt;span&gt;										  |
@@ -40,9 +40,9 @@ protocol which powers the HTTPS. mTLS is a spin on TLS where both client and ser
 &lt;&#x2F;span&gt;&lt;span&gt;						data &amp;lt;--------[public key]
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;The server freely provides Public key to anyone. But the guards the Private key with it&#x27;s life.&lt;&#x2F;p&gt;
+&lt;p&gt;The server freely provides Public key to anyone. But guards the Private key with it&#x27;s life.&lt;&#x2F;p&gt;
 &lt;h4 id=&quot;1-2-tls-certificates&quot;&gt;1.2 TLS Certificates&lt;&#x2F;h4&gt;
-&lt;p&gt;A TLS certificate is a data file that contains the &lt;strong&gt;public key&lt;&#x2F;strong&gt;, information of the &lt;strong&gt;encryption algorithm&lt;&#x2F;strong&gt;,  information of the &lt;strong&gt;certificate issuer&lt;&#x2F;strong&gt;, and the certificate&#x27;s &lt;strong&gt;expiration date&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;A TLS certificate is a data file that containing the &lt;strong&gt;public key&lt;&#x2F;strong&gt;, information of the &lt;strong&gt;encryption algorithm&lt;&#x2F;strong&gt;,  information of the &lt;strong&gt;certificate issuer&lt;&#x2F;strong&gt;, and the certificate&#x27;s &lt;strong&gt;expiration date&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;TLS certificates are issued by a trusted third party called certificate authority. Sometimes written as CA or CA authority.&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;letsencrypt.org&#x2F;&quot;&gt;Let&#x27;s encrypt&lt;&#x2F;a&gt; is one such trusted certificate issuer authority among many others.&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;TLS certificate = Public key + 
@@ -51,17 +51,17 @@ protocol which powers the HTTPS. mTLS is a spin on TLS where both client and ser
 &lt;&#x2F;span&gt;&lt;span&gt;				  expiry date
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;h4 id=&quot;1-3-tls-handshakes&quot;&gt;1.3 TLS Handshakes&lt;&#x2F;h4&gt;
-&lt;p&gt;The TLS handshake is the process to achive 2 things mainly:&lt;&#x2F;p&gt;
+&lt;p&gt;The TLS handshake is the process to achieve 2 things:&lt;&#x2F;p&gt;
 &lt;ol&gt;
 &lt;li&gt;Checking the TLS certificate validity &lt;&#x2F;li&gt;
 &lt;li&gt;Making sure that the server actually owns the private key.&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
-&lt;p&gt;First part is done by validating the certifcate against a list of root CA certificates which are already available on the client side.&lt;br &#x2F;&gt;
-On linux systems, typically a file located at &lt;code&gt;&#x2F;etc&#x2F;ssl&#x2F;certs&#x2F;ca-certificates.crt&lt;&#x2F;code&gt; contains the verification certificates of all the trusted certificate authorities. If this check fails, client shall panick about an untrusted certificate.&lt;&#x2F;p&gt;
-&lt;p&gt;Second part is done by asking the server to decrypt something encrypted by the Public file from the provided certificate.&lt;&#x2F;p&gt;
+&lt;p&gt;First part is done by validating the certificate against a list of root CA certificates which are already available on the client side.&lt;br &#x2F;&gt;
+On Linux systems, typically a file located at &lt;code&gt;&#x2F;etc&#x2F;ssl&#x2F;certs&#x2F;ca-certificates.crt&lt;&#x2F;code&gt; contains the verification certificates of all the trusted certificate authorities. If this check fails, client shall panic about an un-trusted certificate.&lt;&#x2F;p&gt;
+&lt;p&gt;Second part is done by asking the server to decrypt something encrypted by the Public key file from the provided certificate.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;2-how-tls-works&quot;&gt;2 How TLS works&lt;&#x2F;h3&gt;
 &lt;p&gt;With above concepts, working of TLS is fairly straightforward.&lt;&#x2F;p&gt;
-&lt;p&gt;In TLS, the server has a TLS certificate and the key pair as well. Process goes something like following:&lt;&#x2F;p&gt;
+&lt;p&gt;The server has a TLS certificate and the key pair as well. Process goes something like following:&lt;&#x2F;p&gt;
 &lt;ol&gt;
 &lt;li&gt;Client connects to server&lt;&#x2F;li&gt;
 &lt;li&gt;Server sends its TLS certificate&lt;&#x2F;li&gt;
@@ -70,7 +70,7 @@ On linux systems, typically a file located at &lt;code&gt;&#x2F;etc&#x2F;ssl&#x2
 &lt;&#x2F;ol&gt;
 &lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;tls.jpg&quot; alt=&quot;TLS Working&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;3-how-mtls-works&quot;&gt;3 How mTLS works&lt;&#x2F;h3&gt;
-&lt;p&gt;Mutual Transport Level Security is built on top of TLS. Process is very similar, but with an added twist of client bringing it&#x27;s own certificate and key pair to picture. mTLS process looks like following:&lt;&#x2F;p&gt;
+&lt;p&gt;Mutual Transport Level Security is built on top of TLS. Process is very similar, but with an added twist of client bringing it&#x27;s own certificate and key pair to the picture. mTLS process looks like following:&lt;&#x2F;p&gt;
 &lt;ol&gt;
 &lt;li&gt;Client connects to server&lt;&#x2F;li&gt;
 &lt;li&gt;Server sends its TLS certificate&lt;&#x2F;li&gt;
@@ -91,8 +91,7 @@ On linux systems, typically a file located at &lt;code&gt;&#x2F;etc&#x2F;ssl&#x2
 &lt;li&gt;Humble &lt;code&gt;curl&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
 &lt;p&gt;We shall go ahead with a simple bash file to get our certificates&lt;&#x2F;p&gt;
-&lt;p&gt;Start by creating an file &lt;code&gt;mtls_test.sh&lt;&#x2F;code&gt; and enter the following contents.&lt;&#x2F;p&gt;
-&lt;p&gt;Save this file in an empty directory.&lt;&#x2F;p&gt;
+&lt;p&gt;Start by creating a file named &lt;code&gt;mtls_test.sh&lt;&#x2F;code&gt; and enter the following contents.&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;#!&#x2F;bin&#x2F;bash
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;mkdir&lt;&#x2F;span&gt;&lt;span&gt; certs
@@ -142,7 +141,8 @@ On linux systems, typically a file located at &lt;code&gt;&#x2F;etc&#x2F;ssl&#x2
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#65737e;&quot;&gt;# we are making this certificate valid for 365 days. Also sign it with the certificate authority
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;openssl&lt;&#x2F;span&gt;&lt;span&gt; x509&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -req -days&lt;&#x2F;span&gt;&lt;span&gt; 365&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -in&lt;&#x2F;span&gt;&lt;span&gt; client.csr&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -CA&lt;&#x2F;span&gt;&lt;span&gt; ca.crt&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -CAkey&lt;&#x2F;span&gt;&lt;span&gt; ca.key&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -set_serial&lt;&#x2F;span&gt;&lt;span&gt; 01&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; -out&lt;&#x2F;span&gt;&lt;span&gt; client.crt
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;Next let&#x27;s write a simple nginx configuration equipped with mTLS. Put the following contents in a file called &lt;code&gt;nginx.conf&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Save this file in an empty directory. &lt;&#x2F;p&gt;
+&lt;p&gt;Next let&#x27;s write a simple NGINX configuration equipped with mTLS. Put the following contents in a file called &lt;code&gt;nginx.conf&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;conf&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-conf &quot;&gt;&lt;code class=&quot;language-conf&quot; data-lang=&quot;conf&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;server &lt;&#x2F;span&gt;&lt;span&gt;{
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;error_log &lt;&#x2F;span&gt;&lt;span&gt;&#x2F;var&#x2F;log&#x2F;nginx&#x2F;error.log debug;
 &lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;listen &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;443&lt;&#x2F;span&gt;&lt;span&gt; ssl;
@@ -163,7 +163,7 @@ On linux systems, typically a file located at &lt;code&gt;&#x2F;etc&#x2F;ssl&#x2
 &lt;&#x2F;span&gt;&lt;span&gt; 
 &lt;&#x2F;span&gt;&lt;span&gt;}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;Lastly run this configuration on NGINX in docker&lt;&#x2F;p&gt;
+&lt;p&gt;Lastly run this command to start the NGINX docker container&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;docker&lt;&#x2F;span&gt;&lt;span&gt; run&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --rm --name&lt;&#x2F;span&gt;&lt;span&gt; mtls-nginx \
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;		-p&lt;&#x2F;span&gt;&lt;span&gt; 443:443 \
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;		-v &lt;&#x2F;span&gt;&lt;span&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pwd&lt;&#x2F;span&gt;&lt;span&gt;)&#x2F;certs&#x2F;ca.crt:&#x2F;etc&#x2F;nginx&#x2F;mtls&#x2F;ca.crt \
@@ -173,7 +173,7 @@ On linux systems, typically a file located at &lt;code&gt;&#x2F;etc&#x2F;ssl&#x2
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;		-v &lt;&#x2F;span&gt;&lt;span&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;pwd&lt;&#x2F;span&gt;&lt;span&gt;)&#x2F;certs&#x2F;passphrase.txt:&#x2F;etc&#x2F;nginx&#x2F;certs&#x2F;password \
 &lt;&#x2F;span&gt;&lt;span&gt;		nginx
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;Terminal should print info about nginx worker process:&lt;&#x2F;p&gt;
+&lt;p&gt;Terminal should print info about NGINX worker process:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;log&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-log &quot;&gt;&lt;code class=&quot;language-log&quot; data-lang=&quot;log&quot;&gt;&lt;span&gt;2022&#x2F;07&#x2F;29 09:27:29 [notice] 1#1: using the &amp;quot;epoll&amp;quot; event method
 &lt;&#x2F;span&gt;&lt;span&gt;2022&#x2F;07&#x2F;29 09:27:29 [notice] 1#1: nginx&#x2F;1.23.1
 &lt;&#x2F;span&gt;&lt;span&gt;2022&#x2F;07&#x2F;29 09:27:29 [notice] 1#1: built by gcc 10.2.1 20210110 (Debian 10.2.1-6) 
@@ -183,7 +183,7 @@ On linux systems, typically a file located at &lt;code&gt;&#x2F;etc&#x2F;ssl&#x2
 &lt;&#x2F;span&gt;&lt;span&gt;......
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Now in a separate terminal we can use curl to verify the mTLS in action.&lt;&#x2F;p&gt;
-&lt;p&gt;First we shall try to connet &lt;code&gt;curl&lt;&#x2F;code&gt; without client certificate exchange:&lt;&#x2F;p&gt;
+&lt;p&gt;First we shall try to connect &lt;code&gt;curl&lt;&#x2F;code&gt; without client certificate:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span&gt; curl https:&#x2F;&#x2F;localhost&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --insecure                                                                                                                                                          
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;html&amp;gt;
@@ -195,7 +195,7 @@ On linux systems, typically a file located at &lt;code&gt;&#x2F;etc&#x2F;ssl&#x2
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;body&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;html&amp;gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;Now we shall try to connect &lt;code&gt;curl&lt;&#x2F;code&gt; with client side certificates exchange:&lt;&#x2F;p&gt;
+&lt;p&gt;Now we shall try to connect &lt;code&gt;curl&lt;&#x2F;code&gt; with client side certificate:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span&gt; curl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;  --key&lt;&#x2F;span&gt;&lt;span&gt; certs&#x2F;client.key&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --cert&lt;&#x2F;span&gt;&lt;span&gt; certs&#x2F;client.crt https:&#x2F;&#x2F;127.0.0.1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt; --insecure                                                                                                              
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;This&lt;&#x2F;span&gt;&lt;span&gt; is an mTLS connection!  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#96b5b4;&quot;&gt;\(&lt;&#x2F;span&gt;&lt;span&gt;^o^)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;&#x2F;  
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;

@@ -245,15 +245,15 @@
           <p><em>You can grab the code of this article <a href="https://github.com/schartz/mTLSNGinx">here on github</a></em></p>
 <p>mTLS or MTLS is an acronym for <strong>Mutual Transport Layer Security</strong>. TLS(Transport Layer Security) is the encryption 
 protocol which powers the HTTPS. mTLS is a spin on TLS where both client and server are going to exchange certificates before communication begins.</p>
-<p>Let's understand this in plain english.</p>
+<p>Let's understand this in plain English.</p>
 <h3 id="1-tls">1 TLS</h3>
-<p>TLS (sometimes referred as SSL) is a very widely used protocol. It is used to secure a client server communication by encrypting the communicated information. It involves <strong>Public key infrastructure (PKI)</strong>, <strong>TLS Certificates</strong>, <strong>TLS Handshakes</strong>.</p>
+<p>TLS (sometimes referred as SSL) is a very widely used protocol. It is used to secure client server communication by encrypting the communicated information. It involves <strong>Public key infrastructure (PKI)</strong>, <strong>TLS Certificates</strong>, <strong>TLS Handshakes</strong>.</p>
 <h4 id="1-1-public-key-infrastructure-pki">1.1 Public key infrastructure (PKI)</h4>
 <ul>
 <li>You have two keys, called Public and Private keys.</li>
 <li>Both of these keys come with a set expiration period.</li>
-<li>Data encrypted by Public key can only be decrypted by its Private key.</li>
-<li>Data encrypted by Private key can only be decrypted by its Public key.</li>
+<li>Data encrypted by the Public key can only be decrypted by its Private key.</li>
+<li>Data encrypted by the Private key can only be decrypted by its Public key.</li>
 </ul>
 <pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>data --------&gt; [public key] -----&gt; encrypted data
 </span><span>										  |
@@ -269,9 +269,9 @@ protocol which powers the HTTPS. mTLS is a spin on TLS where both client and ser
 </span><span>						data &lt;--------[public key]
 </span><span>
 </span></code></pre>
-<p>The server freely provides Public key to anyone. But the guards the Private key with it's life.</p>
+<p>The server freely provides Public key to anyone. But guards the Private key with it's life.</p>
 <h4 id="1-2-tls-certificates">1.2 TLS Certificates</h4>
-<p>A TLS certificate is a data file that contains the <strong>public key</strong>, information of the <strong>encryption algorithm</strong>,  information of the <strong>certificate issuer</strong>, and the certificate's <strong>expiration date</strong>.</p>
+<p>A TLS certificate is a data file that containing the <strong>public key</strong>, information of the <strong>encryption algorithm</strong>,  information of the <strong>certificate issuer</strong>, and the certificate's <strong>expiration date</strong>.</p>
 <p>TLS certificates are issued by a trusted third party called certificate authority. Sometimes written as CA or CA authority.</p>
 <p><a href="https://letsencrypt.org/">Let's encrypt</a> is one such trusted certificate issuer authority among many others.</p>
 <pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>TLS certificate = Public key + 
@@ -280,17 +280,17 @@ protocol which powers the HTTPS. mTLS is a spin on TLS where both client and ser
 </span><span>				  expiry date
 </span></code></pre>
 <h4 id="1-3-tls-handshakes">1.3 TLS Handshakes</h4>
-<p>The TLS handshake is the process to achive 2 things mainly:</p>
+<p>The TLS handshake is the process to achieve 2 things:</p>
 <ol>
 <li>Checking the TLS certificate validity </li>
 <li>Making sure that the server actually owns the private key.</li>
 </ol>
-<p>First part is done by validating the certifcate against a list of root CA certificates which are already available on the client side.<br />
-On linux systems, typically a file located at <code>/etc/ssl/certs/ca-certificates.crt</code> contains the verification certificates of all the trusted certificate authorities. If this check fails, client shall panick about an untrusted certificate.</p>
-<p>Second part is done by asking the server to decrypt something encrypted by the Public file from the provided certificate.</p>
+<p>First part is done by validating the certificate against a list of root CA certificates which are already available on the client side.<br />
+On Linux systems, typically a file located at <code>/etc/ssl/certs/ca-certificates.crt</code> contains the verification certificates of all the trusted certificate authorities. If this check fails, client shall panic about an un-trusted certificate.</p>
+<p>Second part is done by asking the server to decrypt something encrypted by the Public key file from the provided certificate.</p>
 <h3 id="2-how-tls-works">2 How TLS works</h3>
 <p>With above concepts, working of TLS is fairly straightforward.</p>
-<p>In TLS, the server has a TLS certificate and the key pair as well. Process goes something like following:</p>
+<p>The server has a TLS certificate and the key pair as well. Process goes something like following:</p>
 <ol>
 <li>Client connects to server</li>
 <li>Server sends its TLS certificate</li>
@@ -299,7 +299,7 @@ On linux systems, typically a file located at <code>/etc/ssl/certs/ca-certificat
 </ol>
 <p><img src="/images/tls.jpg" alt="TLS Working" /></p>
 <h3 id="3-how-mtls-works">3 How mTLS works</h3>
-<p>Mutual Transport Level Security is built on top of TLS. Process is very similar, but with an added twist of client bringing it's own certificate and key pair to picture. mTLS process looks like following:</p>
+<p>Mutual Transport Level Security is built on top of TLS. Process is very similar, but with an added twist of client bringing it's own certificate and key pair to the picture. mTLS process looks like following:</p>
 <ol>
 <li>Client connects to server</li>
 <li>Server sends its TLS certificate</li>
@@ -320,8 +320,7 @@ On linux systems, typically a file located at <code>/etc/ssl/certs/ca-certificat
 <li>Humble <code>curl</code></li>
 </ol>
 <p>We shall go ahead with a simple bash file to get our certificates</p>
-<p>Start by creating an file <code>mtls_test.sh</code> and enter the following contents.</p>
-<p>Save this file in an empty directory.</p>
+<p>Start by creating a file named <code>mtls_test.sh</code> and enter the following contents.</p>
 <pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#65737e;">#!/bin/bash
 </span><span>
 </span><span style="color:#bf616a;">mkdir</span><span> certs
@@ -371,7 +370,8 @@ On linux systems, typically a file located at <code>/etc/ssl/certs/ca-certificat
 </span><span style="color:#65737e;"># we are making this certificate valid for 365 days. Also sign it with the certificate authority
 </span><span style="color:#bf616a;">openssl</span><span> x509</span><span style="color:#bf616a;"> -req -days</span><span> 365</span><span style="color:#bf616a;"> -in</span><span> client.csr</span><span style="color:#bf616a;"> -CA</span><span> ca.crt</span><span style="color:#bf616a;"> -CAkey</span><span> ca.key</span><span style="color:#bf616a;"> -set_serial</span><span> 01</span><span style="color:#bf616a;"> -out</span><span> client.crt
 </span></code></pre>
-<p>Next let's write a simple nginx configuration equipped with mTLS. Put the following contents in a file called <code>nginx.conf</code></p>
+<p>Save this file in an empty directory. </p>
+<p>Next let's write a simple NGINX configuration equipped with mTLS. Put the following contents in a file called <code>nginx.conf</code></p>
 <pre data-lang="conf" style="background-color:#2b303b;color:#c0c5ce;" class="language-conf "><code class="language-conf" data-lang="conf"><span style="color:#b48ead;">server </span><span>{
 </span><span style="color:#bf616a;">error_log </span><span>/var/log/nginx/error.log debug;
 </span><span>    </span><span style="color:#bf616a;">listen </span><span style="color:#d08770;">443</span><span> ssl;
@@ -392,7 +392,7 @@ On linux systems, typically a file located at <code>/etc/ssl/certs/ca-certificat
 </span><span> 
 </span><span>}
 </span></code></pre>
-<p>Lastly run this configuration on NGINX in docker</p>
+<p>Lastly run this command to start the NGINX docker container</p>
 <pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">docker</span><span> run</span><span style="color:#bf616a;"> --rm --name</span><span> mtls-nginx \
 </span><span style="color:#bf616a;">		-p</span><span> 443:443 \
 </span><span style="color:#bf616a;">		-v </span><span>$(</span><span style="color:#bf616a;">pwd</span><span>)/certs/ca.crt:/etc/nginx/mtls/ca.crt \
@@ -402,7 +402,7 @@ On linux systems, typically a file located at <code>/etc/ssl/certs/ca-certificat
 </span><span style="color:#bf616a;">		-v </span><span>$(</span><span style="color:#bf616a;">pwd</span><span>)/certs/passphrase.txt:/etc/nginx/certs/password \
 </span><span>		nginx
 </span></code></pre>
-<p>Terminal should print info about nginx worker process:</p>
+<p>Terminal should print info about NGINX worker process:</p>
 <pre data-lang="log" style="background-color:#2b303b;color:#c0c5ce;" class="language-log "><code class="language-log" data-lang="log"><span>2022/07/29 09:27:29 [notice] 1#1: using the &quot;epoll&quot; event method
 </span><span>2022/07/29 09:27:29 [notice] 1#1: nginx/1.23.1
 </span><span>2022/07/29 09:27:29 [notice] 1#1: built by gcc 10.2.1 20210110 (Debian 10.2.1-6) 
@@ -412,7 +412,7 @@ On linux systems, typically a file located at <code>/etc/ssl/certs/ca-certificat
 </span><span>......
 </span></code></pre>
 <p>Now in a separate terminal we can use curl to verify the mTLS in action.</p>
-<p>First we shall try to connet <code>curl</code> without client certificate exchange:</p>
+<p>First we shall try to connect <code>curl</code> without client certificate:</p>
 <pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span>
 </span><span style="color:#bf616a;">$</span><span> curl https://localhost/</span><span style="color:#bf616a;"> --insecure                                                                                                                                                          
 </span><span>&lt;html&gt;
@@ -424,7 +424,7 @@ On linux systems, typically a file located at <code>/etc/ssl/certs/ca-certificat
 </span><span>&lt;/body&gt;
 </span><span>&lt;/html&gt;
 </span></code></pre>
-<p>Now we shall try to connect <code>curl</code> with client side certificates exchange:</p>
+<p>Now we shall try to connect <code>curl</code> with client side certificate:</p>
 <pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">$</span><span> curl</span><span style="color:#bf616a;">  --key</span><span> certs/client.key</span><span style="color:#bf616a;"> --cert</span><span> certs/client.crt https://127.0.0.1</span><span style="color:#bf616a;"> --insecure                                                                                                              
 </span><span style="color:#bf616a;">This</span><span> is an mTLS connection!  </span><span style="color:#96b5b4;">\(</span><span>^o^)</span><span style="color:#bf616a;">/  
 </span></code></pre>
