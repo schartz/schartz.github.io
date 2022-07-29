@@ -297,7 +297,7 @@ On linux systems, typically a file located at <code>/etc/ssl/certs/ca-certificat
 <li>Client verifies the server's certificate (TLS handshake)</li>
 <li>Client and server exchange information over encrypted TLS connection</li>
 </ol>
-<p><img src="/images/tls.png" alt="TLS Working" /></p>
+<p><img src="/images/tls.jpg" alt="TLS Working" /></p>
 <h3 id="3-how-mtls-works">3 How mTLS works</h3>
 <p>Mutual Transport Level Security is built on top of TLS. Process is very similar, but with an added twist of client bringing it's own certificate and key pair to picture. mTLS process looks like following:</p>
 <ol>
@@ -309,7 +309,7 @@ On linux systems, typically a file located at <code>/etc/ssl/certs/ca-certificat
 <li>Server grants access</li>
 <li>Client and server exchange information over encrypted TLS connection</li>
 </ol>
-<p><img src="/images/mtls.png" alt="TLS Working" /></p>
+<p><img src="/images/mtls.jpg" alt="TLS Working" /></p>
 <h3 id="4-code-time">4 Code time</h3>
 <p>To get going we shall need </p>
 <ol>

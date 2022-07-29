@@ -68,7 +68,7 @@ On linux systems, typically a file located at &lt;code&gt;&#x2F;etc&#x2F;ssl&#x2
 &lt;li&gt;Client verifies the server&#x27;s certificate (TLS handshake)&lt;&#x2F;li&gt;
 &lt;li&gt;Client and server exchange information over encrypted TLS connection&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
-&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;tls.png&quot; alt=&quot;TLS Working&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;tls.jpg&quot; alt=&quot;TLS Working&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;3-how-mtls-works&quot;&gt;3 How mTLS works&lt;&#x2F;h3&gt;
 &lt;p&gt;Mutual Transport Level Security is built on top of TLS. Process is very similar, but with an added twist of client bringing it&#x27;s own certificate and key pair to picture. mTLS process looks like following:&lt;&#x2F;p&gt;
 &lt;ol&gt;
@@ -80,7 +80,7 @@ On linux systems, typically a file located at &lt;code&gt;&#x2F;etc&#x2F;ssl&#x2
 &lt;li&gt;Server grants access&lt;&#x2F;li&gt;
 &lt;li&gt;Client and server exchange information over encrypted TLS connection&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
-&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;mtls.png&quot; alt=&quot;TLS Working&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;mtls.jpg&quot; alt=&quot;TLS Working&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;4-code-time&quot;&gt;4 Code time&lt;&#x2F;h3&gt;
 &lt;p&gt;To get going we shall need &lt;&#x2F;p&gt;
 &lt;ol&gt;
