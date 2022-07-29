@@ -13,7 +13,7 @@
 		<updated>2022-07-29T00:00:00+00:00</updated>
 		<link rel="alternate" href="https://schartz.github.io/blog/tls-and-mtls-deep-dive/" type="text/html"/>
 		<id>https://schartz.github.io/blog/tls-and-mtls-deep-dive/</id>
-		<content type="html">&lt;h2 id=&quot;you-can-grab-the-code-of-this-article-here-on-github&quot;&gt;*You can grab the code of this article &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;schartz&#x2F;mTLSNGinx&quot;&gt;here on github&lt;&#x2F;a&gt;  *&lt;&#x2F;h2&gt;
+		<content type="html">&lt;p&gt;&lt;em&gt;You can grab the code of this article &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;schartz&#x2F;mTLSNGinx&quot;&gt;here on github&lt;&#x2F;a&gt;&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;mTLS or MTLS is an acronym for &lt;strong&gt;Mutual Transport Layer Security&lt;&#x2F;strong&gt;. TLS(Transport Layer Security) is the encryption 
 protocol which powers the HTTPS. mTLS is a spin on TLS where both client and server are going to exchange certificates before communication begins.&lt;&#x2F;p&gt;
 &lt;p&gt;Let&#x27;s understand this in plain english.&lt;&#x2F;p&gt;
